@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Client;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -23,7 +24,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Route::model('client',Client::class);
 
         parent::boot();
     }
@@ -65,7 +66,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::prefix('api')
+        Route::prefix('api/v1')
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
