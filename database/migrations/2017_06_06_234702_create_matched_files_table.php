@@ -19,6 +19,7 @@ class CreateMatchedFilesTable extends Migration
             $table->unsignedInteger('pattern_id');
             $table->text('file');
             $table->integer('times_matched')->default(1);
+            $table->boolean('muted_flag')->default(false);
             $table->timestamps();
 
             $table->unique(['client_id','pattern_id','file']);

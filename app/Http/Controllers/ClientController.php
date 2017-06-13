@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use Illuminate\Http\Request;
+use App\Events\ClientShouldUpgrade;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class ClientController extends Controller
@@ -30,6 +31,19 @@ class ClientController extends Controller
     public function show(Client $client)
     {
         return response()->json( $client, 200);
+    }
+
+    /**
+     * Instruct the client to upgrade
+     * @method upgrade
+     *
+     * @return   App\Client
+     */
+    public function upgrade(Client $client)
+    {
+        event( new ClientShouldUpgrade($client));
+
+        return response()->json( [], 202);
     }
 
     /**

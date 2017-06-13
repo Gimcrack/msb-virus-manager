@@ -5,6 +5,11 @@ namespace Tests\Unit;
 use App\Client;
 use App\Pattern;
 use Tests\TestCase;
+use App\Events\PatternWasCreated;
+use App\Events\PatternWasUpdated;
+use App\Events\PatternWasDestroyed;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -80,5 +85,37 @@ class PatternTest extends TestCase
         $pattern->publish();
 
         $this->assertTrue( !! $pattern->fresh()->published_flag );
+    }
+
+    /** @test */
+    function an_event_is_dispatched_when_a_pattern_is_created()
+    {
+        $pattern = factory(Pattern::class)->create();
+
+        $this->assertEvent(PatternWasCreated::class, [ 'pattern' => $pattern ]);
+    }
+
+    /** @test */
+    function an_event_is_dispatched_when_a_pattern_is_updated()
+    {   
+        // given a published pattern
+        $pattern = factory(Pattern::class)->states('published')->create();
+
+        // act - update the pattern
+        $pattern->unpublish();
+
+        $this->assertEvent(PatternWasUpdated::class, [ 'pattern' => $pattern ]);
+    }
+
+    /** @test */
+    function an_event_is_dispatched_when_a_pattern_is_destroyed()
+    {   
+        // given a pattern
+        $pattern = factory(Pattern::class)->create();
+
+        // act - update the pattern
+        $pattern->delete();
+
+        $this->assertEvent(PatternWasDestroyed::class, [ 'pattern' => $pattern ]);
     }
 }

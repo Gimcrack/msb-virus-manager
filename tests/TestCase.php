@@ -3,7 +3,9 @@
 namespace Tests;
 
 use Exception;
+use TestHelper;
 use App\Exceptions\Handler;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
@@ -30,6 +32,42 @@ abstract class TestCase extends BaseTestCase
             }
         });
 
+        return $this;
+    }
+
+    /**
+     * Assert that the event was dispatched and has the proper data
+     * @method assertEvent
+     *
+     * @return      $this
+     */
+    public function assertEvent($event, $models = [])
+    {
+        Event::assertDispatched($event, function($e) use ($models) {
+            // make sure the event has the expected models
+            foreach($models as $model_type => $model) {
+                if ( ! $e->$model_type->is($model) ) return false;
+            }
+            return true;
+        });
+        return $this;
+    }
+
+    /**
+     * Assert that the event was dispatched and has the proper data
+     * @method assertEvent
+     *
+     * @return      $this
+     */
+    public function assertNotEvent($event, $models = [])
+    {
+        Event::assertNotDispatched($event, function($e) use ($models) {
+            // make sure the event has the expected models
+            foreach($models as $model_type => $model) {
+                if ( ! $e->$model_type->is($model) ) return false;
+            }
+            return true;
+        });
         return $this;
     }
 

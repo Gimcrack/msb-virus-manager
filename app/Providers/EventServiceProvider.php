@@ -13,9 +13,24 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\Event' => [
-            'App\Listeners\EventListener',
-        ],
+        'App\Events\PatternWasCreated' => [],
+        'App\Events\PatternWasUpdated' => [],
+        'App\Events\PatternWasDestroyed' => [],
+
+        'App\Events\ClientWasCreated' => [],
+        'App\Events\ClientWasUpdated' => [],
+        'App\Events\ClientWasDestroyed' => [],
+        'App\Events\ClientShouldUpgrade' => [],
+
+        'App\Events\ExemptionWasCreated' => [],
+        'App\Events\ExemptionWasUpdated' => [],
+        'App\Events\ExemptionWasDestroyed' => [],
+
+        'App\Events\MatchedFileWasCreated' => [],
+        'App\Events\MatchedFileWasUpdated' => [],
+        'App\Events\MatchedFileWasMuted' => [],
+        'App\Events\MatchedFileWasUnmuted' => [],
+
     ];
 
     /**

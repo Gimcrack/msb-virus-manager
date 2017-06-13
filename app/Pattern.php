@@ -2,8 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Builder;
+use App\Events\PatternWasCreated;
+use App\Events\PatternWasUpdated;
+use App\Events\PatternWasDestroyed;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Pattern extends Model
 {
@@ -12,6 +16,12 @@ class Pattern extends Model
     protected $casts = [
         'id' => 'int',
         'published_flag' => 'bool'
+    ];
+
+    protected $events = [
+        'created' => PatternWasCreated::class,
+        'updated' => PatternWasUpdated::class,
+        'deleted' => PatternWasDestroyed::class,
     ];
 
     /**

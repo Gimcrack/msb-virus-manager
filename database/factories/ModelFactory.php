@@ -48,9 +48,25 @@ $factory->define(App\MatchedFile::class, function(Faker\Generator $faker) {
         'pattern_id' => function() use ($faker) {
             return factory(App\Pattern::class)->create()->id;
         },
-        'file' => $faker->sentence
+        'file' => $faker->sentence,
+        'muted_flag' => 0
     ];
 });
+
+$factory->state(App\MatchedFile::class, 'muted', function(Faker\Generator $faker) {
+    return [
+        'client_id' => function() use ($faker) {
+            return factory(App\Client::class)->create()->id;
+        },
+        'pattern_id' => function() use ($faker) {
+            return factory(App\Pattern::class)->create()->id;
+        },
+        'file' => $faker->sentence,
+        'muted_flag' => 1
+    ];
+});
+
+
 
 $factory->define(App\Pattern::class, function(Faker\Generator $faker) {
     return [
@@ -68,6 +84,28 @@ $factory->state(App\Pattern::class, 'unpublished', function ($faker) {
 $factory->state(App\Pattern::class, 'published', function ($faker) {
     return [
         'name' => $faker->unique()->word,
+        'published_flag' => 1
+    ];
+});
+
+
+$factory->define(App\Exemption::class, function(Faker\Generator $faker) {
+    return [
+        'pattern' => $faker->unique()->word
+    ];
+});
+
+
+$factory->state(App\Exemption::class, 'unpublished', function ($faker) {
+    return [
+        'pattern' => $faker->unique()->word,
+        'published_flag' => 0
+    ];
+});
+
+$factory->state(App\Exemption::class, 'published', function ($faker) {
+    return [
+        'pattern' => $faker->unique()->word,
         'published_flag' => 1
     ];
 });

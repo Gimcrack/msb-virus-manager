@@ -3,6 +3,9 @@
 namespace App;
 
 use App\MatchedFile;
+use App\Events\ClientWasCreated;
+use App\Events\ClientWasUpdated;
+use App\Events\ClientWasDestroyed;
 use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
@@ -18,6 +21,12 @@ class Client extends Model
     {
         return 'name';
     }
+
+    protected $events = [
+        'created' => ClientWasCreated::class,
+        'updated' => ClientWasUpdated::class,
+        'deleted' => ClientWasDestroyed::class,
+    ];
 
     /**
      * A client may have many log entries

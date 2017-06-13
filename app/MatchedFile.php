@@ -2,11 +2,19 @@
 
 namespace App;
 
+use App\Events\MatchedFileWasMuted;
+use App\Events\MatchedFileWasCreated;
+use App\Events\MatchedFileWasUnmuted;
+use App\Events\MatchedFileWasUpdated;
 use Illuminate\Database\Eloquent\Model;
 
 class MatchedFile extends Model
 {
     protected $guarded = [];
+
+    protected $events = [
+        'created' => MatchedFileWasCreated::class,
+    ];
 
     /**
      * A MatchedFile belongs to a Client
@@ -39,6 +47,41 @@ class MatchedFile extends Model
     public function incrementMatch()
     {
         $this->increment('times_matched');
+
+        if ( ! $this->muted_flag )
+            event(new MatchedFileWasUpdated($this));
+
+        return $this;
+    }
+
+    /**
+     * Mute the matched file
+     * @method mute
+     *
+     * @return   $this
+     */
+    public function mute()
+    {
+        $this->muted_flag = 1;
+        $this->save();
+
+        event(new MatchedFileWasMuted($this));
+
+        return $this;
+    }
+
+    /**
+     * Unmute the matched file
+     * @method unmute
+     *
+     * @return   $this
+     */
+    public function unmute()
+    {
+        $this->muted_flag = 0;
+        $this->save();
+
+        event(new MatchedFileWasUnmuted($this));
 
         return $this;
     }

@@ -16,11 +16,21 @@ class ClientLogEntryController extends Controller
      */
     public function store(Client $client)
     {
+        // TODO: 5.5 syntax
+        // $client->logs()->create(
+        //     $this->validate(request(), [
+        //         'action' => 'required',
+        //         'status' => 'required'
+        //     ])
+        // );
+         
+        $this->validate(request(), [
+            'action' => 'required',
+            'status' => 'required'
+        ]);
+        
         $client->logs()->create(
-            $this->validate(request(), [
-                'action' => 'required',
-                'status' => 'required'
-            ])
+           request()->only(['action', 'status']) 
         );
 
         return response()->json([],201);

@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Client;
 use Carbon\Carbon;
 use Tests\TestCase;
+use App\Events\ClientShouldUpgrade;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -137,6 +138,16 @@ class ClientTest extends TestCase
         // response assertions
         ->response()
             ->assertStatus(202);
+    }
+
+    /** @test */
+    function a_client_can_be_told_to_upgrade_via_an_event()
+    {
+        $client = factory(Client::class)->create();
+
+        $this->post("/api/v1/clients/{$client->name}/upgrade");
+
+        $this->assertEvent(ClientShouldUpgrade::class, ['client' => $client]);
     }
     
 }

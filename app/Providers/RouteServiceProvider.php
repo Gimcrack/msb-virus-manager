@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Client;
+use App\Pattern;
+use App\Exemption;
+use App\MatchedFile;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -25,6 +28,9 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         Route::model('client',Client::class);
+        Route::model('pattern',Pattern::class);
+        Route::model('exemption',Exemption::class);
+        Route::model('match',MatchedFile::class);
 
         parent::boot();
     }

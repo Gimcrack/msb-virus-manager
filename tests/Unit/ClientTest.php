@@ -6,6 +6,9 @@ use App\Client;
 use App\LogEntry;
 use Tests\TestCase;
 use App\MatchedFile;
+use App\Events\ClientWasCreated;
+use App\Events\ClientWasUpdated;
+use App\Events\ClientWasDestroyed;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -71,5 +74,39 @@ class ClientTest extends TestCase
 
         $this->assertCount( 3, $client->matched_files );
         
+    }
+
+    /** @test */
+    function an_event_is_dispatched_when_a_client_is_created()
+    {
+        $client = factory(Client::class)->create();
+
+        $this->assertEvent(ClientWasCreated::class, [ 'client' => $client ]);
+    }
+
+    /** @test */
+    function an_event_is_dispatched_when_a_client_is_updated()
+    {   
+        // given a published client
+        $client = factory(Client::class)->create();
+
+        // act - update the client
+        $client->update([
+            'version' => 'new_version'
+        ]);
+
+        $this->assertEvent(ClientWasUpdated::class, [ 'client' => $client ]);
+    }
+
+    /** @test */
+    function an_event_is_dispatched_when_a_client_is_destroyed()
+    {   
+        // given a client
+        $client = factory(Client::class)->create();
+
+        // act - update the client
+        $client->delete();
+
+        $this->assertEvent(ClientWasDestroyed::class, [ 'client' => $client ]);
     }
 }
