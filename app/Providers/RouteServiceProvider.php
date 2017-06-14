@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\User;
 use App\Client;
 use App\Pattern;
 use App\Exemption;
@@ -31,6 +32,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('pattern',Pattern::class);
         Route::model('exemption',Exemption::class);
         Route::model('match',MatchedFile::class);
+        Route::model('user',User::class);
 
         parent::boot();
     }
@@ -45,8 +47,6 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
-
-        //
     }
 
     /**
@@ -76,5 +76,10 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
+
+        Route::prefix('api/v1/')
+            ->middleware('api:admin')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/admin.php'));
     }
 }

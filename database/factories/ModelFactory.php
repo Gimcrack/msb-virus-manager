@@ -20,12 +20,19 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
+        'admin_flag' => 0
+    ];
+});
+
+$factory->state(App\User::class, 'admin', function (Faker\Generator $faker) {
+    return [
+        'admin_flag' => 1
     ];
 });
 
 $factory->define(App\Client::class, function(Faker\Generator $faker) {
     return [
-        'name' => $faker->word,
+        'name' => $faker->unique()->word,
         'version' => $faker->word
     ];
 });

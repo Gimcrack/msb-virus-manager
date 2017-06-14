@@ -79,7 +79,7 @@ class MatchedFileTest extends TestCase
         
         // response assertions
         ->response()
-            ->assertRedirect("/api/v1/clients/{$client->name}/matches");
+            ->assertStatus(422);
     }
 
     /** @test */

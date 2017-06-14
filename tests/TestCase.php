@@ -2,10 +2,14 @@
 
 namespace Tests;
 
+use App\User;
 use Exception;
 use TestHelper;
 use App\Exceptions\Handler;
+use PHPUnit\Framework\Assert;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
@@ -20,6 +24,31 @@ abstract class TestCase extends BaseTestCase
     protected function setUp()
     {
         parent::setUp();
+
+        Collection::macro('assertContains', function($value) {
+            Assert::assertTrue($this->contains($value), "Failed to assert that the collection contains the expected value");
+            return $this;
+        });
+
+        Collection::macro('assertEmpty', function() {
+            Assert::assertCount(0, $this, "Failed to assert that the collection was empty");
+            return $this;
+        });
+
+        Collection::macro('assertCount', function($count) {
+            Assert::assertCount($count, $this, "Failed to assert that the collection had the expected count");
+            return $this;
+        });
+
+        Collection::macro('assertNotEmpty', function() {
+            Assert::assertTrue($this->count() > 0, "Failed to assert that the collection was not empty");
+            return $this;
+        });
+
+        Collection::macro('assertMinCount', function($count) {
+            Assert::assertTrue($this->count() >= $count, "Failed to assert that the collection had at least {$count} items");
+            return $this;
+        });
     }
 
     public function disableExceptionHandling()
@@ -33,6 +62,28 @@ abstract class TestCase extends BaseTestCase
         });
 
         return $this;
+    }
+
+    /**
+     * Create an admin and login
+     * @method actingAsAdmin
+     *
+     * @return   $this
+     */
+    public function actingAsAdmin()
+    {
+        return $this->actingAs( factory(User::class)->states('admin')->create() );
+    }
+
+    /**
+     * Create a user and login
+     * @method actingAsUser
+     *
+     * @return   $this
+     */
+    public function actingAsUser()
+    {
+        return $this->actingAs( factory(User::class)->create() );
     }
 
     /**
@@ -69,6 +120,38 @@ abstract class TestCase extends BaseTestCase
             return true;
         });
         return $this;
+    }
+
+    /**
+     * Assert that the notification was sent and has the proper data
+     * @method assertNotification
+     *
+     * @return   $this
+     */
+    public function assertNotification($notification, $user, $models = [])
+    {
+        Notification::assertSentTo( $user, $notification, function($n, $channels) use($models) {
+            foreach($models as $model_type => $model) {
+                if ( ! $n->$model_type->is($model) ) return false;
+            }
+            return true;
+        });
+    }
+
+    /**
+     * Assert that the notification was not sent
+     * @method assertNotification
+     *
+     * @return   $this
+     */
+    public function assertNotificationNotSent($notification, $user, $models = [])
+    {
+        Notification::assertNotSentTo( $user, $notification, function($n, $channels) use($models) {
+            foreach($models as $model_type => $model) {
+                if ( ! $n->$model_type->is($model) ) return false;
+            }
+            return true;
+        });
     }
 
     /**
@@ -129,7 +212,7 @@ abstract class TestCase extends BaseTestCase
     {
         $this->headers = array_merge($this->headers, $headers);
         
-        $this->response = parent::post($endpoint, $data, $this->headers);
+        $this->response = parent::json('POST', $endpoint, $data, $this->headers);
 
         return $this;
     }
@@ -144,7 +227,7 @@ abstract class TestCase extends BaseTestCase
     {
         $this->headers = array_merge($this->headers, $headers);
         
-        $this->response = parent::get($endpoint, $data, $this->headers);
+        $this->response = parent::json('GET', $endpoint, $data, $this->headers);
 
         return $this;
     }
@@ -159,7 +242,7 @@ abstract class TestCase extends BaseTestCase
     {
         $this->headers = array_merge($this->headers, $headers);
         
-        $this->response = parent::patch($endpoint, $data, $this->headers);
+        $this->response = parent::json('PATCH', $endpoint, $data, $this->headers);
 
         return $this;
     }
@@ -174,7 +257,7 @@ abstract class TestCase extends BaseTestCase
     {
         $this->headers = array_merge($this->headers, $headers);
         
-        $this->response = parent::put($endpoint, $data, $this->headers);
+        $this->response = parent::json('PUT',$endpoint, $data, $this->headers);
 
         return $this;
     }
@@ -189,7 +272,7 @@ abstract class TestCase extends BaseTestCase
     {
         $this->headers = array_merge($this->headers, $headers);
         
-        $this->response = parent::delete($endpoint, $data, $this->headers);
+        $this->response = parent::json('DELETE', $endpoint, $data, $this->headers);
 
         return $this;
     }

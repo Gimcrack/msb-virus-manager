@@ -8,6 +8,20 @@ use Illuminate\Http\Request;
 
 class ClientLogEntryController extends Controller
 {
+
+    /**
+     * Get an index of the clients LogEntry resources
+     * @method index
+     *
+     * @return   response
+     */
+    public function index(Client $client)
+    {
+        $data = $client->logs()->latest()->paginate(25);
+
+        return response()->json( $data, 200 );
+    }
+
     /**
      * Create a new LogEntry for the given client
      * @method store

@@ -3,6 +3,8 @@
 namespace Tests;
 
 use Event;
+use Notification;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Console\Kernel;
 
 trait CreatesApplication
@@ -19,6 +21,7 @@ trait CreatesApplication
         $app->make(Kernel::class)->bootstrap();
 
         Event::fake();
+        Notification::fake();
 
         return $app;
     }

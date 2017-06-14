@@ -13,16 +13,18 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::get('definitions', 'DefinitionsController@index');
+
 Route::get('exemptions', 'ExemptionController@index');
 Route::get('exemptions/{exemption}', 'ExemptionController@show');
-Route::post('exemptions/{exemption}/unpublish', 'ExemptionController@unpublish');
-Route::post('exemptions/{exemption}/publish', 'ExemptionController@publish');
+
 
 Route::get('patterns', 'PatternController@index');
 Route::get('patterns/{pattern}', 'PatternController@show');
-Route::post('patterns/{pattern}/unpublish', 'PatternController@unpublish');
-Route::post('patterns/{pattern}/publish', 'PatternController@publish');
 
+Route::get('logs', 'LogEntryController@index');
+
+Route::get('clients/{client}/logs', 'ClientLogEntryController@index');
 Route::post('clients/{client}/logs', 'ClientLogEntryController@store');
 
 Route::post('clients/{client}/matches/{match}/mute', 'ClientMatchedFilesController@mute');

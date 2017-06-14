@@ -60,6 +60,41 @@ class LogEntryTest extends TestCase
             ->assertStatus(404);
     }
 
+    /** @test */
+    function a_clients_log_entries_can_be_viewed()
+    {
+        // given a client
+        $client = factory(Client::class)->create();
+
+        // and some log entries
+        $logs = factory(LogEntry::class, 10)->create([
+            'client_id' => $client->id
+        ]);
+
+        $this->get("/api/v1/clients/{$client->name}/logs")
+
+        ->assertJsonCount(10)
+
+        ->response()
+            ->assertStatus(200)
+            ->assertJsonFragment( $logs->first()->fresh()->toArray() );
+    }
+
+    /** @test */
+    function all_log_entries_can_be_viewed()
+    {
+        // given some log entries, each with different clients
+        $logs = factory(LogEntry::class, 10)->create();
+
+        $this->get("/api/v1/logs")
+
+        ->assertJsonCount(10)
+
+        ->response()
+            ->assertStatus(200)
+            ->assertJsonFragment( $logs->first()->fresh()->toArray() );
+    }
+
     
     
 }

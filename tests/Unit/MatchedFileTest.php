@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\User;
 use App\Client;
 use App\Pattern;
 use Tests\TestCase;
@@ -11,8 +12,10 @@ use App\Events\MatchedFileWasCreated;
 use App\Events\MatchedFileWasUnmuted;
 use App\Events\MatchedFileWasUpdated;
 use Illuminate\Database\QueryException;
+use App\Notifications\MatchedFileCreatedNotification;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\Notifications\MatchedFileIncrementedNotification;
 
 class MatchedFileTest extends TestCase
 {
@@ -196,5 +199,82 @@ class MatchedFileTest extends TestCase
         $matched_file->incrementMatch();
 
         $this->assertNotEvent(MatchedFileWasUpdated::class, [ 'matched_file' => $matched_file ]);
+    }
+
+    /** @test */
+    function a_notification_is_sent_only_to_admins_when_a_file_is_matched()
+    {
+        // given an admin user
+        $admin = factory(User::class)->states('admin')->create();
+
+        // and a standard user
+        $user = factory(User::class)->create();
+
+        // act - create a matched file
+        $matched_file = factory(MatchedFile::class)->create();
+
+        // assert that a notification was sent to the admin
+        $this->assertNotification( 
+            MatchedFileCreatedNotification::class,
+            $admin,
+            ['matched_file' => $matched_file] 
+        );
+
+        // assert that a notification was not sent to the std user
+        $this->assertNotificationNotSent( 
+            MatchedFileCreatedNotification::class,
+            $user,
+            ['matched_file' => $matched_file] 
+        );
+    }
+
+    /** @test */
+    function a_notification_is_sent_only_to_admins_when_a_file_is_incremented()
+    {
+        // given an admin user
+        $admin = factory(User::class)->states('admin')->create();
+
+        // and a standard user
+        $user = factory(User::class)->create();
+
+        // and a matched file
+        $matched_file = factory(MatchedFile::class)->create();
+
+        // act - increment the file
+        $matched_file->incrementMatch();
+
+        // assert that a notification was sent to the admin
+        $this->assertNotification( 
+            MatchedFileIncrementedNotification::class,
+            $admin,
+            ['matched_file' => $matched_file] 
+        );
+
+        // assert that a notification was not sent to the std user
+        $this->assertNotificationNotSent( 
+            MatchedFileIncrementedNotification::class,
+            $user,
+            ['matched_file' => $matched_file] 
+        );
+    }
+
+    /** @test */
+    function a_notification_is_not_sent_when_a_muted_file_is_incremented()
+    {
+        // given an admin user
+        $admin = factory(User::class)->states('admin')->create();
+
+        // and a muted matched file
+        $matched_file = factory(MatchedFile::class)->states('muted')->create();
+
+        // act - increment the file
+        $matched_file->incrementMatch();
+
+        // assert that a notification was not sent
+        $this->assertNotificationNotSent( 
+            MatchedFileIncrementedNotification::class,
+            $admin,
+            ['matched_file' => $matched_file] 
+        );
     }
 }

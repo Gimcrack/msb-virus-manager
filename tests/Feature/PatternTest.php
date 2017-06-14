@@ -63,7 +63,9 @@ class PatternTest extends TestCase
         $pattern = factory(Pattern::class)->states('published')->create(); 
 
         // act
-        $this->post("/api/v1/patterns/{$pattern->id}/unpublish")
+        $this
+            ->actingAsAdmin()
+            ->post("/api/v1/patterns/{$pattern->id}/unpublish")
 
         ->response()
             ->assertStatus(202);
@@ -78,7 +80,9 @@ class PatternTest extends TestCase
         $pattern = factory(Pattern::class)->states('unpublished')->create(); 
 
         // act
-        $this->post("/api/v1/patterns/{$pattern->id}/publish")
+        $this
+            ->actingAsAdmin()
+            ->post("/api/v1/patterns/{$pattern->id}/publish")
 
         ->response()
             ->assertStatus(202);

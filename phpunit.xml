@@ -8,6 +8,11 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false">
+    <groups>
+        <exclude>
+            <group>external</group>
+        </exclude>
+    </groups>
     <testsuites>
         <testsuite name="Feature Tests">
             <directory suffix="Test.php">./tests/Feature</directory>
@@ -15,6 +20,10 @@
 
         <testsuite name="Unit Tests">
             <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+
+        <testsuite name="Integration Tests">
+            <directory suffix="Test.php">./tests/Integration</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -29,5 +38,6 @@
         <env name="QUEUE_DRIVER" value="sync"/>
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
+        <env name="BROADCAST_DRIVER" value="redis"/>
     </php>
 </phpunit>

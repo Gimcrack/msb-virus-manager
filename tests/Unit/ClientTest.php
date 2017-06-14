@@ -32,6 +32,25 @@ class ClientTest extends TestCase
     }
 
     /** @test */
+    function a_client_must_have_a_unique_name()
+    { 
+        // given a client
+        $client = factory(Client::class)->create(['name' => 'some-name']);
+
+        // act - try to create another client with the same name
+        try {
+            factory(Client::class)->create(['name' => 'some-name']);            
+        }
+        catch (\Illuminate\Database\QueryException $e)
+        {
+            $this->assertCount(1, Client::all() );
+            return;
+        }
+
+        $this->fail("Expected a query exception, but did not get one.");
+    }
+
+    /** @test */
     function a_client_must_have_a_version()
     {
         try {

@@ -66,10 +66,12 @@ class ExemptionTest extends TestCase
         $exemption = factory(Exemption::class)->states('published')->create(); 
 
         // act
-        $this->post("/api/v1/exemptions/{$exemption->id}/unpublish")
+        $this
+            ->actingAsAdmin()
+            ->post("/api/v1/exemptions/{$exemption->id}/unpublish")
 
-        ->response()
-            ->assertStatus(202);
+            ->response()
+                ->assertStatus(202);
 
         $this->assertFalse( !! $exemption->fresh()->published_flag );
     }
@@ -77,15 +79,16 @@ class ExemptionTest extends TestCase
     /** @test */
     function an_unpublished_exemption_can_be_published()
     {
-        $this->disableExceptionHandling();
         // given a exemption
         $exemption = factory(Exemption::class)->states('unpublished')->create(); 
 
         // act
-        $this->post("/api/v1/exemptions/{$exemption->id}/publish")
+        $this
+            ->actingAsAdmin()
+            ->post("/api/v1/exemptions/{$exemption->id}/publish")
 
-        ->response()
-            ->assertStatus(202);
+            ->response()
+                ->assertStatus(202);
 
         $this->assertTrue( !! $exemption->fresh()->published_flag );
     }

@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Client;
 use App\LogEntry;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -67,5 +68,20 @@ class LogEntryTest extends TestCase
 
         // make sure the log entry has a client
         $this->assertInstanceOf(Client::class,$entry->client);
+    }
+
+    /** @test */
+    function a_history_of_recent_log_entries_can_be_obtained()
+    {
+        // given some recent log entries
+        factory(LogEntry::class, 10)->create();
+
+        // and some old ones
+        factory(LogEntry::class, 10)->create([
+            'created_at' => Carbon::now()->subDays(10)
+        ]);
+
+        // make sure we only get the recent ones
+        $this->assertCount(10, LogEntry::recent($days = 7)->get() );
     }
 }

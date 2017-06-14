@@ -3,7 +3,9 @@
 namespace App;
 
 use App\Client;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class LogEntry extends Model
 {
@@ -18,5 +20,16 @@ class LogEntry extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    /**
+     * Get the recent log entries
+     * @method scopeRecent
+     *
+     * @return   Builder
+     */
+    public function scopeRecent(Builder $query, $days = 7)
+    {
+        return $query->where('created_at','>',Carbon::now()->subDays($days));
     }
 }
