@@ -4,6 +4,7 @@ namespace App\Definitions;
 
 use Cache;
 use Zttp\Zttp;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use App\Definitions\Facades\Definitions;
 
@@ -29,6 +30,8 @@ class Experiant extends DefinitionsProvider {
         });
 
         $this->definitions = collect($response->filters);
+
+        $this->lastUpdated = ( new Carbon( $response->lastUpdated['date'], $response->lastUpdated['timezone'] ) )->setTimezone('America/Anchorage');
 
         return $this->definitions();
     }

@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Definitions\Experiant;
 use Illuminate\Support\ServiceProvider;
-use App\Definitions\Contracts\Definitions;
+use App\Definitions\Facades\Definitions;
 
 class DefinitionsServiceProvider extends ServiceProvider
 {
@@ -28,5 +28,9 @@ class DefinitionsServiceProvider extends ServiceProvider
         $this->app->singleton( 'definitions', function($app) {
             return new Experiant;
         });
+
+        if ( env('APP_ENV') == 'local' ) {
+            Definitions::fake();
+        }
     }
 }

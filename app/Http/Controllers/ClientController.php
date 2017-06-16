@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Events\NewBuild;
 use Illuminate\Http\Request;
 use App\Events\ClientShouldUpgrade;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -88,6 +89,46 @@ class ClientController extends Controller
         $client->update([
             'version' => request('version')
         ]);
+
+        return response()->json([],202);
+    }
+
+    /**
+     * A new build has been made, make an event
+     * @method build
+     *
+     * @return   response
+     */
+    public function build()
+    {
+        event( new NewBuild );
+
+        return response()->json([],202);
+    }
+
+    /**
+     * Get the latest agent build
+     * @method agentBuild
+     *
+     * @return   response
+     */
+    public function agentBuild()
+    {
+        return response()->json(
+            [ 'version' => Client::max_version() ],
+            200
+        );
+    }
+
+    /**
+     * Destroy the specified client
+     * @method destroy
+     *
+     * @return    void
+     */
+    public function destroy(Client $client)
+    {
+        $client->delete();
 
         return response()->json([],202);
     }

@@ -30,6 +30,18 @@ class ExemptionController extends Controller
     }
 
     /**
+     * Create an exemption
+     * @method create
+     *
+     * @return   response
+     */
+    public function create()
+    {
+        Exemption::create( request()->only(['pattern']) );
+        return response()->json([],201);
+    }
+
+    /**
      * Unpublish the specified exemption
      * @method unpublish
      *
@@ -51,6 +63,19 @@ class ExemptionController extends Controller
     public function publish(Exemption $exemption)
     {
         $exemption->publish();
+
+        return response()->json([], 202);
+    }
+
+    /**
+     * Delete the specified exemption
+     * @method destroy
+     *
+     * @return   response
+     */
+    public function destroy(Exemption $exemption)
+    {
+        $exemption->delete();
 
         return response()->json([], 202);
     }

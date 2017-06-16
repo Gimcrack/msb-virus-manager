@@ -31,6 +31,8 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\MatchedFileWasMuted' => [],
         'App\Events\MatchedFileWasUnmuted' => [],
 
+        'App\Events\NewBuild' => [],
+
     ];
 
     /**

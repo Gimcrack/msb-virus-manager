@@ -37,6 +37,12 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
+let api_token = document.head.querySelector('meta[name="token"]');
+
+if (api_token) {
+    window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + api_token.content;
+}
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
@@ -49,3 +55,31 @@ window.Echo = new Echo({
     broadcaster: 'socket.io',
     host: window.location.hostname + ':6001'
 });
+
+require('font-awesome-webpack');
+require('bootstrap-vertical-tabs');
+
+window.sleep = require('sleep-promise');
+
+import swal from 'sweetalert2';
+
+window.swal = swal;
+
+Array.prototype.$remove = function(key) {
+    Vue.delete(this, key);
+    return this;
+}
+
+String.prototype.$ucfirst = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
+}
+
+import Api from './api';
+window.Api = Api;
+
+import moment from 'moment-timezone';
+window.moment = moment;
+
+window.fromNow = (dateTime) => {
+    return moment.tz( dateTime, "GMT" ).fromNow();
+}

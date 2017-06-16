@@ -2,6 +2,7 @@
 
 namespace App\Definitions;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class FakeDefinitions extends DefinitionsProvider {
@@ -17,6 +18,8 @@ class FakeDefinitions extends DefinitionsProvider {
         $this->definitions = collect([
             'foo', 'bar', 'biz'
         ]);
+
+        $this->lastUpdated = Carbon::now();
 
         return $this->definitions();
     }

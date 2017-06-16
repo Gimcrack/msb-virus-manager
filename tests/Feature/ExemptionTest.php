@@ -60,6 +60,18 @@ class ExemptionTest extends TestCase
     }
 
     /** @test */
+    function an_exemption_can_be_created_by_an_admin()
+    {
+        $this->actingAsAdmin()
+            ->post('/api/v1/exemptions', [ 'pattern' => 'hello'])
+
+        ->response()
+            ->assertStatus(201);
+
+        $this->assertDatabaseHas('exemptions', ['pattern' => 'hello']);
+    }
+
+    /** @test */
     function a_published_exemption_can_be_unpublished()
     {
         // given a exemption
@@ -105,6 +117,23 @@ class ExemptionTest extends TestCase
         ->response()
             ->assertStatus(200)
             ->assertJsonFragment([ 'pattern' => $exemption->pattern ]);
+    }
+
+    /** @test */
+    function an_exemption_can_be_destroyed_by_an_admin()
+    {
+        // given a exemption
+        $exemption = factory(Exemption::class)->create(); 
+
+        // act
+        $this
+            ->actingAsAdmin()
+            ->delete("/api/v1/exemptions/{$exemption->id}")
+
+        ->response()
+            ->assertStatus(202);
+        
+        $this->assertFalse($exemption->exists());
     }
 
     /** @test */

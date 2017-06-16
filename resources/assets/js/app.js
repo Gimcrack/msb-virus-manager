@@ -9,14 +9,44 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+window.Bus = new Vue();
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', require('./components/Example.vue'));
+Vue.component('newBuild', require('./components/NewBuild.vue'));
+Vue.component('agentBuildStatus', require('./components/AgentBuildStatus.vue'));
+Vue.component('definitionsStatus', require('./components/DefinitionsStatus.vue'));
+Vue.component('headerSortButton', require('./components/HeaderSortButton.vue'));
+Vue.component('exemptions', require('./components/Exemptions.vue'));
+Vue.component('exemption', require('./components/Exemption.vue'));
+Vue.component('definitions', require('./components/Definitions.vue'));
+Vue.component('definition', require('./components/Definition.vue'));
+Vue.component('clients', require('./components/Clients.vue'));
+Vue.component('client', require('./components/Client.vue'));
+Vue.component('flash', require('./components/Flash.vue'));
 
 const app = new Vue({
     el: '#app'
 });
+
+window.flash = {
+    success(message) {
+        Bus.$emit('flash', { message, type : 'success' } );
+    },
+
+    warning(message) {
+        Bus.$emit('flash', { message, type : 'warning' } );
+    },
+
+    danger(message) {
+        Bus.$emit('flash', { message, type : 'danger' } );
+    },
+
+    error(message) {
+        Bus.$emit('flash', { message, type : 'danger' } );
+    },
+}

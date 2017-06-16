@@ -13,11 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::get('agent-build', 'ClientController@agentBuild');
 Route::get('definitions', 'DefinitionsController@index');
+Route::get('definitions-status', 'DefinitionsController@status');
 
 Route::get('exemptions', 'ExemptionController@index');
 Route::get('exemptions/{exemption}', 'ExemptionController@show');
-
 
 Route::get('patterns', 'PatternController@index');
 Route::get('patterns/{pattern}', 'PatternController@show');
@@ -27,13 +28,10 @@ Route::get('logs', 'LogEntryController@index');
 Route::get('clients/{client}/logs', 'ClientLogEntryController@index');
 Route::post('clients/{client}/logs', 'ClientLogEntryController@store');
 
-Route::post('clients/{client}/matches/{match}/mute', 'ClientMatchedFilesController@mute');
-Route::post('clients/{client}/matches/{match}/unmute', 'ClientMatchedFilesController@unmute');
 Route::post('clients/{client}/matches', 'ClientMatchedFilesController@store');
 
 Route::get('clients', 'ClientController@index');
 Route::get('clients/{client}/heartbeat', 'ClientController@touch');
 Route::get('clients/{client}', 'ClientController@show');
 Route::patch('clients/{client}', 'ClientController@update');
-Route::post('clients/{client}/upgrade', 'ClientController@upgrade');
 Route::post('clients/{name}', 'ClientController@store');

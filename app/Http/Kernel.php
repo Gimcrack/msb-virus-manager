@@ -44,7 +44,8 @@ class Kernel extends HttpKernel
 
         'api:admin' => [
             'api',
-            'admin'
+            'admin',
+            'auth:api'
         ],
     ];
 

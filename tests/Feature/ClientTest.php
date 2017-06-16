@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\User;
 use App\Client;
 use Carbon\Carbon;
 use Tests\TestCase;
+use App\Events\NewBuild;
 use App\Events\ClientShouldUpgrade;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -141,13 +143,61 @@ class ClientTest extends TestCase
     }
 
     /** @test */
-    function a_client_can_be_told_to_upgrade_via_an_event()
+    function a_client_can_be_told_to_upgrade_by_an_admin_via_an_event()
     {
         $client = factory(Client::class)->create();
 
-        $this->post("/api/v1/clients/{$client->name}/upgrade");
+        $this
+        ->actingAsAdmin()
+        ->post("/api/v1/clients/{$client->name}/upgrade");
 
         $this->assertEvent(ClientShouldUpgrade::class, ['client' => $client]);
+    }
+
+    /** @test */
+    function clients_can_be_told_of_a_new_build_via_event()
+    {
+        $this->disableExceptionHandling();
+
+        $this
+        ->actingAsAdmin()
+        ->post("/api/v1/builds")
+
+
+        ->response()
+            ->assertStatus(202);
+
+        $this->assertEvent(NewBuild::class);
+    }
+
+    /** @test */
+    function a_client_can_be_deleted_by_an_admin()
+    {
+        $client = factory(Client::class)->create();
+
+        $this
+            ->actingAsAdmin()
+            ->delete("/api/v1/clients/{$client->name}")
+
+        ->response()
+            ->assertStatus(202);
+
+        $this->assertFalse( $client->exists() );
+    }   
+
+    /** @test */
+    function the_latest_agent_build_can_be_obtained()
+    {
+        // given some clients
+        factory(Client::class)->create(['version' => '1.0.1.0']);
+        factory(Client::class)->create(['version' => '1.0.2.0']);
+        factory(Client::class)->create(['version' => '1.0.3.0']);
+
+        $this->get('/api/v1/agent-build')
+
+        ->response()
+            ->assertStatus(200)
+            ->assertJsonFragment(['version' => '1.0.3.0']);
     }
     
 }

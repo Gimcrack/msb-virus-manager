@@ -54,4 +54,18 @@ class DefinitionsProviderTests extends TestCase
     {
         $this->assertEquals( $this->implementation, Definitions::implementation() );
     }
+
+    /** @test */
+    function the_implementation_short_name_of_the_definitions_provider_can_be_obtained()
+    {
+        $this->assertEquals( $this->implementation_short, Definitions::implementation_short() );
+    }
+
+    /** @test */
+    function the_date_last_updated_can_be_obtained()
+    {
+        Definitions::fetch();
+        
+        $this->assertInstanceOf( \Carbon\Carbon::class, Definitions::lastUpdated() );
+    }
 }

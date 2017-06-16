@@ -16,6 +16,8 @@ class FakeDefinitionsTest extends DefinitionsProviderTests
         
         $this->implementation = FakeDefinitions::class;
 
+        $this->implementation_short = 'FakeDefinitions';
+
         Definitions::fake();
     }
 }

@@ -101,13 +101,15 @@ class MatchedFileTest extends TestCase
     }
 
     /** @test */
-    function a_matched_file_can_be_muted()
+    function a_matched_file_can_be_muted_by_an_admin()
     {   
         // given a matched file
         $file = factory(MatchedFile::class)->create();
 
         // act
-        $this->post("/api/v1/clients/{$file->client->name}/matches/{$file->id}/mute")
+        $this
+        ->actingAsAdmin()
+        ->post("/api/v1/clients/{$file->client->name}/matches/{$file->id}/mute")
 
         // assert
         ->response()
@@ -117,13 +119,15 @@ class MatchedFileTest extends TestCase
     }
 
     /** @test */
-    function a_muted_matched_file_can_be_unmuted()
+    function a_muted_matched_file_can_be_unmuted_by_an_admin()
     {
         // given a matched file
         $file = factory(MatchedFile::class)->states('muted')->create();
 
         // act
-        $this->post("/api/v1/clients/{$file->client->name}/matches/{$file->id}/unmute")
+        $this
+        ->actingAsAdmin()
+        ->post("/api/v1/clients/{$file->client->name}/matches/{$file->id}/unmute")
 
         // assert
         ->response()
@@ -135,13 +139,13 @@ class MatchedFileTest extends TestCase
     /** @test */
     function a_valid_file_with_an_invalid_client_cannot_be_muted_or_unmuted()
     {
-        //$this->disableExceptionHandling();
-
         // given a matched file
         $file = factory(MatchedFile::class)->states('muted')->create();
 
         // act
-        $this->post("/api/v1/clients/invalid-client-name/matches/{$file->id}/unmute")
+        $this
+        ->actingAsAdmin()
+        ->post("/api/v1/clients/invalid-client-name/matches/{$file->id}/unmute")
 
         // assert
         ->response()
@@ -153,8 +157,6 @@ class MatchedFileTest extends TestCase
     /** @test */
     function a_valid_file_with_the_wrong_client_cannot_be_muted_or_unmuted()
     {
-        // $this->disableExceptionHandling();
-
         // given a matched file
         $file = factory(MatchedFile::class)->states('muted')->create();
 
@@ -162,7 +164,9 @@ class MatchedFileTest extends TestCase
         $other_client = factory(Client::class)->create();
 
         // act
-        $this->post("/api/v1/clients/{$other_client->name}/matches/{$file->id}/unmute")
+        $this
+        ->actingAsAdmin()
+        ->post("/api/v1/clients/{$other_client->name}/matches/{$file->id}/unmute")
 
         // assert
         ->response()

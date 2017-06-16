@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exemption;
 use Illuminate\Http\Request;
 use App\Definitions\Facades\Definitions;
 
@@ -15,8 +16,21 @@ class DefinitionsController extends Controller
      */
     public function index()
     {
-        $definitions = Definitions::fetch();
+        $definitions = Definitions::active();
+        
+        $lastUpdated = Definitions::lastUpdated();
 
-        return response()->json( compact('definitions'), 200);
+        return response()->json( compact('definitions', 'lastUpdated'), 200);
+    }
+
+    /**
+     * Get the definitons status
+     * @method status
+     *
+     * @return   response
+     */
+    public function status()
+    {
+        return response()->json( ['definitions' => Definitions::status() ], 200);
     }
 }

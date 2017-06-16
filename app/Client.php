@@ -25,7 +25,7 @@ class Client extends Model
     protected $events = [
         'created' => ClientWasCreated::class,
         'updated' => ClientWasUpdated::class,
-        'deleted' => ClientWasDestroyed::class,
+        'deleting' => ClientWasDestroyed::class,
     ];
 
     /**
@@ -48,5 +48,31 @@ class Client extends Model
     public function matched_files()
     {
         return $this->hasMany(MatchedFile::class);
+    }
+
+    /**
+     * Get the max version
+     * @method max_version
+     *
+     * @return   string
+     */
+    public static function max_version()
+    {
+        $v = static::pluck('version')
+            ->transform( function($v) {
+                return collect( explode('.', $v) )
+                    ->transform( function($part) {
+                        return substr('0000' . $part, -3);
+                    })
+                    ->implode('.');
+            })
+            ->max();
+
+         return  
+            collect( explode('.',$v) )
+                ->transform( function($part) {
+                    return 1 * $part;
+                })
+                ->implode('.');
     }
 }

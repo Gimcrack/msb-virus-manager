@@ -13,11 +13,20 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post("builds",'ClientController@build');
 
 Route::post("users/{user}/promote", "UserController@promote");
 
+Route::post('exemptions', 'ExemptionController@create');
 Route::post('exemptions/{exemption}/unpublish', 'ExemptionController@unpublish');
 Route::post('exemptions/{exemption}/publish', 'ExemptionController@publish');
+Route::delete('exemptions/{exemption}', 'ExemptionController@destroy');
 
 Route::post('patterns/{pattern}/unpublish', 'PatternController@unpublish');
 Route::post('patterns/{pattern}/publish', 'PatternController@publish');
+
+Route::delete('clients/{client}', 'ClientController@destroy');
+Route::post('clients/{client}/matches/{match}/mute', 'ClientMatchedFilesController@mute');
+Route::post('clients/{client}/matches/{match}/unmute', 'ClientMatchedFilesController@unmute');
+
+Route::post('clients/{client}/upgrade', 'ClientController@upgrade');

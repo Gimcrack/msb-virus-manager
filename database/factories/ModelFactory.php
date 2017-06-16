@@ -20,6 +20,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
+        'api_token' => str_random(60),
         'admin_flag' => 0
     ];
 });
@@ -33,7 +34,7 @@ $factory->state(App\User::class, 'admin', function (Faker\Generator $faker) {
 $factory->define(App\Client::class, function(Faker\Generator $faker) {
     return [
         'name' => $faker->unique()->word,
-        'version' => $faker->word
+        'version' => '1.0.' . $faker->randomDigit . '.0'
     ];
 });
 

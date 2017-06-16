@@ -7,3 +7,71 @@
 
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "buttons";
+
+// SWAL
+@import "node_modules/sweetalert2/src/sweetalert2.scss";
+
+.relative {
+    position: relative;
+}
+
+.row {
+    margin-top: 2em;
+}
+
+.navbar {
+    margin-bottom: 0 !important;
+    position: fixed;
+    width: 100vw;
+    top: 0;
+}
+
+.tabs-left, .tabs-right {
+    min-height: calc(100vh - 50px) !important;
+    padding-top: 2em !important;
+    background-color: #f5f8fa;
+    position: fixed;
+    top: 50px;
+}
+
+.tab-content {
+    min-height: calc(100vh - 80px) !important;
+    padding-top: 2em !important;
+    background: white;
+    margin-top: 50px;
+}
+
+.content {
+    margin-top: 50px;
+}
+
+.nav-tabs > li.active > a, 
+.nav-tabs > li.active > a:hover, 
+.nav-tabs > li.active > a:focus {
+    background: white;
+}
+
+body {
+    background: linear-gradient(to right, #f5f8fa 12%, white 12%);
+}
+
+ .table-hover tbody tr td {
+    transition: all 0.3s linear;
+ }
+
+ .table-hover tbody tr:hover td,
+ .table-hover tbody tr.hover td, {
+    background-color: #FFFF66;
+ }
+
+ .btn-submenu {
+      position: absolute;
+      /* padding: 0 3px 3px; */
+      background: white;
+      z-index: 3;
+      top: 50%;
+      margin-top: -12px;
+      left: 30px;
+      overflow: hidden;
+    }

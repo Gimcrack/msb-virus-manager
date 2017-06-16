@@ -72,7 +72,13 @@ abstract class TestCase extends BaseTestCase
      */
     public function actingAsAdmin()
     {
-        return $this->actingAs( factory(User::class)->states('admin')->create() );
+        $user = factory(User::class)->states('admin')->create();
+
+        $this
+            ->actingAs($user)
+            ->headers(['Authorization' => "Bearer {$user->api_token}"]);
+
+        return $this;
     }
 
     /**
@@ -83,7 +89,13 @@ abstract class TestCase extends BaseTestCase
      */
     public function actingAsUser()
     {
-        return $this->actingAs( factory(User::class)->create() );
+        $user = factory(User::class)->create();
+
+        $this
+            ->actingAs($user)
+            ->headers(['Authorization' => "Bearer {$user->api_token}"]);
+
+        return $this;
     }
 
     /**

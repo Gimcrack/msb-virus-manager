@@ -11,5 +11,17 @@ const { mix } = require('laravel-mix');
  |
  */
 
-// mix.js('resources/assets/js/app.js', 'public/js')
-//    .sass('resources/assets/sass/app.scss', 'public/css');
+mix.js('resources/assets/js/app.js', 'public/js')
+   .sass('resources/assets/sass/app.scss', 'public/css')
+   .webpackConfig({
+        resolve: {
+            modules: [
+                'node_modules'
+            ],
+            alias: {
+                'vue$': 'vue/dist/vue.js',
+                jquery: 'jquery/src/jquery'
+            }
+        }
+   })
+   .browserSync('http://10.msb-virus-manager.dev');

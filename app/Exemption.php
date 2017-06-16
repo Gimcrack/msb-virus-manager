@@ -16,7 +16,7 @@ class Exemption extends Model
     protected $events = [
         'created' => ExemptionWasCreated::class,
         'updated' => ExemptionWasUpdated::class,
-        'deleted' => ExemptionWasDestroyed::class,
+        'deleting' => ExemptionWasDestroyed::class,
     ];
     
     /**
