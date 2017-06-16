@@ -6,12 +6,12 @@
         <div class="col-xs-1"> <!-- required for floating -->
             <!-- Nav tabs -->
             <ul class="nav nav-tabs tabs-left">
-              <li class="active">
+              <!-- <li >
                 <a href="#home" data-toggle="tab">
                     <i class="fa fa-fw fa-2x fa-home"></i>
                 </a>
-              </li>
-              <li>
+              </li> -->
+              <li class="active">
                 <a href="#clients" data-toggle="tab">
                     <i class="fa fa-fw fa-2x fa-windows"></i>
                 </a>
@@ -26,29 +26,29 @@
                     <i class="fa fa-fw fa-2x fa-cubes"></i>
                 </a>
               </li>
-              <li>
+              <!-- <li>
                 <a href="#files" data-toggle="tab">
                     <i class="fa fa-fw fa-2x fa-bug"></i>
                 </a>
-              </li>
-              <li>
+              </li> -->
+              <!-- <li>
                 <a href="#logs" data-toggle="tab">
                     <i class="fa fa-fw fa-2x fa-file-text-o"></i>
                 </a>
-              </li>
-              <li>
+              </li> -->
+              <!-- <li>
                 <a href="#users" data-toggle="tab">
                     <i class="fa fa-fw fa-2x fa-users"></i>
                 </a>
-              </li>
+              </li> -->
             </ul>
         </div>
 
         <div class="col-xs-11">
             <!-- Tab panes -->
             <div class="tab-content">
-                <div class="tab-pane active" id="home">Home</div>
-                <div class="tab-pane" id="clients">
+                <!-- <div class="tab-pane " id="home">Home</div> -->
+                <div class="tab-pane active" id="clients">
                     <div>
                         <clients></clients>
                     </div>
@@ -63,9 +63,9 @@
                         <definitions></definitions>
                     </div>
                 </div>
-                <div class="tab-pane" id="files">Files</div>
-                <div class="tab-pane" id="logs">Logs</div>
-                <div class="tab-pane" id="users">Users</div>
+                <!-- <div class="tab-pane" id="files">Files</div> -->
+                <!-- <div class="tab-pane" id="logs">Logs</div> -->
+                <!-- <div class="tab-pane" id="users">Users</div> -->
             </div>
         </div>
     </div>
