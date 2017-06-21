@@ -98,6 +98,14 @@ abstract class DefinitionsProvider implements DefinitionsContract {
 
         $exemptions = Exemption::published()->pluck('pattern')->all();
 
-        return $this->definitions()->flip()->except($exemptions)->flip();
+        return $this
+            ->definitions()
+            ->flip()
+            ->except($exemptions)
+            ->flip()
+            ->map( function($pattern, $id) {
+                $status = 'active';
+                return compact('pattern','id','status');
+            });
     }
 }

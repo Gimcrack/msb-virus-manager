@@ -57,6 +57,48 @@ class PatternTest extends TestCase
     }
 
     /** @test */
+    function a_pattern_can_be_created()
+    {
+        $this->post("/api/v1/patterns", [
+            'name' => 'new-pattern'
+        ])
+
+        ->response()
+            ->assertStatus(201)
+            ->assertJsonFragment(['name' => 'new-pattern']);
+
+        $this->assertDatabaseHas('patterns', ['name' => 'new-pattern']);
+    }
+
+    /** @test */
+    function a_pattern_can_be_deleted_by_an_admin()
+    {
+        $pattern = factory(Pattern::class)->create(['name' => 'delete-me']);
+        $this
+        ->actingAsAdmin()
+        ->delete("/api/v1/patterns/{$pattern->id}")
+
+        ->response()
+            ->assertStatus(202);
+
+        $this->assertDatabaseMissing('patterns', ['name' => 'delete-me']);
+    }
+
+    /** @test */
+    function a_pattern_created_with_the_same_name_returns_the_original_pattern_instead()
+    {
+        factory(Pattern::class)->create(['name' => 'new-pattern']);
+
+        $this->post("/api/v1/patterns", [
+            'name' => 'new-pattern'
+        ])
+
+        ->response()
+            ->assertStatus(202)
+            ->assertJsonFragment(['name' => 'new-pattern']);
+    }
+
+    /** @test */
     function a_published_pattern_can_be_unpublished()
     {
         // given a pattern
@@ -105,4 +147,6 @@ class PatternTest extends TestCase
             ->assertStatus(200)
             ->assertJsonFragment([ 'name' => $pattern->name ]);
     }
+
+    
 }

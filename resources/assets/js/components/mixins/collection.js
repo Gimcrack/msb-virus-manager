@@ -1,8 +1,30 @@
 export default {
     
+    data() {
+        return {
+            busy : false,
+            models : [],
+            refresh_btn_text : 'Refresh',
+            search : null,
+            orderBy : 'name',
+            asc : true
+        }
+    },
+
     mounted() {
         this.listen();
         this.fetch();
+    },
+
+    computed : {
+        filtered() {
+
+            let models = _(this.models)
+                .filter( this.searchModel )
+                .sortBy(this.orderBy);
+
+            return (this.asc) ? models.value() : models.reverse().value();
+        }
     },
 
     methods : {
@@ -20,6 +42,10 @@ export default {
 
             if ( !! this.postSuccess )
                 this.postSuccess();
+        },
+
+        done(response) {
+            this.busy = false;
         },
 
         error(error) {
@@ -44,9 +70,22 @@ export default {
         },
 
         add( model ) {
-            this.models.push(model.entity);
+            let index = this.findModelById(model.entity.id);
 
-            flash.success(`New ${model.type}: ${model.name}`);
+            // if the model exists, replace it
+            if ( index > -1 ) {
+                console.log('Updating model');
+                return this.models[index] = model.entity;
+            }
+            else {
+                console.log('New model');
+                this.models.push(model.entity);
+                flash.success(`New ${model.type}: ${model.name}`);
+            }
+        },
+
+        properType() {
+            return this.collection.type.$ucfirst();
         },
 
         model( event ) {
@@ -83,6 +122,45 @@ export default {
                     if ( !! this.postDeleted )
                         this.postDeleted(event);
                 });
+        },
+
+        searchModel( model ) {
+            if ( ! this.search ) return true;
+
+            for ( let prop in model )
+            {
+                if ( typeof model[prop] === "string" ) 
+                {
+                    if ( model[prop].toLowerCase().indexOf( this.search.toLowerCase() ) !== -1 ) return true;    
+                }
+                else 
+                {
+                    if ( this.searchModel( model[prop] ) ) return true;
+                }
+            }
+
+            return false;
+        },
+
+        // override these on the instance if you want to customize the behavior
+
+        preFetch() {
+            this.busy = true;
+            this.refresh_btn_text = 'Refreshing';
+        },
+
+        postSuccess() {
+            this.refresh_btn_text = 'Refreshed';
+
+            sleep(1000).then( () => {
+                this.refresh_btn_text = 'Refresh';
+                this.busy = false;
+            })
+        },
+
+        postError() {
+            this.busy = false;
+            this.refresh_btn_text = 'Refresh';
         },
     }
 }

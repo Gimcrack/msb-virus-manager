@@ -12,7 +12,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class PatternWasCreated implements ShouldQueue
+class PatternWasCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -35,6 +35,6 @@ class PatternWasCreated implements ShouldQueue
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new Channel('patterns');
     }
 }

@@ -12,6 +12,20 @@
 // SWAL
 @import "node_modules/sweetalert2/src/sweetalert2.scss";
 
+.form-control {
+  width: unset;
+  flex: 1;
+}
+
+.fa-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 17px;
+  background: white;
+  border-radius: 50%;
+  padding: 2px;
+}
+
 .relative {
     position: relative;
 }

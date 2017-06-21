@@ -17,6 +17,7 @@ window.Bus = new Vue();
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.component('page', require('./components/Page.vue'));
 Vue.component('newBuild', require('./components/NewBuild.vue'));
 Vue.component('agentBuildStatus', require('./components/AgentBuildStatus.vue'));
 Vue.component('definitionsStatus', require('./components/DefinitionsStatus.vue'));
@@ -25,6 +26,8 @@ Vue.component('exemptions', require('./components/Exemptions.vue'));
 Vue.component('exemption', require('./components/Exemption.vue'));
 Vue.component('definitions', require('./components/Definitions.vue'));
 Vue.component('definition', require('./components/Definition.vue'));
+Vue.component('patterns', require('./components/Patterns.vue'));
+Vue.component('customPattern', require('./components/Pattern.vue'));
 Vue.component('clients', require('./components/Clients.vue'));
 Vue.component('client', require('./components/Client.vue'));
 Vue.component('flash', require('./components/Flash.vue'));

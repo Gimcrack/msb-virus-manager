@@ -22,6 +22,7 @@ Route::post('exemptions/{exemption}/unpublish', 'ExemptionController@unpublish')
 Route::post('exemptions/{exemption}/publish', 'ExemptionController@publish');
 Route::delete('exemptions/{exemption}', 'ExemptionController@destroy');
 
+Route::delete('patterns/{pattern}', 'PatternController@destroy');
 Route::post('patterns/{pattern}/unpublish', 'PatternController@unpublish');
 Route::post('patterns/{pattern}/publish', 'PatternController@publish');
 

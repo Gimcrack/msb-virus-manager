@@ -24,11 +24,9 @@ class DefinitionsTest extends TestCase {
         // assert
         ->response()
             ->assertStatus(200)
-            ->assertJsonFragment(['definitions'])
             ->assertJsonFragment(['foo'])
             ->assertJsonFragment(['bar'])
-            ->assertJsonFragment(['biz'])
-            ->assertJsonFragment(['lastUpdated']);
+            ->assertJsonFragment(['biz']);
     }
 
     /** @test */

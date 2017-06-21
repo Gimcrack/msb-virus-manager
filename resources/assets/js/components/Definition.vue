@@ -5,7 +5,8 @@
                 <button @click.prevent="show_menu = !show_menu" class="btn btn-xs btn-default btn-outline" :class="{ active : show_menu }"> 
                     <i class="fa fa-bars"></i> 
                 </button>
-                <button @click.prevent="" class="btn btn-xs btn-default btn-outline"> {{ definition.id }}
+                <button @click.prevent="" class="btn btn-xs btn-default btn-outline"> 
+                    {{ model.id }}
                 </button>
             </div>
             <div v-if="show_menu" class="btn-submenu">
@@ -17,73 +18,33 @@
                 </button>
             </div> 
         </td>
-        <td>{{ definition.pattern }}</td>
-        <td>{{ definition.status }}</td>
+        <td>{{ model.pattern }}</td>
+        <td>{{ model.status }}</td>
     </tr>
 </template>
 
 <script>
-    export default {
-        props : {
-            pattern : {
-                required : true,
-            },
-            status : {
-                default : 'Active'
-            },
-            id : {
-                default : null,
-            }
-        },
+    import item from './mixins/item.js';
 
-        computed : {
-            busy() {
-                return this.deleting || this.updating;
-            }
-        },
+    export default {
+        mixins : [
+            item
+        ],
 
         data() {
             return {
-                definition : {
-                    id : ( this.id == null ) ? this.pattern : this.id,
-                    pattern : this.pattern,
-                    status : this.status,
-                },
-                updating : false,
-                deleting : false,
-                show_menu : false,
+                item : {
+                    key : 'pattern',
+                    type : 'definition',
+                    endpoint : 'definitions',
+                }
             }
         },
 
-        mounted() {
-            this.highlight();
-            this.listen();
-        },
-
         methods : {
-            listen() {
-
-                // Echo.channel(`clients.${this.client_data.id}`)
-                //     .listen("ClientWasUpdated", (event) => {
-                //         this.client_data = event.client;
-                //         this.highlight();
-
-                //         flash.success(`Client ${this.client.name} Was Updated`);
-                //     });
-            },
-
-            highlight() {
-                $(this.$refs.row)
-                    .addClass('hover');
-
-                sleep(2000).then( () => {
-                    $(this.$refs.row).removeClass('hover');
-                });
-            },
-
             exempt() {
                 return swal({
-                      title: `Create Exemption For: ${this.definition.pattern}?`,
+                      title: `Create Exemption For: ${this.model.pattern}?`,
                       text: "The pattern will be whitelisted.",
                       type: "warning",
                       showCancelButton: true,
@@ -96,30 +57,9 @@
             performExempt() {
 
                 this.updating = true;
-                Api.post(`exemptions`, { pattern : this.definition.pattern })
+                Api.post(`exemptions`, { pattern : this.model.pattern })
                     .then( this.updateSuccess, this.error );
             },
-
-            updateSuccess(response) {
-                flash.success('Exemption created.')
-                this.updating = false;
-            },
-
-            ignore() {
-            
-            },
-
-            error(error) {
-                console.error(error);
-                this.deleting = false;
-                flash.error('There was an error performing the operation. See the console for more details');
-            },
-
-            
         }
     }
 </script>
-
-<style lang="scss">
-    
-</style>

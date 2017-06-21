@@ -74,6 +74,13 @@ String.prototype.$ucfirst = function() {
     return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
 }
 
+String.prototype.$title_case = function() {
+    return this
+        .split('_')
+        .map( (piece) => piece.$ucfirst() )
+        .join(' ');
+}
+
 import Api from './api';
 window.Api = Api;
 

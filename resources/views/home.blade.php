@@ -23,7 +23,13 @@
               </li>
               <li>
                 <a href="#patterns" data-toggle="tab">
-                    <i class="fa fa-fw fa-2x fa-cubes"></i>
+                    <i class="fa fa-fw fa-2x fa-shield"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#custom" data-toggle="tab" class="relative">
+                    <i class="fa fa-plus-circle text-success fa-badge"></i>
+                    <i class="fa fa-fw fa-shield fa-2x"></i>
                 </a>
               </li>
               <!-- <li>
@@ -61,6 +67,11 @@
                 <div class="tab-pane" id="patterns">
                     <div>
                         <definitions></definitions>
+                    </div>
+                </div>
+                <div class="tab-pane" id="custom">
+                    <div>
+                        <patterns></patterns>
                     </div>
                 </div>
                 <!-- <div class="tab-pane" id="files">Files</div> -->

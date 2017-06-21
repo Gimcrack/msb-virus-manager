@@ -21,7 +21,7 @@ class Pattern extends Model
     protected $events = [
         'created' => PatternWasCreated::class,
         'updated' => PatternWasUpdated::class,
-        'deleted' => PatternWasDestroyed::class,
+        'deleting' => PatternWasDestroyed::class,
     ];
 
     /**

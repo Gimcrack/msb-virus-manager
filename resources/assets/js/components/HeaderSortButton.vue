@@ -1,6 +1,6 @@
 <template>
     <th>
-        {{ column.$ucfirst() }}
+        {{ column.$title_case() }}
         <button :class="{active, 'btn-outline' : ! active}" class="btn btn-xs btn-primary " @click="$parent.sortBy(column)"> 
             <i class="fa fa-fw" :class="active_asc ? 'fa-sort-amount-asc' : 'fa-sort-amount-desc' "></i> 
         </button>

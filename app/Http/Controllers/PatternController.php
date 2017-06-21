@@ -30,6 +30,22 @@ class PatternController extends Controller
     }
 
     /**
+     * Store the pattern
+     * @method store
+     *
+     * @return   response
+     */
+    public function store()
+    {
+        $pattern = Pattern::firstOrNew( request()->only(['name']) );
+
+        $code = ( $pattern->exists() ) ? 202 : 201;
+            
+        $pattern->save();
+        return response()->json($pattern, $code);
+    }
+
+    /**
      * Unpublish the specified pattern
      * @method unpublish
      *
@@ -53,5 +69,18 @@ class PatternController extends Controller
         $pattern->publish();
 
         return response()->json([],202);
+    }
+
+    /**
+     * Destroy the specified pattern
+     * @method destroy
+     *
+     * @return   response
+     */
+    public function destroy(Pattern $pattern)
+    {
+        $pattern->delete();
+
+        return response()->json([], 202);
     }
 }
