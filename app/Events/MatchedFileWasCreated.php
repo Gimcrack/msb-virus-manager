@@ -14,7 +14,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use App\Notifications\MatchedFileCreatedNotification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class MatchedFileWasCreated
+class MatchedFileWasCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -27,6 +27,9 @@ class MatchedFileWasCreated
      */
     public function __construct(MatchedFile $matched_file)
     {
+        $matched_file->load('client');
+        $matched_file->load('pattern');
+
         $this->matched_file = $matched_file;
 
         if ( ! $matched_file->muted_flag )
@@ -40,7 +43,18 @@ class MatchedFileWasCreated
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new Channel('matches');
+    }
+
+    /**
+     * Get the attributes to broadcast
+     * @method broadcastWith
+     *
+     * @return   array
+     */
+    public function broadcastWith()
+    {
+        return ['matched_file' => $this->matched_file->load(['pattern','client'])->toArray() ];
     }
 
     /**

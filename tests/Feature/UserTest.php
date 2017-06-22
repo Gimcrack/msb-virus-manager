@@ -46,5 +46,20 @@ class UserTest extends TestCase
         
         $this->assertFalse( $user->fresh()->isAdmin() );
     }
+
+    /** @test */
+    function a_listing_of_users_can_be_retrieved_by_an_admin()
+    {
+        $users = factory(User::class,3)->create();
+
+        $this
+            ->actingAsAdmin()
+            ->get("api/v1/users")
+            ->response()
+                ->assertStatus(200);
+
+        $this->assertJsonCount(4);
+
+    }
     
 }

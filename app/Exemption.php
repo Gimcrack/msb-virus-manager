@@ -18,6 +18,10 @@ class Exemption extends Model
         'updated' => ExemptionWasUpdated::class,
         'deleting' => ExemptionWasDestroyed::class,
     ];
+
+    protected $casts = [
+        'published_flag' => 'bool'
+    ];
     
     /**
      * Limit the scope to only published exemptions

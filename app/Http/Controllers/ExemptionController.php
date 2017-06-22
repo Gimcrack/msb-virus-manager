@@ -15,7 +15,13 @@ class ExemptionController extends Controller
      */
     public function index()
     {
-        return response()->json( Exemption::published()->get(), 200 );
+        if ( request('published') )
+        {
+            return response()->json( Exemption::published()->get(), 200 );
+        }
+
+        return response()->json( Exemption::all(), 200 );
+
     }
 
     /**

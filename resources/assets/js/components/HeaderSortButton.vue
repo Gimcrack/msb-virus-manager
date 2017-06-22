@@ -1,9 +1,13 @@
 <template>
-    <th>
-        {{ column.$title_case() }}
-        <button :class="{active, 'btn-outline' : ! active}" class="btn btn-xs btn-primary " @click="$parent.sortBy(column)"> 
+    <th v-if="column != '__blank__'">
+        {{ column_title }}
+        <button :class="{active, 'btn-outline' : ! active}" class="btn btn-xs btn-primary " @click="$parent.sortBy(column_key)"> 
             <i class="fa fa-fw" :class="active_asc ? 'fa-sort-amount-asc' : 'fa-sort-amount-desc' "></i> 
         </button>
+    </th>
+
+    <th v-else>
+        
     </th>
 </template>
 
@@ -16,6 +20,20 @@
         ],
 
         computed : {
+            column_title() {
+                if ( !! this.column.title )
+                    return this.column.title;
+
+                return this.column.$title_case();
+            },
+
+            column_key() {
+                if ( !! this.column.key )
+                    return this.column.key;
+
+                return this.column;
+            },
+
             active() {
                 return this.orderBy == this.column;
             },

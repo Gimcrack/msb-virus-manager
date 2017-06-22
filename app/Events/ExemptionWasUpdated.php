@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class ExemptionWasUpdated
+class ExemptionWasUpdated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -27,6 +27,8 @@ class ExemptionWasUpdated
         $this->exemption = $exemption;
     }
 
+    
+
     /**
      * Get the channels the event should broadcast on.
      *
@@ -34,6 +36,6 @@ class ExemptionWasUpdated
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new Channel("exemptions.{$this->exemption->id}");
     }
 }

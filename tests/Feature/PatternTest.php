@@ -47,7 +47,7 @@ class PatternTest extends TestCase
             ->create(['name' => 'unpublished_pattern']); 
 
         // act
-        $this->get("/api/v1/patterns")
+        $this->get("/api/v1/patterns?published=1")
 
         // response assertions
         ->assertJsonCount(3)

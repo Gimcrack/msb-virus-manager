@@ -18,18 +18,21 @@
                 details : {
                     columns : [
                         'id',
-                        'name',
-                        'version',
+                        'action',
+                        'status',
                         'updated'
                     ],
-                    type : 'client',
-                    heading : 'Clients',
-                    endpoint : 'clients',
-                    help : 'Clients will self-register here once the agent has been installed.',
+                    data_key : 'data',
+                    order : 'updated_at',
+                    orderDir : false,
+                    type : 'log',
+                    heading : 'Log Entries',
+                    endpoint : 'logs',
+                    help : 'Review Log Entries',
                     events : {
-                        channel : 'clients',
-                        created : 'ClientWasCreated',
-                        destroyed : 'ClientWasDestroyed',
+                        channel : 'logs',
+                        created : 'LogEntryWasCreated',
+                        destroyed : 'LogEntryWasDestroyed',
                     }
                 },
             }
@@ -38,11 +41,9 @@
         methods : {
 
             created(event) {
-                Bus.$emit('ShouldFetchAgentBuild');
             },
 
             deleted(event) {
-                Bus.$emit('ShouldFetchAgentBuild');
             },
         },
     }

@@ -1,42 +1,43 @@
 <template>
-    <tr ref="row">
-        <td class="relative">
-            <div class="btn-group"> 
-                <button @click.prevent="show_menu = !show_menu" class="btn btn-xs btn-default btn-outline" :class="{ active : show_menu }"> 
-                    <i class="fa fa-bars"></i> 
-                </button>
-                <button @click.prevent="" class="btn btn-xs btn-default btn-outline"> 
-                    {{ model.id }}
-                </button>
-            </div>
-            <div v-if="show_menu" class="btn-submenu">
-                <button @click.prevent="view" :disabled="busy" class="btn btn-info btn-xs btn-outline" :class="{disabled : busy}"> 
-                    <i class="fa fa-fw fa-info"></i> 
-                </button>
-                <button @click.prevent="exempt" :disabled="busy" class="btn btn-success btn-xs btn-outline" :class="{disabled : busy}"> 
-                    <i class="fa fa-fw fa-check" :class="{'fa-spin' : updating}"></i> 
-                </button>
-            </div> 
-        </td>
+    <item 
+        :id="model.id"
+        :deleting="deleting"
+        :updating="updating"
+        :toggles="toggles"
+        @view="view"
+        @update="update"
+        @destroy="destroy"
+    >
         <td>{{ model.pattern }}</td>
-        <td>{{ model.status }}</td>
-    </tr>
+        <td v-if="model.status == 'active'" ><span class="label label-success">Active</span></td>
+        <td v-else><span class="label label-danger">Exempt</span></td>
+
+        <template slot="menu">
+            <button @click.prevent="exempt" :disabled="busy" class="btn btn-success btn-xs btn-outline" :class="{disabled : busy}"> 
+                <i :class="{'fa-spin' : updating}" class="fa fa-fw fa-check"></i> 
+            </button>
+        </template>
+    </item>
 </template>
 
 <script>
-    import item from './mixins/item.js';
-
     export default {
         mixins : [
-            item
+            mixins.item
         ],
 
         data() {
             return {
                 item : {
                     key : 'pattern',
+                    model_friendly : 'pattern',
                     type : 'definition',
                     endpoint : 'definitions',
+                },
+
+                toggles : {
+                    update : false,
+                    delete : false
                 }
             }
         },
@@ -60,6 +61,11 @@
                 Api.post(`exemptions`, { pattern : this.model.pattern })
                     .then( this.updateSuccess, this.error );
             },
+
+            updateSuccess() {
+                this.updating = false;
+                Bus.$emit('ShouldFetchDefinitions');
+            }
         }
     }
 </script>

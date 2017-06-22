@@ -101,6 +101,46 @@ class MatchedFileTest extends TestCase
     }
 
     /** @test */
+    function a_matched_file_can_be_acknowledged_by_an_admin()
+    {   
+        // given a matched file
+        $file = factory(MatchedFile::class)->create();
+
+        // act
+        $this
+        ->actingAsAdmin()
+        ->post("/api/v1/clients/{$file->client->name}/matches/{$file->id}/acknowledge")
+
+        // assert
+        ->response()
+            ->assertStatus(202);
+
+        $this->assertTrue( !! $file->fresh()->acknowledged_flag );
+    }
+
+    /** @test */
+    function matched_file_can_be_simultaneously_acknowledged_by_an_admin()
+    {   
+        $this->disableExceptionHandling();
+        
+        // given a matched file
+        $files = factory(MatchedFile::class,5)->create();
+
+        // act
+        $this
+        ->actingAsAdmin()
+        ->post("/api/v1/matches/acknowledge")
+
+        // assert
+        ->response()
+            ->assertStatus(202);
+
+        $files->each( function($file) {
+            $this->assertTrue( !! $file->fresh()->acknowledged_flag );
+        });
+    }
+
+    /** @test */
     function a_matched_file_can_be_muted_by_an_admin()
     {   
         // given a matched file
@@ -173,6 +213,19 @@ class MatchedFileTest extends TestCase
             ->assertStatus(404);
 
         $this->assertTrue( !! $file->fresh()->muted_flag );
+    }
+
+    /** @test */
+    function a_list_of_matched_files_can_be_fetched()
+    {
+        factory(MatchedFile::class,5)->create();
+
+        $this
+            ->get("/api/v1/matches")
+            ->response()
+                ->assertStatus(200);
+        
+        $this->assertJsonCount(5);
     }
 
 

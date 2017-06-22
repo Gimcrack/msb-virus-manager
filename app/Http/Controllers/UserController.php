@@ -9,6 +9,17 @@ class UserController extends Controller
 {
     
     /**
+     * Get an index of the resource
+     * @method index
+     *
+     * @return   response
+     */
+    public function index()
+    {
+        return response()->json( User::all(), 200 );
+    }
+
+    /**
      * Promote the user to admin
      * @method promote
      *

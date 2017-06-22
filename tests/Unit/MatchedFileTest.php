@@ -12,6 +12,7 @@ use App\Events\MatchedFileWasCreated;
 use App\Events\MatchedFileWasUnmuted;
 use App\Events\MatchedFileWasUpdated;
 use Illuminate\Database\QueryException;
+use App\Events\MatchedFileWasIncremented;
 use App\Notifications\MatchedFileCreatedNotification;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -186,7 +187,7 @@ class MatchedFileTest extends TestCase
         // act - increment the matched_file
         $matched_file->incrementMatch();
 
-        $this->assertEvent(MatchedFileWasUpdated::class, [ 'matched_file' => $matched_file ]);
+        $this->assertEvent(MatchedFileWasIncremented::class, [ 'matched_file' => $matched_file ]);
     }
 
     /** @test */
@@ -276,5 +277,35 @@ class MatchedFileTest extends TestCase
             $admin,
             ['matched_file' => $matched_file] 
         );
+    }
+
+    /** @test */
+    function a_matched_file_is_not_acknowledged_by_default()
+    {
+        $matched_file = factory(MatchedFile::class)->create();
+
+        $this->assertFalse( !! $matched_file->acknowledged_flag );
+    }
+
+    /** @test */
+    function a_matched_file_can_be_acknowledged()
+    {
+        $matched_file = factory(MatchedFile::class)->create();
+
+        $matched_file->acknowledge();
+
+        $this->assertTrue( !! $matched_file->acknowledged_flag );
+    }
+
+    /** @test */
+    function incrementing_an_acknowledged_file_makes_it_unacknowledged()
+    {
+        $matched_file = factory(MatchedFile::class)->create();
+
+        $matched_file->acknowledge();
+
+        $matched_file->incrementMatch();
+
+        $this->assertFalse( !! $matched_file->acknowledged_flag );
     }
 }

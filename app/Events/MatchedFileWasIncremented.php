@@ -2,20 +2,23 @@
 
 namespace App\Events;
 
+use App\User;
 use App\MatchedFile;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use App\Notifications\MatchedFileIncrementedNotification;
 
-class MatchedFileWasUnmuted implements ShouldBroadcast
+class MatchedFileWasIncremented implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $matched_file;
+   public $matched_file;
 
     /**
      * Create a new event instance.
@@ -25,6 +28,8 @@ class MatchedFileWasUnmuted implements ShouldBroadcast
     public function __construct(MatchedFile $matched_file)
     {
         $this->matched_file = $matched_file;
+
+        $this->handle();
     }
 
     /**
@@ -46,5 +51,19 @@ class MatchedFileWasUnmuted implements ShouldBroadcast
     public function broadcastWith()
     {
         return ['matched_file' => $this->matched_file->load(['pattern','client'])->toArray() ];
+    }
+
+    /**
+     * Handle the event
+     * @method handle
+     *
+     * @return   void
+     */
+    public function handle()
+    {
+        Notification::send( 
+            User::admins()->get(), 
+            new MatchedFileIncrementedNotification( $this->matched_file ) 
+        );
     }
 }

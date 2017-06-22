@@ -53,6 +53,22 @@ class ClientMatchedFilesController extends Controller
     }
 
     /**
+     * Acknowledge the specified matched file for the specified client
+     * @method acknowledge
+     *
+     * @return   response
+     */
+    public function acknowledge(Client $client, MatchedFile $match)
+    {
+        if ( ! $match->client->is($client) )
+            throw new ModelNotFoundException;
+
+        $match->acknowledge();
+
+        return response()->json([], 202);
+    }
+
+    /**
      * Mute the specified matched file for the specified client
      * @method unmute
      *

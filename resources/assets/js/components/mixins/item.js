@@ -12,17 +12,26 @@ export default {
 
     data() {
         return {
+            $item : null,
+            
             model : this.initial,
             updating : false,
             deleting : false,
             show_menu : false,
 
             item : {
-                key : null,
+                key : 'id',
+                model_friendly : 'name',
                 type : null,
                 endpoint : null,
                 channel : null,
                 updated : null
+            },
+
+            toggles : {
+                info : true,
+                update : true,
+                delete : true
             }
         }
     },
@@ -30,24 +39,36 @@ export default {
     computed : {
         busy() {
             return this.deleting || this.updating;
+        },
+
+        name() {
+            let friendly = this.item.model_friendly; 
+            return this.model[friendly];
         }
     },
 
     methods : {
-        highlight() {
-            $(this.$refs.row)
+        highlight(sticky) {
+            $(this.$item.$refs.row)
                 .addClass('hover');
 
-            sleep(2000).then( () => {
-                $(this.$refs.row).removeClass('hover');
-            });
+            if ( ! sticky )
+                sleep(2000).then( () => {
+                    $(this.$item.$refs.row).removeClass('hover');
+                });
+        },
+
+        view() {
+            console.warn('The view method has not been implemented on the instance.')
+        },
+
+        update() {
+            console.warn('The update method has not been implemented on the instance.')
         },
 
         destroy() {
-            let friendly = this.item.model_friendly || 'name'; 
-
             return swal({
-                  title: `Remove ${this.item.type}: ${this.model[friendly]}?`,
+                  title: `Remove ${this.item.type}: ${this.name}?`,
                   text: `This cannot be undone.`,
                   type: "warning",
                   showCancelButton: true,
@@ -58,7 +79,7 @@ export default {
         },
 
         performDestroy() {
-            let key = this.item.key || 'id';
+            let key = this.item.key;
             this.deleting = true;
             Api.delete(`${this.item.endpoint}/${this.model[key]}`)
                 .then(this.deleteSuccess, this.error);
@@ -80,31 +101,43 @@ export default {
                 this.postError();
         },
 
-        model( event ) {
+        eventModel( event ) {
             let type = this.item.type,
                 entity = event[type],
-                friendly = this.item.model_friendly || 'name';
+                friendly = this.item.model_friendly;
 
             return {
                 entity,
-                type : type.$ucfirst(),
+                type : type.$title_case(),
                 name : entity[friendly]
             }
         },
 
+        updatedEvent(event) {
+            console.log(event);
+            let model = this.eventModel(event);
+
+            this.model = model.entity;
+            this.$forceUpdate();
+            this.highlight();
+
+            flash.success(`${model.type} '${model.name}' Was Updated`);
+
+            if ( !! this.postUpdated )
+                this.postUpdated(event);
+        },
+
         listen() {
             Echo.channel(this.item.channel)
-                .listen(this.item.updated, (event) => {
-                    let model = this.model(event);
+                .listen(this.item.updated, this.updatedEvent)
 
-                    this.model = model.entity;
-                    this.highlight();
-
-                    flash.success(`${this.item.type} ${model.name} Was Updated`);
-
-                    if ( !! this.postUpdated )
-                        this.postUpdated(event);
-                });
+            if ( !! this.item.events ) {
+                console.log('Binding custom events');
+                this.item.events.forEach( ( e ) => {
+                    Echo.channel(this.item.channel)
+                        .listen( e.event, e.handler )
+                })
+            }
         },
 
         ignore() {

@@ -1,41 +1,38 @@
 <template>
     <page
-        type="definition"
-        page-heading="Definitions"
-        order="name"
-        :header-columns="headerColumns"
-        :collection="collection"
-    >
-        <div slot="help_text">
-            Definitions are automatically downloaded from the provider.
-        </div>
-    </page>
+        :params="details"
+        :toggles="toggles"
+    ></page>
 </template>
 
 <script>
     export default {
         data() {
             return {
-                page : null,
+                toggles : {
+                    new : false,
+                },
 
-                headerColumns : [
-                    'id',
-                    'pattern',
-                    'status'
-                ],
-
-                collection : {
+                details : {
+                    columns : [
+                        'id',
+                        'pattern',
+                        'status'
+                    ],
+                    heading : 'Definitions',
                     type : 'definition',
                     endpoint : 'definitions',
-                    channel : 'definitions',
-                    created : 'DefinitionWasCreated',
-                    destroyed : 'DefinitionWasDestroyed'
+                    help : 'Definitions are automatically downloaded from the provider.',
+                    events : {
+                        channel : 'definitions',
+                        created : 'DefinitionWasCreated',
+                        destroyed : 'DefinitionWasDestroyed',
+                        global : {
+                            ShouldFetchDefinitions: 'fetch'
+                        }
+                    }
                 },
             }
-        },
-
-        mounted() {
-            Bus.$on('ShouldFetchDefinitions', this.page.fetch)
         },
     }
 </script>

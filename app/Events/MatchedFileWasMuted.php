@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class MatchedFileWasMuted
+class MatchedFileWasMuted implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -34,6 +34,17 @@ class MatchedFileWasMuted
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new Channel("matches.{$this->matched_file->id}");
+    }
+    
+    /**
+     * Get the attributes to broadcast
+     * @method broadcastWith
+     *
+     * @return   array
+     */
+    public function broadcastWith()
+    {
+        return ['matched_file' => $this->matched_file->load(['pattern','client'])->toArray() ];
     }
 }

@@ -75,9 +75,13 @@ body {
  }
 
  .table-hover tbody tr:hover td,
- .table-hover tbody tr.hover td, {
+ .table-hover tbody tr.hover td {
     background-color: #FFFF66;
  }
+
+.table-hover tbody tr.sticky td {
+    background-color: lighten(#FFFF55, 20%);
+}
 
  .btn-submenu {
       position: absolute;

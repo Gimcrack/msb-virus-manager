@@ -39,7 +39,7 @@ class ExemptionTest extends TestCase
     }
 
     /** @test */
-    function unpublished_exemptions_are_not_returned_in_the_list()
+    function unpublished_exemptions_are_not_returned_in_the_list_if_you_dont_want_them()
     {
         // given some exemptions
         factory(Exemption::class, 3)->create();
@@ -50,7 +50,7 @@ class ExemptionTest extends TestCase
             ->create(['pattern' => 'unpublished_exemption']); 
 
         // act
-        $this->get("/api/v1/exemptions")
+        $this->get("/api/v1/exemptions?published=1")
 
         // response assertions
         ->assertJsonCount(3)

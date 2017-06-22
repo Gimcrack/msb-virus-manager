@@ -83,7 +83,7 @@ abstract class DefinitionsProvider implements DefinitionsContract {
         return $this->implementation_short() 
             . "::" 
             . $this->lastUpdated() 
-            . " ({$this->active()->count()} Patterns)";
+            . " ({$this->active()->count()} Active Patterns)";
     }
 
     /**

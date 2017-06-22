@@ -14,7 +14,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use App\Notifications\MatchedFileIncrementedNotification;
 
-class MatchedFileWasUpdated
+class MatchedFileWasUpdated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -28,8 +28,6 @@ class MatchedFileWasUpdated
     public function __construct(MatchedFile $matched_file)
     {
         $this->matched_file = $matched_file;
-
-        $this->handle();
     }
 
     /**
@@ -39,20 +37,17 @@ class MatchedFileWasUpdated
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new Channel("matches.{$this->matched_file->id}");
     }
 
     /**
-     * Handle the event
-     * @method handle
+     * Get the attributes to broadcast
+     * @method broadcastWith
      *
-     * @return   void
+     * @return   array
      */
-    public function handle()
+    public function broadcastWith()
     {
-        Notification::send( 
-            User::admins()->get(), 
-            new MatchedFileIncrementedNotification( $this->matched_file ) 
-        );
+        return ['matched_file' => $this->matched_file->load(['pattern','client'])->toArray() ];
     }
 }

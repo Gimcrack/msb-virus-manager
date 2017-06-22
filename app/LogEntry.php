@@ -4,12 +4,17 @@ namespace App;
 
 use App\Client;
 use Carbon\Carbon;
+use App\Events\LogEntryWasCreated;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 class LogEntry extends Model
 {
     protected $guarded = [];
+
+    protected $events = [
+        'created' => LogEntryWasCreated::class
+    ];
 
     /**
      * A LogEntry belongs to one Client

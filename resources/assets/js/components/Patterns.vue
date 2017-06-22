@@ -1,76 +1,69 @@
 <template>
     <page
-        type="customPattern"
-        page-heading="Patterns"
-        order="name"
-        :header-columns="headerColumns"
-        :collection="collection"
+        :params="details"
         :toggles="toggles"
-        @new="newPattern"
-        @created=""
-        @deleted=""
-    >
-        <template slot="help_text">
-            Manage custom definitions here.
-        </template>
-    </page>
+        @new="create"
+        @created="created"
+        @deleted="deleted"
+    ></page>
 </template>
 
 <script>
-    
-
     export default {
-
         data() {
             return {
                 toggles : {
                     new : true,
                 },
 
-                headerColumns : [
-                    'id',
-                    'pattern',
-                    'published'
-                ],
-
-                collection : {
+                details : {
+                    columns : [
+                        'id',
+                        'pattern',
+                        'published'
+                    ],
+                    heading : 'Custom Blacklist',
+                    component : 'customPattern',
                     type : 'pattern',
                     endpoint : 'patterns',
-                    channel : 'patterns',
-                    created : 'PatternWasCreated',
-                    destroyed : 'PatternWasDestroyed'
-                }
+                    help : 'Manage custom definitions here.',
+                    events : {
+                        channel : 'patterns',
+                        created : 'PatternWasCreated',
+                        destroyed : 'PatternWasDestroyed',
+                    },
+                    newBtnText : 'New Definition'
+                },
             }
         },
 
         methods : {
 
-            newPattern() {
+            create() {
                 return swal({
                     title: "Custom Definition",
+                    text : "What is the pattern?",
                     inputPlaceholder: "*.xyz",
                     input: "text",
                     showLoaderOnConfirm: true,
                     showCancelButton: true,
                     animation: "slide-from-top",
                 })
-                .then( this.storeNewPattern, this.ignore );
+                .then( this.store, this.page.ignore );
             },
 
-            storeNewPattern( pattern ) {
-                this.busy = true;
+            store( name ) {
+                this.page.busy = true;
 
-                Api.post('patterns', {
-                    name : pattern
-                })
-                .then( this.done, this.error );
+                Api.post('patterns', { name })
+                    .then( this.page.ignore, this.page.error );
             },
 
-            postCreated(event) {
-
+            created(event) {
+                this.page.busy = false;
             },
 
-            postDeleted(event) {
+            deleted(event) {
                 return swal({
                       title: `Create an exemption?`,
                       text: "Do you want to create an exemption for this definition?",

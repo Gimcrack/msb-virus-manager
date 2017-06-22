@@ -12,24 +12,23 @@
         data() {
             return {
                 toggles : {
-                    new : false,
                 },
 
                 details : {
                     columns : [
                         'id',
                         'name',
-                        'version',
-                        'updated'
+                        'email',
+                        'admin_flag'
                     ],
-                    type : 'client',
-                    heading : 'Clients',
-                    endpoint : 'clients',
-                    help : 'Clients will self-register here once the agent has been installed.',
+                    type : 'user',
+                    heading : 'Users',
+                    endpoint : 'users',
+                    help : 'System Users',
                     events : {
-                        channel : 'clients',
-                        created : 'ClientWasCreated',
-                        destroyed : 'ClientWasDestroyed',
+                        channel : 'users',
+                        created : 'UserWasCreated',
+                        destroyed : 'UserWasDestroyed',
                     }
                 },
             }
@@ -38,11 +37,9 @@
         methods : {
 
             created(event) {
-                Bus.$emit('ShouldFetchAgentBuild');
             },
 
             deleted(event) {
-                Bus.$emit('ShouldFetchAgentBuild');
             },
         },
     }

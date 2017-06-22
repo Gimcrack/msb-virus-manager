@@ -90,3 +90,12 @@ window.moment = moment;
 window.fromNow = (dateTime) => {
     return moment.tz( dateTime, "GMT" ).fromNow();
 }
+
+// mixins
+import Item from './components/mixins/item.js';
+import Collection from './components/mixins/collection.js'
+
+window.mixins = {
+    item : Item,
+    collection : Collection
+}

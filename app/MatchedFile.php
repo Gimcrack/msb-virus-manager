@@ -7,6 +7,8 @@ use App\Events\MatchedFileWasCreated;
 use App\Events\MatchedFileWasUnmuted;
 use App\Events\MatchedFileWasUpdated;
 use Illuminate\Database\Eloquent\Model;
+use App\Events\MatchedFileWasIncremented;
+use App\Events\AllMatchedFilesAcknowledged;
 
 class MatchedFile extends Model
 {
@@ -14,6 +16,13 @@ class MatchedFile extends Model
 
     protected $events = [
         'created' => MatchedFileWasCreated::class,
+    ];
+
+    protected $casts = [
+        'client_id' => 'int',
+        'pattern_id' => 'int',
+        'muted_flag' => 'bool',
+        'acknowledged_flag' => 'bool'
     ];
 
     /**
@@ -47,12 +56,35 @@ class MatchedFile extends Model
     public function incrementMatch()
     {
         $this->increment('times_matched');
-
+        
+        $this->acknowledged_flag = 0;
+        $this->save();
+        
         if ( ! $this->muted_flag )
-            event(new MatchedFileWasUpdated($this));
+            event(new MatchedFileWasIncremented($this));
 
         return $this;
     }
+
+    /**
+     * Acknowledge the matched file
+     * @method acknowledge
+     *
+     * @return   $this
+     */
+    public function acknowledge()
+    {
+        $this->acknowledged_flag = 1;
+        $this->save();
+        if ( ! $this->muted_flag)
+            event(new MatchedFileWasUpdated($this));
+
+        if ( ! static::whereAcknowledgedFlag(0)->count() ) 
+            event(new AllMatchedFilesAcknowledged);
+
+        return $this;
+    }
+
 
     /**
      * Mute the matched file

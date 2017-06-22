@@ -1,48 +1,68 @@
 <template>
-    <tr ref="row">
-        <td class="relative">
-            <div class="btn-group"> 
-                <button @click.prevent="show_menu = !show_menu" class="btn btn-xs btn-default btn-outline" :class="{ active : show_menu }"> 
-                    <i class="fa fa-bars"></i> 
-                </button>
-                <button @click.prevent="" class="btn btn-xs btn-default btn-outline"> 
-                    {{ model.id }}
-                </button>
-            </div>
-            <div v-if="show_menu" class="btn-submenu">
-                <button @click.prevent="view" :disabled="busy" class="btn btn-info btn-xs btn-outline" :class="{disabled : busy}"> 
-                    <i class="fa fa-fw fa-info"></i> 
-                </button>
-                <button @click.prevent="performUpdate" :disabled="busy" class="btn btn-success btn-xs btn-outline" :class="{disabled : busy}"> 
-                    <i class="fa fa-fw fa-refresh" :class="{'fa-spin' : updating}"></i> 
-                </button>
-                <button @click.prevent="destroy" :disabled="busy" class="btn btn-danger btn-xs btn-outline" :class="{disabled : busy}"> 
-                    <i class="fa fa-fw fa-times" :class="{'fa-spin' : deleting}"></i> 
-                </button>
-            </div> 
-        </td>
+    <item 
+        :id="model.id"
+        :deleting="deleting"
+        :updating="updating"
+        :toggles="toggles"
+        @view="view"
+        @update="update"
+        @destroy="destroy"
+    >
         <td>{{ model.pattern }}</td>
-        <td>{{ model.published_flag }}</td>
-    </tr>
+        <td v-if="model.published_flag"><span class="label label-success">Yes</span></td>
+        <td v-else><span class="label label-danger">No</span></td>
+
+        <template slot="menu">
+            <button @click.prevent="togglePublish" :disabled="busy" class="btn btn-success btn-xs btn-outline" :class="{disabled : busy}"> 
+                <i :class="[ model.published_flag ? 'fa-arrow-down' : 'fa-arrow-up', {'fa-spin' : updating}]" class="fa fa-fw"></i> 
+            </button>
+        </template>
+    </item>
 </template>
 
 <script>
-    import item from './mixins/item.js';
-
     export default {
         mixins : [
-            item
+            mixins.item
         ],
         
         data() {
             return {
                 item : {
                     type : 'exemption',
-                    endpoint : `exemptions/${this.model.id}`,
-                    channel : `exemptions.${this.model.id}`,
+                    model_friendly : 'pattern',
+                    endpoint : `exemptions`,
+                    channel : `exemptions.${this.initial.id}`,
                     updated : 'ExemptionWasUpdated',
+                },
+
+                toggles : {
+                    update : false
                 }
             }
         },
+
+        methods: {
+            togglePublish() {
+                if ( this.model.published_flag ) 
+                    return this.unpublish();
+
+                return this.publish(); 
+            },
+
+            unpublish() {
+                this.updating = true;
+
+                Api.post(`exemptions/${this.initial.id}/unpublish`)
+                    .then(this.updateSuccess, this.error)
+            },
+
+            publish() {
+                this.updating = true;
+
+                Api.post(`exemptions/${this.initial.id}/publish`)
+                    .then(this.updateSuccess, this.error)
+            },
+        }
     }
 </script>

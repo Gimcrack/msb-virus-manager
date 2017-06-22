@@ -7,7 +7,7 @@ export default {
             refresh_btn_text : 'Refresh',
             search : null,
             orderBy : 'name',
-            asc : true
+            asc : true,
         }
     },
 
@@ -24,6 +24,14 @@ export default {
                 .sortBy(this.orderBy);
 
             return (this.asc) ? models.value() : models.reverse().value();
+        },
+
+        modelType() {
+            return this.params.type;
+        },
+
+        properType() {
+            return this.modelType.$ucfirst();
         }
     },
 
@@ -33,12 +41,13 @@ export default {
             if ( !! this.preFetch )
                 this.preFetch();
 
-            Api.get( this.collection.endpoint )
+            Api.get( this.params.endpoint )
                 .then( this.success, this.error ) 
         },
 
         success(response) {
-            this.models = response.data;
+            let data_key = this.params.data_key;
+            this.models = (!! data_key) ? response.data[data_key] : response.data;
 
             if ( !! this.postSuccess )
                 this.postSuccess();
@@ -49,7 +58,7 @@ export default {
         },
 
         error(error) {
-            flash.error('There was an error performing the operation. See the console for more details');
+            flash.error('There was an error performing the operation. See the console for more params');
             console.error(error);
 
             if ( !! this.postError )
@@ -80,22 +89,17 @@ export default {
             else {
                 console.log('New model');
                 this.models.push(model.entity);
-                flash.success(`New ${model.type}: ${model.name}`);
+                flash.success(`New ${model.type.$title_case()}: ${model.name}`);
             }
         },
 
-        properType() {
-            return this.collection.type.$ucfirst();
-        },
-
         model( event ) {
-            let type = this.collection.type,
-                entity = event[type],
-                friendly = this.collection.model_friendly || 'name';
+            let entity = event[this.modelType],
+                friendly = this.params.model_friendly || 'name';
 
             return {
                 entity,
-                type : type.$ucfirst(),
+                type : this.properType,
                 name : entity[friendly]
             }
         },
@@ -103,25 +107,40 @@ export default {
         sortBy(key) {
             if ( key == this.orderBy ) {
                 this.asc = ! this.asc;
-                console.log('swapping');
             }
             this.orderBy = key;
         },
 
         listen() {
-            Echo.channel(this.collection.channel)
-                .listen( this.collection.created, (event) => {
+            Echo.channel(this.params.events.channel)
+                .listen( this.params.events.created, (event) => {
+                    console.log(event);
                     this.add( this.model(event) );
 
                     if ( !! this.postCreated )
                         this.postCreated(event);
                 })
-                .listen( this.collection.destroyed, (event) => {
+                .listen( this.params.events.destroyed, (event) => {
                     this.remove( this.model(event) );
 
                     if ( !! this.postDeleted )
                         this.postDeleted(event);
                 });
+
+            let other = this.params.events.other;
+            if ( !! other ) {
+                for( let type in other ) {
+                    Echo.channel(this.params.events.channel)
+                        .listen( type, (event) => { other[type](event) } );
+                }
+            }
+
+            let g = this.params.events.global;
+            if ( !! g ) {
+                for( let type in g ) {
+                    Bus.$on(type, (event) => { this[g[type]](event) });
+                }
+            }
         },
 
         searchModel( model ) {

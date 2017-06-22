@@ -20,6 +20,8 @@ Route::get('definitions-status', 'DefinitionsController@status');
 Route::get('exemptions', 'ExemptionController@index');
 Route::get('exemptions/{exemption}', 'ExemptionController@show');
 
+Route::get('matches', 'MatchedFileController@index');
+
 Route::get('patterns', 'PatternController@index');
 Route::post('patterns', 'PatternController@store');
 Route::get('patterns/{pattern}', 'PatternController@show');

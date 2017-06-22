@@ -29,44 +29,26 @@
         data() {
             return {
                 item : {
-                    key : 'name',
-                    type : 'client',
-                    endpoint : 'clients',
-                    channel : `clients.${this.initial.id}`,
-                    updated : 'ClientWasUpdated',
+                    key : 'id',
+                    type : 'log_entry',
+                    endpoint : 'logs',
+                    channel : `logs.${this.initial.id}`,
+                    updated : 'LogEntryWasUpdated',
                 }
             }
         },
 
         methods : {
             postUpdated(event) {
-                Bus.$emit('ShouldFetchAgentBuild');
             },
 
             update() {
-                this.updating = true;
-                Api.post(`clients/${this.model.name}/upgrade`)
-                    .then( this.upgradeSuccess, this.error );
+
             },
 
             upgradeSuccess(response) {
-                this.updating = false;
 
-                flash.success('The client was told to upgrade.');
             },
         }
     }
 </script>
-
-<style lang="scss">
-    .btn-submenu {
-      position: absolute;
-      /* padding: 0 3px 3px; */
-      background: white;
-      z-index: 3;
-      top: 50%;
-      margin-top: -12px;
-      left: 30px;
-      overflow: hidden;
-    }
-</style>

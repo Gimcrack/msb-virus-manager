@@ -6,6 +6,7 @@ use App\Client;
 use App\LogEntry;
 use Carbon\Carbon;
 use Tests\TestCase;
+use App\Events\LogEntryWasCreated;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -83,5 +84,13 @@ class LogEntryTest extends TestCase
 
         // make sure we only get the recent ones
         $this->assertCount(10, LogEntry::recent($days = 7)->get() );
+    }
+
+    /** @test */
+    function an_event_is_dispatched_when_a_client_is_created()
+    {
+        $log_entry = factory(LogEntry::class)->create();
+
+        $this->assertEvent(LogEntryWasCreated::class, [ 'log_entry' => $log_entry ]);
     }
 }
