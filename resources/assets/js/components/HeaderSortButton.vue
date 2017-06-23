@@ -35,7 +35,7 @@
             },
 
             active() {
-                return this.orderBy == this.column;
+                return this.orderBy == this.column_key;
             },
 
             active_asc() {

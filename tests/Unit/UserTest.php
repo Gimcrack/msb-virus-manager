@@ -3,14 +3,12 @@
 namespace Tests\Unit;
 
 use App\User;
-use App\Client;
 use App\Pattern;
 use Tests\TestCase;
 use App\MatchedFile;
-use App\Events\MatchedFileWasMuted;
-use App\Events\MatchedFileWasCreated;
-use App\Events\MatchedFileWasUnmuted;
-use App\Events\MatchedFileWasUpdated;
+use App\Events\UserWasCreated;
+use App\Events\UserWasUpdated;
+use App\Events\UserWasDestroyed;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\MatchedFileCreatedNotification;
@@ -39,5 +37,37 @@ class UserTest extends TestCase
         $user->promoteToAdmin();
 
         $this->assertTrue( $user->fresh()->isAdmin() );   
+    }
+
+    /** @test */
+    function an_event_is_dispatched_when_a_user_is_created()
+    {
+        $user = factory(User::class)->create();
+
+        $this->assertEvent(UserWasCreated::class, [ 'user' => $user ]);
+    }
+
+    /** @test */
+    function an_event_is_dispatched_when_a_user_is_updated()
+    {   
+        // given a published user
+        $user = factory(User::class)->create();
+
+        // act - update the user
+        $user->promoteToAdmin();
+
+        $this->assertEvent(UserWasUpdated::class, [ 'user' => $user ]);
+    }
+
+    /** @test */
+    function an_event_is_dispatched_when_a_user_is_destroyed()
+    {   
+        // given a user
+        $user = factory(User::class)->create();
+
+        // act - update the user
+        $user->delete();
+
+        $this->assertEvent(UserWasDestroyed::class, [ 'user' => $user ]);
     }
 }

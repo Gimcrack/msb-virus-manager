@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 Route::post("builds",'ClientController@build');
 
 Route::get("users", "UserController@index");
+Route::post("users", "UserController@store");
+Route::delete("users/{user}", "UserController@destroy");
 Route::post("users/{user}/promote", "UserController@promote");
 
 Route::post('exemptions', 'ExemptionController@create');

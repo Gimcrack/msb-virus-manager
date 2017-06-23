@@ -67,7 +67,7 @@
                         heading : 'Page Heading',
                         data_key : null,
                         order : 'name',
-                        orderDir : 'asc',
+                        orderDir : true,
                         columns : [],
                         model_friendly : 'name',
                         endpoint : '',
@@ -93,8 +93,8 @@
 
         data() {
             return {
-                orderBy : this.params.order,
-                asc : this.params.orderDir
+                orderBy : this.params.order || 'name',
+                asc : ( this.params.orderDir != null ) ? this.params.orderDir : true
             }
         },
 

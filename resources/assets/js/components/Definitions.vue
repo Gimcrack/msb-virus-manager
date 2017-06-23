@@ -19,6 +19,7 @@
                         'pattern',
                         'status'
                     ],
+                    order: 'pattern',
                     heading : 'Definitions',
                     type : 'definition',
                     endpoint : 'definitions',

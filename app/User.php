@@ -2,6 +2,9 @@
 
 namespace App;
 
+use App\Events\UserWasCreated;
+use App\Events\UserWasUpdated;
+use App\Events\UserWasDestroyed;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,6 +29,16 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password', 'remember_token',
+    ];
+
+    protected $casts = [
+        'admin_flag' => 'bool'
+    ];
+
+    protected $events = [
+        'created' => UserWasCreated::class,
+        'updated' => UserWasUpdated::class,
+        'deleting' => UserWasDestroyed::class,
     ];
 
     /**

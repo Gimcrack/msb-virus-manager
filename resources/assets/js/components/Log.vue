@@ -8,8 +8,8 @@
         @update="update"
         @destroy="destroy"
     >
-        <td>{{ model.name }}</td>
-        <td>{{ model.version }}</td>
+        <td>{{ model.action }}</td>
+        <td>{{ model.status }}</td>
         <td>{{ updated }}</td>
     </item>
 </template>
@@ -32,8 +32,12 @@
                     key : 'id',
                     type : 'log_entry',
                     endpoint : 'logs',
-                    channel : `logs.${this.initial.id}`,
-                    updated : 'LogEntryWasUpdated',
+                    model_friendly : 'status'
+                },
+
+                toggles : {
+                    update : false,
+                    delete : false
                 }
             }
         },

@@ -62,4 +62,52 @@ class UserTest extends TestCase
 
     }
     
+
+    /** @test */
+    function a_user_can_be_created_by_an_admin()
+    {
+        $this
+            ->actingAsAdmin()
+            ->post("api/v1/users", [
+                'name' => 'John Doe',
+                'email' => 'john@example.com',
+                'password' => 'password'
+            ])
+            ->response()
+                ->assertStatus(201);
+
+        $this->assertDatabaseHas('users', [
+            'name' => 'John Doe',
+            'email' => 'john@example.com'
+        ]);
+
+    }
+
+    /** @test */
+    function a_nonadmin_can_be_deleted_by_an_admin()
+    {
+        $user = factory(User::class)->create();
+
+        $this
+            ->actingAsAdmin()
+            ->delete("api/v1/users/{$user->id}")
+            ->response()
+                ->assertStatus(202);
+
+        $this->assertDatabaseMissing('users', $user->toArray());
+    }
+
+    /** @test */
+    function an_admin_cannot_be_deleted()
+    {
+        $user = factory(User::class)->states('admin')->create();
+
+        $this
+            ->actingAsAdmin()
+            ->delete("api/v1/users/{$user->id}")
+            ->response()
+                ->assertStatus(403);
+
+        $this->assertDatabaseHas('users', $user->toArray());
+    }
 }

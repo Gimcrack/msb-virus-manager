@@ -22,6 +22,7 @@
                         'pattern',
                         'published'
                     ],
+                    order : 'pattern',
                     heading : 'Custom Blacklist',
                     component : 'customPattern',
                     type : 'pattern',

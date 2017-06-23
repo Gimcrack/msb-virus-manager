@@ -24970,6 +24970,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             details: {
                 columns: ['id', 'pattern', 'status'],
+                order: 'pattern',
                 heading: 'Definitions',
                 type: 'definition',
                 endpoint: 'definitions',
@@ -25281,7 +25282,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return this.column;
         },
         active: function active() {
-            return this.orderBy == this.column;
+            return this.orderBy == this.column_key;
         },
         active_asc: function active_asc() {
             return this.asc && this.active;
@@ -25529,8 +25530,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 key: 'id',
                 type: 'log_entry',
                 endpoint: 'logs',
-                channel: 'logs.' + this.initial.id,
-                updated: 'LogEntryWasUpdated'
+                model_friendly: 'status'
+            },
+
+            toggles: {
+                update: false,
+                delete: false
             }
         };
     },
@@ -25567,16 +25572,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
 
             details: {
-                columns: ['id', 'action', 'status', 'updated'],
+                columns: ['id', 'action', 'status', {
+                    title: 'Logged',
+                    key: 'updated_at'
+                }],
                 data_key: 'data',
                 order: 'updated_at',
                 orderDir: false,
-                type: 'log',
-                heading: 'Log Entries',
+                type: 'log_entry',
+                component: 'log',
+                model_friendly: 'status',
+                heading: 'Recent Logs',
                 endpoint: 'logs',
                 help: 'Review Log Entries',
                 events: {
-                    channel: 'logs',
+                    channel: 'log_entries',
                     created: 'LogEntryWasCreated',
                     destroyed: 'LogEntryWasDestroyed'
                 }
@@ -25974,7 +25984,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     heading: 'Page Heading',
                     data_key: null,
                     order: 'name',
-                    orderDir: 'asc',
+                    orderDir: true,
                     columns: [],
                     model_friendly: 'name',
                     endpoint: '',
@@ -26000,8 +26010,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     data: function data() {
         return {
-            orderBy: this.params.order,
-            asc: this.params.orderDir
+            orderBy: this.params.order || 'name',
+            asc: this.params.orderDir != null ? this.params.orderDir : true
         };
     },
 
@@ -26109,6 +26119,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             details: {
                 columns: ['id', 'pattern', 'published'],
+                order: 'pattern',
                 heading: 'Custom Blacklist',
                 component: 'customPattern',
                 type: 'pattern',
@@ -26189,6 +26200,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mixins: [mixins.item],
@@ -26207,6 +26224,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 endpoint: 'users',
                 channel: 'users.' + this.initial.id,
                 updated: 'UserWasUpdated'
+            },
+
+            toggles: {
+                update: false,
+                delete: !this.initial.admin_flag
             }
         };
     },
@@ -26215,7 +26237,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         postUpdated: function postUpdated(event) {},
         update: function update() {},
-        upgradeSuccess: function upgradeSuccess(response) {}
+        upgradeSuccess: function upgradeSuccess(response) {},
+        toggleAdmin: function toggleAdmin() {
+            if (this.model.admin_flag) return this.unpromote();
+
+            return this.promote();
+        },
+        unpromote: function unpromote() {
+            this.updating = true;
+
+            Api.post('users/' + this.initial.id + '/unpromote').then(this.updateSuccess, this.error);
+        },
+        promote: function promote() {
+            this.updating = true;
+
+            Api.post('users/' + this.initial.id + '/promote').then(this.updateSuccess, this.error);
+        }
     }
 });
 
@@ -26234,14 +26271,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            toggles: {},
+            toggles: {
+                new: true
+            },
 
             details: {
-                columns: ['id', 'name', 'email', 'admin_flag'],
+                columns: ['id', 'name', 'email', {
+                    title: 'User Type',
+                    key: 'admin_flag'
+                }],
                 type: 'user',
                 heading: 'Users',
                 endpoint: 'users',
@@ -26251,13 +26294,68 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     created: 'UserWasCreated',
                     destroyed: 'UserWasDestroyed'
                 }
+            },
+
+            tempUser: {
+                name: null,
+                email: null,
+                password: null
             }
         };
     },
 
 
     methods: {
-        created: function created(event) {},
+        create: function create() {
+            return swal({
+                title: "New User",
+                text: "What is the user's name?",
+                inputPlaceholder: "John Doe",
+                input: "text",
+                showLoaderOnConfirm: true,
+                showCancelButton: true,
+                animation: "slide-from-top"
+            }).then(this.getEmail, this.page.ignore);
+        },
+        getEmail: function getEmail(name) {
+            this.tempUser.name = name;
+
+            return swal({
+                title: "New User",
+                text: "What is the user's email?",
+                inputPlaceholder: "john.doe@example.com",
+                input: "text",
+                showLoaderOnConfirm: true,
+                showCancelButton: true,
+                animation: "slide-from-top"
+            }).then(this.getPassword, this.page.ignore);
+        },
+        getPassword: function getPassword(email) {
+            this.tempUser.email = email;
+
+            return swal({
+                title: "New User",
+                text: "What is the user's password?",
+                inputPlaceholder: "********",
+                input: "password",
+                showLoaderOnConfirm: true,
+                showCancelButton: true,
+                animation: "slide-from-top"
+            }).then(this.store, this.page.ignore);
+        },
+        store: function store(password) {
+            this.tempUser.password = password;
+
+            this.page.busy = true;
+            Api.post('users', this.tempUser).then(this.created, this.page.error);
+        },
+        created: function created(event) {
+            this.tempUser = {
+                name: null,
+                email: null,
+                password: null
+            };
+        },
         deleted: function deleted(event) {}
     }
 });
@@ -56620,6 +56718,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "toggles": _vm.toggles
     },
     on: {
+      "new": _vm.create,
       "created": _vm.created,
       "deleted": _vm.deleted
     }
@@ -56815,7 +56914,40 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "update": _vm.update,
       "destroy": _vm.destroy
     }
-  }, [_c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.email))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.admin_flag))])])
+  }, [_c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.email))]), _vm._v(" "), _c('td', [_c('span', {
+    staticClass: "label",
+    class: [_vm.model.admin_flag ? 'label-primary' : 'label-success'],
+    domProps: {
+      "textContent": _vm._s(_vm.model.admin_flag ? 'Admin' : 'User')
+    }
+  })]), _vm._v(" "), _c('template', {
+    slot: "menu"
+  }, [_c('button', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (!_vm.model.admin_flag),
+      expression: "! model.admin_flag"
+    }],
+    staticClass: "btn btn-success btn-xs btn-outline",
+    class: {
+      disabled: _vm.busy
+    },
+    attrs: {
+      "disabled": _vm.busy
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.toggleAdmin($event)
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-fw",
+    class: [_vm.model.admin_flag ? 'fa-arrow-down' : 'fa-arrow-up', {
+      'fa-spin': _vm.updating
+    }]
+  })])])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -57090,7 +57222,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "update": _vm.update,
       "destroy": _vm.destroy
     }
-  }, [_c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.updated))])])
+  }, [_c('td', [_vm._v(_vm._s(_vm.model.action))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.updated))])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

@@ -20,17 +20,22 @@
                         'id',
                         'action',
                         'status',
-                        'updated'
+                        {
+                            title : 'Logged',
+                            key : 'updated_at'
+                        }
                     ],
                     data_key : 'data',
                     order : 'updated_at',
                     orderDir : false,
-                    type : 'log',
-                    heading : 'Log Entries',
+                    type : 'log_entry',
+                    component : 'log',
+                    model_friendly : 'status',
+                    heading : 'Recent Logs',
                     endpoint : 'logs',
                     help : 'Review Log Entries',
                     events : {
-                        channel : 'logs',
+                        channel : 'log_entries',
                         created : 'LogEntryWasCreated',
                         destroyed : 'LogEntryWasDestroyed',
                     }
