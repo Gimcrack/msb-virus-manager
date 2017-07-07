@@ -23835,6 +23835,7 @@ Vue.component('item', __webpack_require__(322));
 Vue.component('vinput', __webpack_require__(334));
 Vue.component('flash', __webpack_require__(319));
 Vue.component('newBuild', __webpack_require__(327));
+Vue.component('newExemptionFromMatch', __webpack_require__(393));
 Vue.component('agentBuildStatus', __webpack_require__(311));
 Vue.component('definitionsStatus', __webpack_require__(316));
 Vue.component('newFilesShortcut', __webpack_require__(328));
@@ -24803,7 +24804,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 key: 'name',
                 type: 'client',
                 endpoint: 'clients',
-                channel: 'clients.' + this.initial.id,
+                channel: 'clients.' + this.initial.name.toLowerCase(),
                 updated: 'ClientWasUpdated'
             }
         };
@@ -25639,6 +25640,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mixins: [mixins.item],
@@ -25652,13 +25656,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 type: 'matched_file',
                 model_friendly: 'file',
                 endpoint: 'matches',
-                channel: 'matches.' + this.initial.id,
+                channel: 'clients.' + this.initial.client.name.toLowerCase() + '.matches.' + this.initial.id,
                 updated: 'MatchedFileWasUpdated',
                 events: [{
                     event: 'MatchedFileWasMuted',
                     handler: this.updatedEvent
                 }, {
                     event: 'MatchedFileWasUnmuted',
+                    handler: this.updatedEvent
+                }, {
+                    event: 'MatchedFileWasIncremented',
                     handler: this.updatedEvent
                 }]
             },
@@ -25678,6 +25685,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+        newExemptionFromMatch: function newExemptionFromMatch() {
+            Bus.$emit('newExemptionFromMatch', {
+                match: this.model
+            });
+        },
         toggleMute: function toggleMute() {
             if (this.model.muted_flag) return this.unmute();
 
@@ -25725,6 +25737,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -25732,6 +25748,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             page: {
                 busy: false
             },
+
+            show_muted: false,
 
             details: {
                 columns: ['__blank__', 'id', 'client', 'pattern', 'file', 'times_matched', 'last_match', {
@@ -25755,6 +25773,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             Bus.$emit('AllMatchedFilesAcknowledged');
                         }
                     }
+                },
+                where: {
+                    muted_flag: false
                 }
             },
             toggles: {
@@ -25773,10 +25794,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         Bus.$on('AllMatchedFilesAcknowledged', function () {
             _this.has_unacknowledged = false;
         });
+
+        // Bus.$on('UpdateMatches', () => {
+        //     this.page.fetch();
+        // });
     },
 
 
     methods: {
+        toggleMuted: function toggleMuted() {
+            this.show_muted = !this.show_muted;
+
+            this.details.where = this.show_muted ? {} : { muted_flag: false };
+        },
         ackAll: function ackAll() {
             this.page.busy = true;
 
@@ -25994,8 +26024,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         created: '',
                         destroyed: '',
                         global: null
-                    }
-
+                    },
+                    where: {}
                 };
             }
         },
@@ -26559,7 +26589,7 @@ window.mixins = {
     computed: {
         filtered: function filtered() {
 
-            var models = _(this.models).filter(this.searchModel).sortBy(this.orderBy);
+            var models = _(this.models).filter(this.searchModel).filter(this.params.where).sortBy(this.orderBy);
 
             return this.asc ? models.value() : models.reverse().value();
         },
@@ -26817,6 +26847,12 @@ window.mixins = {
         updatedEvent: function updatedEvent(event) {
             console.log(event);
             var model = this.eventModel(event);
+
+            if (!!this.$parent.add) {
+                this.$parent.add(model);
+                this.$parent.orderBy = null;
+                this.$parent.orderBy = 'id';
+            }
 
             this.model = model.entity;
             this.$forceUpdate();
@@ -29276,13 +29312,7 @@ exports = module.exports = __webpack_require__(6)();
 exports.push([module.i, "", ""]);
 
 /***/ }),
-/* 246 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(6)();
-exports.push([module.i, "\n.btn-submenu {\n  position: absolute;\n  /* padding: 0 3px 3px; */\n  background: white;\n  z-index: 3;\n  top: 50%;\n  margin-top: -12px;\n  left: 30px;\n  overflow: hidden;\n}\n", ""]);
-
-/***/ }),
+/* 246 */,
 /* 247 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -55569,7 +55599,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\AgentBuildStatus.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\AgentBuildStatus.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] AgentBuildStatus.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -55593,10 +55623,6 @@ module.exports = Component.exports
 /* 312 */
 /***/ (function(module, exports, __webpack_require__) {
 
-
-/* styles */
-__webpack_require__(364)
-
 var Component = __webpack_require__(2)(
   /* script */
   __webpack_require__(211),
@@ -55607,7 +55633,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Client.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Client.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Client.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -55641,7 +55667,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Clients.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Clients.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Clients.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -55675,7 +55701,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Definition.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Definition.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Definition.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -55709,7 +55735,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Definitions.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Definitions.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Definitions.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -55747,7 +55773,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\DefinitionsStatus.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\DefinitionsStatus.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] DefinitionsStatus.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -55781,7 +55807,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Exemption.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Exemption.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Exemption.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -55815,7 +55841,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Exemptions.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Exemptions.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Exemptions.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -55853,7 +55879,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Flash.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Flash.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Flash.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -55891,7 +55917,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\HeaderSortButton.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\HeaderSortButton.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] HeaderSortButton.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -55929,7 +55955,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Home.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Home.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Home.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -55963,7 +55989,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Item.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Item.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Item.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -55997,7 +56023,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Log.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Log.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Log.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -56031,7 +56057,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Logs.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Logs.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Logs.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -56065,7 +56091,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Match.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Match.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Match.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -56099,7 +56125,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Matches.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Matches.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Matches.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -56137,7 +56163,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\NewBuild.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\NewBuild.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] NewBuild.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -56175,7 +56201,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\NewFilesShortcut.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\NewFilesShortcut.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] NewFilesShortcut.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -56213,7 +56239,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Page.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Page.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Page.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -56247,7 +56273,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Pattern.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Pattern.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Pattern.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -56281,7 +56307,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Patterns.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Patterns.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Patterns.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -56315,7 +56341,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\User.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\User.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] User.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -56349,7 +56375,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Users.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Users.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Users.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -56387,7 +56413,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\b\\code\\msb-virus-manager\\resources\\assets\\js\\components\\Vinput.vue"
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\Vinput.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Vinput.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -56564,6 +56590,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   })]), _vm._v(" "), _c('template', {
     slot: "menu"
   }, [_c('button', {
+    staticClass: "btn btn-success btn-xs btn-outline",
+    class: {
+      disabled: _vm.busy
+    },
+    attrs: {
+      "disabled": _vm.busy
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.newExemptionFromMatch($event)
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-fw",
+    class: ['fa-check', {
+      'fa-spin': _vm.updating
+    }]
+  })]), _vm._v(" "), _c('button', {
     staticClass: "btn btn-success btn-xs btn-outline",
     class: {
       disabled: _vm.busy
@@ -57023,7 +57068,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     class: {
       'fa-spin': _vm.page.busy
     }
-  }), _vm._v("\n            Acknowledge All\n        ")])])], 2)
+  }), _vm._v("\n            Acknowledge All\n        ")]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-primary",
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.toggleMuted($event)
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-fw fa-check",
+    class: [_vm.show_muted ? 'fa-toggle-on' : 'fa-toggle-off', {
+      active: _vm.show_muted
+    }]
+  }), _vm._v("\n            Toggle Muted\n        ")])])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -57659,32 +57717,7 @@ if(false) {
 }
 
 /***/ }),
-/* 364 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(246);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(9)("185d3830", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-54efaebf\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Client.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-54efaebf\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Client.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
+/* 364 */,
 /* 365 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -67519,6 +67552,433 @@ return Vue$3;
 __webpack_require__(190);
 module.exports = __webpack_require__(191);
 
+
+/***/ }),
+/* 372 */,
+/* 373 */,
+/* 374 */,
+/* 375 */,
+/* 376 */,
+/* 377 */,
+/* 378 */,
+/* 379 */,
+/* 380 */,
+/* 381 */,
+/* 382 */,
+/* 383 */,
+/* 384 */,
+/* 385 */,
+/* 386 */,
+/* 387 */,
+/* 388 */,
+/* 389 */,
+/* 390 */,
+/* 391 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    mounted: function mounted() {
+        this.listen();
+    },
+    data: function data() {
+        return {
+            match: null,
+            visible: false,
+            exemption_pattern: null,
+            show_partial_path: false,
+            busy: false
+        };
+    },
+
+
+    computed: {
+        filename: function filename() {
+            if (this.match.file.indexOf('\\') == -1) {
+                return this.match.file.split(' ').pop();
+            }
+
+            return this.match.file.split('\\').pop();
+        }
+    },
+
+    methods: {
+        listen: function listen() {
+            var _this = this;
+
+            Bus.$on('newExemptionFromMatch', function (event) {
+                _this.match = event.match;
+                _this.show();
+            });
+        },
+        show: function show() {
+            this.visible = true;
+        },
+        cancel: function cancel() {
+            this.busy = false;
+            this.match = null;
+            this.visible = false;
+            this.exemption_pattern = null;
+            this.show_partial_path = false;
+        },
+        exemptPartialPath: function exemptPartialPath() {
+            this.exemption_pattern = this.match.file;
+            this.show_partial_path = true;
+        },
+        exempt: function exempt(pattern) {
+            this.exemption_pattern = pattern;
+            this.submit();
+        },
+        submit: function submit() {
+            return swal({
+                title: 'Create Exemption',
+                text: this.exemption_pattern,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#bf5329",
+                confirmButtonText: 'Yes, create the exemption.'
+            }).then(this.createExemption, this.ignore);
+        },
+        createExemption: function createExemption() {
+            this.busy = true;
+
+            Api.post('exemptions', { pattern: this.exemption_pattern }).then(this.mute, this.errorDuplicate);
+        },
+        errorDuplicate: function errorDuplicate() {
+            flash.error('Oops. That pattern may be exempt already.');
+            this.busy = false;
+        },
+        mute: function mute() {
+            Api.post('clients/' + this.match.client.name + '/matches/' + this.match.id + '/mute').then(this.updateMatches, this.error);
+        },
+        updateMatches: function updateMatches() {
+            Bus.$emit('UpdateMatches');
+            this.cancel();
+        },
+        ignore: function ignore() {},
+        error: function error(_error) {
+            flash.error('There was an error performing the operation. See the console for more details');
+            console.error(_error);
+
+            this.busy = false;
+        }
+    }
+
+});
+
+/***/ }),
+/* 392 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(6)();
+exports.push([module.i, "\n.new-exemption-from-match {\n  width: 600px;\n  min-height: 400px;\n}\n.new-exemption-from-match .panel-heading {\n  font-size: 24px;\n}\n.new-exemption-from-match .panel-footer {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: end;\n      -ms-flex-pack: end;\n          justify-content: flex-end;\n}\n.new-exemption-from-match .panel-body button {\n  font-weight: bold;\n}\n.new-exemption-from-match .partial-path-form {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n.new-exemption-from-match .partial-path-form input {\n  -webkit-box-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n}\n.new-exemption-from-match .partial-path-form * + * {\n  margin-left: 15px;\n}\n.new-exemption-from-match-wrapper {\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 1000;\n  height: 100vh;\n  width: 100vw;\n  background: rgba(0, 0, 0, 0.3);\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n", ""]);
+
+/***/ }),
+/* 393 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(395)
+
+var Component = __webpack_require__(2)(
+  /* script */
+  __webpack_require__(391),
+  /* template */
+  __webpack_require__(394),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\NewExemptionFromMatch.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] NewExemptionFromMatch.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7d7dff24", Component.options)
+  } else {
+    hotAPI.reload("data-v-7d7dff24", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 394 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return (_vm.visible) ? _c('div', {
+    staticClass: "new-exemption-from-match-wrapper"
+  }, [_c('div', {
+    staticClass: "new-exemption-from-match"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "panel-body"
+  }, [_c('table', {
+    staticClass: "table table-striped"
+  }, [_c('tr', [_c('th', {
+    attrs: {
+      "nowrap": "nowrap"
+    }
+  }, [_vm._v("Client")]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.match.client.name))])]), _vm._v(" "), _c('tr', [_c('th', {
+    attrs: {
+      "nowrap": "nowrap"
+    }
+  }, [_vm._v("Pattern Matched")]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.match.pattern.name))])]), _vm._v(" "), _c('tr', [_c('th', {
+    attrs: {
+      "nowrap": "nowrap"
+    }
+  }, [_vm._v("File Matched")]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.match.file))])]), _vm._v(" "), _c('tr', [_c('th', {
+    attrs: {
+      "nowrap": "nowrap"
+    }
+  }, [_vm._v("Times Matched")]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.match.times_matched))])])]), _vm._v(" "), _c('h3', [_vm._v("\n                    What do you want to make exempt?\n                ")]), _vm._v(" "), _vm._m(1), _vm._v(" "), _c('p', [_c('button', {
+    staticClass: "btn btn-success btn-outline full-width",
+    class: {
+      disabled: _vm.busy
+    },
+    attrs: {
+      "disabled": _vm.busy,
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.exempt(_vm.match.pattern.name)
+      }
+    }
+  }, [_vm._v("\n                        Pattern: " + _vm._s(_vm.match.pattern.name) + "\n                    ")])]), _vm._v(" "), _c('p', [_c('button', {
+    staticClass: "btn btn-success btn-outline full-width",
+    class: {
+      disabled: _vm.busy
+    },
+    attrs: {
+      "disabled": _vm.busy,
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.exempt(_vm.filename)
+      }
+    }
+  }, [_vm._v("\n                        Filename: " + _vm._s(_vm.filename) + "\n                    ")])]), _vm._v(" "), _c('p', [_c('button', {
+    staticClass: "btn btn-success btn-outline full-width",
+    class: {
+      disabled: _vm.busy
+    },
+    attrs: {
+      "disabled": _vm.busy,
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.exempt(_vm.match.file)
+      }
+    }
+  }, [_vm._v("\n                        Full Path: " + _vm._s(_vm.match.file) + "\n                    ")])]), _vm._v(" "), _c('p', [_c('button', {
+    staticClass: "btn btn-info btn-outline full-width",
+    class: {
+      disabled: _vm.busy
+    },
+    attrs: {
+      "disabled": _vm.busy,
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.exemptPartialPath($event)
+      }
+    }
+  }, [_vm._v("\n                        Partial Path ...\n                    ")])]), _vm._v(" "), (_vm.show_partial_path) ? _c('p', {
+    staticClass: "partial-path-form"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.exemption_pattern),
+      expression: "exemption_pattern"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "placeholder": "Partial Path",
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.exemption_pattern)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.exemption_pattern = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-success btn-outline",
+    class: {
+      disabled: _vm.busy
+    },
+    attrs: {
+      "disabled": _vm.busy
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.submit($event)
+      }
+    }
+  }, [_vm._v("Go")])]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "panel-footer"
+  }, [_c('button', {
+    staticClass: "btn btn-danger btn-outline",
+    class: {
+      disabled: _vm.busy
+    },
+    attrs: {
+      "disabled": _vm.busy,
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.cancel($event)
+      }
+    }
+  }, [_vm._v("Cancel")])])])])]) : _vm._e()
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "panel-heading"
+  }, [_c('span', {
+    staticClass: "text-success"
+  }, [_c('i', {
+    staticClass: "fa fa-fw fa-check"
+  }), _vm._v("\n                    New Exemption\n                ")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "alert alert-warning"
+  }, [_c('i', {
+    staticClass: "fa fa-fw fa-exclamation-circle"
+  }), _vm._v("\n                    Don't make it too broad, you risk exempting legitimate threats.\n                ")])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-7d7dff24", module.exports)
+  }
+}
+
+/***/ }),
+/* 395 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(392);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(9)("6ece7993", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-7d7dff24\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/less-loader/index.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./NewExemptionFromMatch.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-7d7dff24\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/less-loader/index.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./NewExemptionFromMatch.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

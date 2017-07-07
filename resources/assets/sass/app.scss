@@ -83,14 +83,32 @@ body {
     background-color: lighten(#FFFF55, 20%);
 }
 
- .btn-submenu {
-      position: absolute;
-      /* padding: 0 3px 3px; */
-      background: white;
-      z-index: 3;
-      top: 50%;
-      width: 100%;
-      margin-top: -12px;
-      left: 30px;
-      overflow: visible;
+.btn-submenu {
+    position: absolute;
+    display: flex;
+    /* padding: 0 3px 3px; */
+    background: white;
+    z-index: 3;
+    top: 50%;
+    width: 100%;
+    margin-top: -11px;
+    left: 30px;
+    overflow: visible;
+    
+    button:last-child() {
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
     }
+
+    button {
+        border-radius: 0;
+    }
+
+    button + button {
+        margin-left: -1px;
+    }
+}
+
+button.full-width {
+    width: 100%;
+}

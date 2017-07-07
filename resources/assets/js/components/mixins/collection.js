@@ -21,6 +21,7 @@ export default {
 
             let models = _(this.models)
                 .filter( this.searchModel )
+                .filter( this.params.where )
                 .sortBy(this.orderBy);
 
             return (this.asc) ? models.value() : models.reverse().value();

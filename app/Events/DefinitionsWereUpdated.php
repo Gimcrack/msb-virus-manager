@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Client;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -11,20 +10,18 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class ClientWasUpdated implements ShouldBroadcast
+class DefinitionsWereUpdated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $client;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Client $client)
+    public function __construct()
     {
-        $this->client = $client;
+        //
     }
 
     /**
@@ -34,6 +31,6 @@ class ClientWasUpdated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel( strtolower("clients.{$this->client->name}") );
+        return new Channel('definitions');
     }
 }

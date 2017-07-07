@@ -11,6 +11,10 @@
                 <i class="fa fa-fw fa-check" :class="{'fa-spin' : page.busy}"></i>
                 Acknowledge All
             </button>
+            <button @click.prevent="toggleMuted" class="btn btn-primary">
+                <i class="fa fa-fw fa-check" :class="[ show_muted ? 'fa-toggle-on' : 'fa-toggle-off', { active : show_muted } ]"></i>
+                Toggle Muted
+            </button>
         </template>
 
     </page>
@@ -23,6 +27,8 @@
                 page : {
                     busy : false
                 },
+
+                show_muted : false,
 
                 details : {
                     columns : [
@@ -55,6 +61,9 @@
                                 Bus.$emit('AllMatchedFilesAcknowledged');
                             }
                         }
+                    },
+                    where : {
+                        muted_flag : false
                     }
                 },
                 toggles : {
@@ -67,14 +76,24 @@
         mounted() {
             Bus.$on('UnacknowledgedMatch', () => {
                 this.has_unacknowledged = true;
-            })
+            });
 
             Bus.$on('AllMatchedFilesAcknowledged', () => {
                 this.has_unacknowledged = false;
-            })
+            });
+
+            // Bus.$on('UpdateMatches', () => {
+            //     this.page.fetch();
+            // });
         },
 
         methods : {
+
+            toggleMuted() {
+                this.show_muted = ! this.show_muted;
+
+                this.details.where =  ( this.show_muted ) ? {} : { muted_flag : false };
+            },
 
             ackAll() {
                 this.page.busy = true;

@@ -23,6 +23,9 @@
         
 
         <template slot="menu">
+            <button @click.prevent="newExemptionFromMatch" :disabled="busy" class="btn btn-success btn-xs btn-outline" :class="{disabled : busy}"> 
+                <i :class="[ 'fa-check', {'fa-spin' : updating}]" class="fa fa-fw"></i> 
+            </button>
             <button @click.prevent="toggleMute" :disabled="busy" class="btn btn-success btn-xs btn-outline" :class="{disabled : busy}"> 
                 <i :class="[ model.muted_flag ? 'fa-bell-o' : 'fa-bell-slash-o', {'fa-spin' : updating}]" class="fa fa-fw"></i> 
             </button>
@@ -47,7 +50,7 @@
                     type : 'matched_file',
                     model_friendly : 'file',
                     endpoint : `matches`,
-                    channel : `matches.${this.initial.id}`,
+                    channel : `clients.${this.initial.client.name.toLowerCase()}.matches.${this.initial.id}`,
                     updated : 'MatchedFileWasUpdated',
                     events : [
                         {
@@ -56,6 +59,10 @@
                         },
                         {
                             event : 'MatchedFileWasUnmuted',
+                            handler : this.updatedEvent
+                        },
+                        {
+                            event : 'MatchedFileWasIncremented',
                             handler : this.updatedEvent
                         },
                     ]
@@ -75,6 +82,12 @@
         },
 
         methods: {
+            newExemptionFromMatch() {
+                Bus.$emit('newExemptionFromMatch', {
+                    match : this.model
+                });
+            },
+
             toggleMute() {
                 if ( this.model.muted_flag ) 
                     return this.unmute();

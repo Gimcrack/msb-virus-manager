@@ -60,4 +60,15 @@ class Pattern extends Model
     {
         return $query->wherePublishedFlag(1);
     }
+
+    /**
+     * A pattern may have many matched files
+     * @method logs
+     *
+     * @return   Collection<App\MatchedFile>
+     */
+    public function matched_files()
+    {
+        return $this->hasMany(MatchedFile::class);
+    }
 }

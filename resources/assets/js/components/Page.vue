@@ -77,8 +77,8 @@
                             created : '',
                             destroyed : '',
                             global : null
-                        }
-                        
+                        },
+                        where : {}
                     }
                 }
             },

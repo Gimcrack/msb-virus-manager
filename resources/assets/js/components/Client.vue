@@ -32,7 +32,7 @@
                     key : 'name',
                     type : 'client',
                     endpoint : 'clients',
-                    channel : `clients.${this.initial.id}`,
+                    channel : `clients.${this.initial.name.toLowerCase()}`,
                     updated : 'ClientWasUpdated',
                 }
             }
@@ -57,16 +57,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-    .btn-submenu {
-      position: absolute;
-      /* padding: 0 3px 3px; */
-      background: white;
-      z-index: 3;
-      top: 50%;
-      margin-top: -12px;
-      left: 30px;
-      overflow: hidden;
-    }
-</style>

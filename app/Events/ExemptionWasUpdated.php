@@ -36,6 +36,9 @@ class ExemptionWasUpdated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel("exemptions.{$this->exemption->id}");
+        return [
+            new Channel("exemptions"),
+            new Channel("exemptions.{$this->exemption->id}")
+        ];
     }
 }

@@ -25,6 +25,8 @@ class PatternWasDestroyed implements ShouldBroadcast
     public function __construct(Pattern $pattern)
     {
         $this->pattern = $pattern;
+
+        $this->handle();
     }
 
     /**
@@ -35,5 +37,16 @@ class PatternWasDestroyed implements ShouldBroadcast
     public function broadcastOn()
     {
         return new Channel("patterns");
+    }
+
+    /**
+     * Handle the event
+     * @method handle
+     *
+     * @return   void
+     */
+    public function handle()
+    {
+        $this->pattern->matched_files->each->delete();
     }
 }

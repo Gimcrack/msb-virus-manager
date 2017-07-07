@@ -43,7 +43,10 @@ class MatchedFileWasCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('matches');
+        return [
+            new Channel('matches'),
+            new Channel( strtolower("clients.{$this->matched_file->client->name}.matches") )
+        ];
     }
 
     /**

@@ -2,10 +2,12 @@
 
 namespace App\Definitions;
 
+use Cache;
 use App\Exemption;
 use Carbon\Carbon;
 use ReflectionClass;
 use Illuminate\Support\Collection;
+use App\Events\DefinitionsWereUpdated;
 use App\Definitions\Concerns\DefinitionsCanBeFaked;
 use App\Definitions\Contracts\Definitions as DefinitionsContract;
 
@@ -67,6 +69,20 @@ abstract class DefinitionsProvider implements DefinitionsContract {
      */
     public function lastUpdated() : Carbon
     {
+        $prevUpdate = Cache::forever('definitionsLastUpdated', 
+            $this->lastUpdated ? ( $this->lastUpdated->timestamp ) : ( new Carbon("1900-01-01 00:00:00"))->timestamp
+        );
+
+        if ($this->lastUpdated && $this->lastUpdated->timestamp > $prevUpdate)
+        {
+            event( new DefinitionsWereUpdated );
+            Cache::forget('definitionsLastUpdated');
+
+            $prevUpdate = Cache::forever('definitionsLastUpdated', 
+                $this->lastUpdated ? ( $this->lastUpdated->timestamp ) : ( new Carbon("1900-01-01 00:00:00"))->timestamp
+            );
+        }
+
         return $this->lastUpdated;
     }
 

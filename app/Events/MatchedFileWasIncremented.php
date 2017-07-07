@@ -39,7 +39,7 @@ class MatchedFileWasIncremented implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel("matches.{$this->matched_file->id}");
+        return new Channel( strtolower("clients.{$this->matched_file->client->name}.matches.{$this->matched_file->id}") );
     }
 
     /**

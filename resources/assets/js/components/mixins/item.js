@@ -117,6 +117,12 @@ export default {
             console.log(event);
             let model = this.eventModel(event);
 
+            if ( !! this.$parent.add ) {
+                this.$parent.add(model);
+                this.$parent.orderBy = null;
+                this.$parent.orderBy = 'id';
+            }
+
             this.model = model.entity;
             this.$forceUpdate();
             this.highlight();

@@ -43,7 +43,7 @@ class Client extends Model
      * A client may have many matched files
      * @method logs
      *
-     * @return   Collection<App\MatcedFile>
+     * @return   Collection<App\MatchedFile>
      */
     public function matched_files()
     {

@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class ClientShouldUpgrade
+class ClientShouldUpgrade implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     
@@ -35,6 +35,6 @@ class ClientShouldUpgrade
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new Channel( strtolower("clients.{$this->client->name}") );
     }
 }

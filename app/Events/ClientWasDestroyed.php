@@ -25,6 +25,8 @@ class ClientWasDestroyed implements ShouldBroadcast
     public function __construct(Client $client)
     {
         $this->client = $client;
+
+        $this->handle();
     }
 
     /**
@@ -35,5 +37,16 @@ class ClientWasDestroyed implements ShouldBroadcast
     public function broadcastOn()
     {
         return new Channel('clients');
+    }
+
+    /**
+     * Handle the event
+     * @method handle
+     *
+     * @return   void
+     */
+    public function handle()
+    {
+        $this->client->matched_files->each->delete();
     }
 }
