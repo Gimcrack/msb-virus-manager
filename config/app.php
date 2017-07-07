@@ -53,6 +53,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'echo_host' => env('APP_ECHO_HOST', 'localhost:6001'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

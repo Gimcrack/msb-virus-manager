@@ -30,7 +30,7 @@
 
 
     <!-- Scripts -->
-    <script src="http://{{ $host }}/socket.io/socket.io.js"></script>
+    <script src="http://{{ config('app.echo_host') }}/socket.io/socket.io.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>
