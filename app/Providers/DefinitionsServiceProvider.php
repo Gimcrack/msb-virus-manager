@@ -29,7 +29,7 @@ class DefinitionsServiceProvider extends ServiceProvider
             return new Experiant;
         });
 
-        if ( env('APP_ENV') == 'local' ) {
+        if ( config('app.env') == 'local' ) {
             Definitions::fake();
         }
     }
