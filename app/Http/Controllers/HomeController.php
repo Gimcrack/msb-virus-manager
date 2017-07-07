@@ -25,6 +25,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $host = ( env('APP_ENV') == 'local' ) ? 'localhost:6001' : 'sentry.itdashboard.matsugov.us:6001';
+        
+        return view('home', compact('host'));
     }
 }
