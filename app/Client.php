@@ -68,6 +68,8 @@ class Client extends Model
             })
             ->max();
 
+        if ( ! $v ) return null;
+
          return  
             collect( explode('.',$v) )
                 ->transform( function($part) {
