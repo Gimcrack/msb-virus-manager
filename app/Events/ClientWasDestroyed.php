@@ -48,5 +48,6 @@ class ClientWasDestroyed implements ShouldBroadcast
     public function handle()
     {
         $this->client->matched_files->each->delete();
+        $this->client->logs->each->delete();
     }
 }

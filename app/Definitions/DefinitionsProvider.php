@@ -70,17 +70,18 @@ abstract class DefinitionsProvider implements DefinitionsContract {
     public function lastUpdated() : Carbon
     {
         $prevUpdate = Cache::forever('definitionsLastUpdated', 
-            $this->lastUpdated ? ( $this->lastUpdated->timestamp ) : ( new Carbon("1900-01-01 00:00:00"))->timestamp
+            $this->lastUpdated ? ( $this->lastUpdated ) : ( new Carbon("1900-01-01 00:00:00"))
         );
 
         if ($this->lastUpdated && $this->lastUpdated->timestamp > $prevUpdate)
         {
-            event( new DefinitionsWereUpdated );
             Cache::forget('definitionsLastUpdated');
 
             $prevUpdate = Cache::forever('definitionsLastUpdated', 
                 $this->lastUpdated ? ( $this->lastUpdated->timestamp ) : ( new Carbon("1900-01-01 00:00:00"))->timestamp
             );
+
+            event( new DefinitionsWereUpdated );
         }
 
         return $this->lastUpdated;
