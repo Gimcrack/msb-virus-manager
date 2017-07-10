@@ -40,6 +40,34 @@ class ClientTest extends TestCase
     }
 
     /** @test */
+    function an_existing_client_can_register_an_update()
+    {
+        factory(Client::class)->create([
+            'name' => 'Test-Computer-Name',
+            'version' => '1.0.0.0'
+        ]);
+
+        // act
+        $this->post("/api/v1/clients/test-computer-name", [
+            'version' => '1.0.1.0'
+        ])
+
+        // database assertions
+        ->assertDatabaseHas('clients', [
+            'name' => 'test-computer-name',
+            'version' => '1.0.1.0'
+        ])
+        
+        // response assertions
+        ->response()
+            ->assertStatus(201)
+            ->assertJsonFragment(['name' => 'test-computer-name'])
+            ->assertJsonFragment(['version' => '1.0.1.0']);
+
+        $this->assertEquals( 1, Client::count() );
+    }
+
+    /** @test */
     function a_client_with_a_null_name_cannot_register()
     {
         $this->disableExceptionHandling();

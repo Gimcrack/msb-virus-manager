@@ -59,10 +59,12 @@ class ClientController extends Controller
             'version' => 'required'
         ]);
 
-        return response()->json( Client::firstOrCreate([ 
-            'name' => $name,
-            'version' => request('version')
-        ]), 201);
+        return response()->json( Client::updateOrCreate([ 
+                'name' => strtolower($name),
+            ], 
+            [ 
+                'version' => request('version') 
+            ]), 201);
     }
 
     /**

@@ -29,6 +29,17 @@ class Client extends Model
     ];
 
     /**
+     * Set the name attribute
+     * @method setNameAttribute
+     *
+     * @return   void
+     */
+    public function setNameAttribute($name)
+    {
+        $this->attributes['name'] = strtolower($name) ?: null;
+    }
+
+    /**
      * A client may have many log entries
      * @method logs
      *

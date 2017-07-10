@@ -19,6 +19,8 @@ class ClientTest extends TestCase
     /** @test */
     function a_client_must_have_a_name()
     {
+        $this->disableExceptionHandling();
+
         try {
             $client = factory(Client::class)->create(['name' => null]);
         }
