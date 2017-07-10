@@ -59,12 +59,14 @@ class ClientController extends Controller
             'version' => 'required'
         ]);
 
+        $exists = !! Client::whereName(strtolower($name))->first();
+
         return response()->json( Client::updateOrCreate([ 
                 'name' => strtolower($name),
             ], 
             [ 
                 'version' => request('version') 
-            ]), 201);
+            ]), $exists ? 202 : 201);
     }
 
     /**

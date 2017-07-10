@@ -60,7 +60,7 @@ class ClientTest extends TestCase
         
         // response assertions
         ->response()
-            ->assertStatus(201)
+            ->assertStatus(202)
             ->assertJsonFragment(['name' => 'test-computer-name'])
             ->assertJsonFragment(['version' => '1.0.1.0']);
 

@@ -25515,6 +25515,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mixins: [mixins.item],
@@ -25573,7 +25574,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
 
             details: {
-                columns: ['id', 'action', 'status', {
+                columns: ['id', {
+                    title: 'Client',
+                    key: 'client.name'
+                }, 'action', 'status', {
                     title: 'Logged',
                     key: 'updated_at'
                 }],
@@ -57280,7 +57284,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "update": _vm.update,
       "destroy": _vm.destroy
     }
-  }, [_c('td', [_vm._v(_vm._s(_vm.model.action))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.updated))])])
+  }, [_c('td', [_vm._v(_vm._s(_vm.model.client.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.action))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.updated))])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

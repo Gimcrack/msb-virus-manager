@@ -18,6 +18,10 @@
                 details : {
                     columns : [
                         'id',
+                        {
+                            title : 'Client',
+                            key : 'client.name'
+                        },
                         'action',
                         'status',
                         {

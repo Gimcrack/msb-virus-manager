@@ -8,6 +8,7 @@
         @update="update"
         @destroy="destroy"
     >
+        <td>{{ model.client.name }}</td>
         <td>{{ model.action }}</td>
         <td>{{ model.status }}</td>
         <td>{{ updated }}</td>

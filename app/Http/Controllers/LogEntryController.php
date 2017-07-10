@@ -15,6 +15,6 @@ class LogEntryController extends Controller
      */
     public function index()
     {
-        return response()->json( LogEntry::latest()->paginate(25), 200);
+        return response()->json( LogEntry::with('client')->latest()->paginate(25), 200);
     }
 }
