@@ -17,16 +17,24 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\PatternWasUpdated' => [],
         'App\Events\PatternWasDestroyed' => [],
 
-        'App\Events\ClientWasCreated' => [],
+        'App\Events\ClientWasCreated' => [
+            'App\Listeners\LogNewClient'
+        ],
         'App\Events\ClientWasUpdated' => [],
-        'App\Events\ClientWasDestroyed' => [],
-        'App\Events\ClientShouldUpgrade' => [],
+        'App\Events\ClientWasDestroyed' => [
+            'App\Listeners\LogClientDestroyed'
+        ],
+        'App\Events\ClientShouldUpgrade' => [
+            'App\Listeners\LogClientPendingUpgrade'
+        ],
 
         'App\Events\ExemptionWasCreated' => [],
         'App\Events\ExemptionWasUpdated' => [],
         'App\Events\ExemptionWasDestroyed' => [],
 
-        'App\Events\MatchedFileWasCreated' => [],
+        'App\Events\MatchedFileWasCreated' => [
+            'App\Listeners\LogNewMatchedFile'
+        ],
         'App\Events\MatchedFileWasUpdated' => [],
         'App\Events\MatchedFileWasMuted' => [],
         'App\Events\MatchedFileWasUnmuted' => [],
