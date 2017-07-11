@@ -34,6 +34,9 @@ class PatternWasUpdated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel("patterns.{$this->pattern->id}");
+        return [
+            new Channel("patterns"),
+            new Channel("patterns.{$this->pattern->id}"),
+        ];
     }
 }
