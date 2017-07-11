@@ -25677,6 +25677,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }, {
                     event: 'MatchedFileWasIncremented',
                     handler: this.updatedEvent
+                }, {
+                    event: 'MatchedFileWasIncremented',
+                    handler: this.incremented
                 }]
             },
 
@@ -25695,6 +25698,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+        incremented: function incremented() {
+            Bus.$emit('UnacknowledgedMatch');
+        },
         newExemptionFromMatch: function newExemptionFromMatch() {
             Bus.$emit('newExemptionFromMatch', {
                 match: this.model

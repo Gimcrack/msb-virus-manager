@@ -65,6 +65,10 @@
                             event : 'MatchedFileWasIncremented',
                             handler : this.updatedEvent
                         },
+                        {
+                            event : 'MatchedFileWasIncremented',
+                            handler : this.incremented
+                        },
                     ]
                 },
 
@@ -82,6 +86,10 @@
         },
 
         methods: {
+            incremented() {
+                Bus.$emit('UnacknowledgedMatch');
+            },
+
             newExemptionFromMatch() {
                 Bus.$emit('newExemptionFromMatch', {
                     match : this.model
