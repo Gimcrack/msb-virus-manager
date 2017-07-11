@@ -18,5 +18,7 @@ class ExperiantTest extends DefinitionsProviderTests
         $this->minCount = 1000;
         
         $this->implementation = Experiant::class;
+
+        $this->implementation_short = 'Experiant';
     }
 }
