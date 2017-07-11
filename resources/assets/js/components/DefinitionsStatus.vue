@@ -1,7 +1,7 @@
 <template>
     <li v-show="loaded">
         <a href="#">
-            <span class="label label-primary">{{ definitions }}</span>
+            <span class="label label-info">{{ definitions }}</span>
         </a>
     </li>
 </template>

@@ -36,7 +36,7 @@
                             <i class="fa fa-fw fa-user"></i>
                             {{ Auth::user()->name }} 
                             @if( Auth::user()->isAdmin() )
-                            <span class="label label-primary">Admin</span>
+                            <span class="label label-info">Admin</span>
                             @endif
                             <span class="caret"></span>
                         </a>

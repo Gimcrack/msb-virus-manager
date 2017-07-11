@@ -1,7 +1,7 @@
 <template>
     <li v-show="loaded">
         <a href="#">  
-            <span class="label label-primary">Agent {{ build }}</span>
+            <span class="label label-info">Agent {{ build }}</span>
         </a>
     </li>
 </template>
