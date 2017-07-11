@@ -18,7 +18,7 @@ class LogClientDestroyed
     {
         $event->client->logs()->create([
             'action' => 'Destroy',
-            'status' => 'Client record was removed'
+            'status' => 'Client record was removed for ' . $event->client->name
         ]);
     }
 }
