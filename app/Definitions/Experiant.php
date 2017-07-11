@@ -6,6 +6,7 @@ use Cache;
 use Zttp\Zttp;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use App\Events\DefinitionsWereUpdated;
 use App\Definitions\Facades\Definitions;
 
 class Experiant extends DefinitionsProvider {
@@ -32,6 +33,15 @@ class Experiant extends DefinitionsProvider {
         $this->definitions = collect($response->filters);
 
         $this->lastUpdated = ( new Carbon( $response->lastUpdated['date'], $response->lastUpdated['timezone'] ) )->setTimezone('America/Anchorage');
+
+        if ( Definitions::haveBeenUpdated() )
+        {
+            Cache::forget('definitionsLastUpdated');
+
+            $prevUpdate = Cache::forever('definitionsLastUpdated', $this->lastUpdated);
+
+            event( new DefinitionsWereUpdated );
+        }
 
         return $this->definitions();
     }

@@ -3,6 +3,7 @@
 namespace Tests\Integration;
 
 use Cache;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Support\Collection;
 use App\Events\DefinitionsWereUpdated;
@@ -68,15 +69,13 @@ class DefinitionsProviderTests extends TestCase
     {
         Definitions::fetch();
         
-        $this->assertInstanceOf( \Carbon\Carbon::class, Definitions::lastUpdated() );
+        $this->assertInstanceOf( Carbon::class, Definitions::lastUpdated() );
     }
 
     /** @test */
     function an_event_is_fired_when_updated_definitions_are_fetched()
     {
-        Cache::forever('definitionsLastUpdated', function(){
-            return new Carbon\Carbon("2000-01-01 00:00:00");
-        });
+        Cache::forever('definitionsLastUpdated', Carbon::parse("1900-01-01 00:00:00") );
 
         Definitions::fetch();
         Definitions::lastUpdated();

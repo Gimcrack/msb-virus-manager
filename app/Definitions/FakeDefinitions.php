@@ -4,6 +4,7 @@ namespace App\Definitions;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use App\Events\DefinitionsWereUpdated;
 
 class FakeDefinitions extends DefinitionsProvider {
 
@@ -20,6 +21,8 @@ class FakeDefinitions extends DefinitionsProvider {
         ]);
 
         $this->lastUpdated = Carbon::now();
+
+        event( new DefinitionsWereUpdated );
 
         return $this->definitions();
     }
