@@ -36,7 +36,7 @@ class ClientMatchedFilesController extends Controller
         {
             if ( ! $data['pattern'] ) abort(422);
             
-            $pattern = Pattern::firsOrCreate( [ 'name' => $data['pattern'] ] );
+            $pattern = Pattern::firstOrCreate( [ 'name' => $data['pattern'] ] );
 
             $data['pattern_id'] = $pattern->id;
             unset($data['pattern']);
