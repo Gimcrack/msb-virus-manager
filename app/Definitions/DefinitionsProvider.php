@@ -73,7 +73,7 @@ abstract class DefinitionsProvider implements DefinitionsContract {
             $this->lastUpdated ? ( $this->lastUpdated ) : ( new Carbon("1900-01-01 00:00:00"))
         );
 
-        if ($this->lastUpdated && $this->lastUpdated->timestamp > $prevUpdate)
+        if ($this->lastUpdated && $this->lastUpdated->gt( $prevUpdate->addHour() ) )
         {
             Cache::forget('definitionsLastUpdated');
 
