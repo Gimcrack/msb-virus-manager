@@ -10,7 +10,7 @@
     >
         <td>{{ name }}</td>
         <td>{{ model.action }}</td>
-        <td>{{ model.status }}</td>
+        <td>{{ status }}</td>
         <td>{{ updated }}</td>
     </item>
 </template>
@@ -28,6 +28,10 @@
 
             name() {
                 return ( this.model.client ) ? this.model.client.name : '-Unknown-';
+            },
+
+            status() {
+                return ( this.model.status.length > 30 ) ? this.model.status.slice(0,30) + '...' : this.model.status;
             }
         },
 

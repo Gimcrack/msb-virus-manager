@@ -25526,6 +25526,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         name: function name() {
             return this.model.client ? this.model.client.name : '-Unknown-';
+        },
+        status: function status() {
+            return this.model.status.length > 30 ? this.model.status.slice(0, 30) + '...' : this.model.status;
         }
     },
 
@@ -57287,7 +57290,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "update": _vm.update,
       "destroy": _vm.destroy
     }
-  }, [_c('td', [_vm._v(_vm._s(_vm.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.action))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.updated))])])
+  }, [_c('td', [_vm._v(_vm._s(_vm.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.action))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.updated))])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
