@@ -41,6 +41,31 @@ class MatchedFileTest extends TestCase
     }
 
     /** @test */
+    function a_matched_file_can_be_entered_for_a_client_with_a_pattern_that_will_be_looked_up()
+    {
+        // given a client
+        $client = factory(Client::class)->create();
+        $pattern = factory(Pattern::class)->create(['name' => 'foo']);
+
+        // act
+        $this->post("/api/v1/clients/{$client->name}/matches", [
+            'file' => 'some_file',
+            'pattern' => $pattern->name
+        ])
+
+        // database assertions
+        ->assertDatabaseHas('matched_files', [
+            'client_id' => $client->id,
+            'pattern_id' => $pattern->id,
+            'file' => 'some_file'
+        ])
+        
+        // response assertions
+        ->response()
+            ->assertStatus(201);
+    }
+
+    /** @test */
     function a_matched_file_cannot_be_entered_for_an_invalid_client()
     {
         // act

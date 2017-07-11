@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Pattern;
 use App\MatchedFile;
 use Illuminate\Http\Request;
 use App\Exceptions\InvalidOperationException;
@@ -25,11 +26,20 @@ class ClientMatchedFilesController extends Controller
         // ]);
          
         $this->validate(request(), [
-            'pattern_id' => 'required|exists:patterns,id',
+            'pattern_id' => 'sometimes|required|exists:patterns,id',
             'file' => 'required'
         ]);
         
-        $data = request()->only(['pattern_id','file']);
+        $data = request()->only(['pattern_id','file','pattern']);
+
+        if ( ! $data['pattern_id'] )
+        {
+            if ( ! $data['pattern'] ) abort(422);
+            if( ! $pattern = Pattern::whereName( $data['pattern'] )->first() ) abort(422);
+
+            $data['pattern_id'] = $pattern->id;
+            unset($data['pattern']);
+        }
 
         $code = MatchedFile::createOrIncrement( $client, $data ) ? 202 : 201;
 
