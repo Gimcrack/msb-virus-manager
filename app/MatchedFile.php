@@ -57,11 +57,11 @@ class MatchedFile extends Model
     {
         $this->increment('times_matched');
         
-        $this->acknowledged_flag = 0;
-        $this->save();
-        
-        if ( ! $this->muted_flag )
+        if ( ! $this->muted_flag ) {
+            $this->acknowledged_flag = 0;
+            $this->save();
             event(new MatchedFileWasIncremented($this));
+        }
 
         return $this;
     }

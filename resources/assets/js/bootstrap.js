@@ -88,7 +88,7 @@ import moment from 'moment-timezone';
 window.moment = moment;
 
 window.fromNow = (dateTime) => {
-    return moment.tz( dateTime, "GMT" ).fromNow();
+    return moment(dateTime).fromNow();
 }
 
 // mixins
