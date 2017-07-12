@@ -36,4 +36,19 @@ class LogEntryWasCreated implements ShouldBroadcast
     {
         return new Channel('log_entries');
     }
+
+    /**
+     * The data to broadcast with the event
+     * @method broadcastWith
+     *
+     * @return   array
+     */
+    public function broadcastWith()
+    {
+        $this->log_entry->load('client');
+
+        return [
+            'log_entry' => $this->log_entry
+        ];
+    }
 }
