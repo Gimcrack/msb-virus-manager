@@ -25694,6 +25694,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         lastMatch: function lastMatch() {
             return fromNow(this.model.updated_at);
+        },
+        fileName: function fileName() {
+            return this.model.file.indexOf('\\') > -1 ? this.model.file.split('\\').pop() : this.model.file.split(' ').pop();
         }
     },
 
@@ -56809,7 +56812,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     class: {
       'fa-spin': _vm.updating
     }
-  })]) : _vm._e()]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.client.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.pattern.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.file.split(' ').pop()))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.times_matched))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.lastMatch))]), _vm._v(" "), _c('td', [_c('span', {
+  })]) : _vm._e()]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.client.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.pattern.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.fileName))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.times_matched))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.lastMatch))]), _vm._v(" "), _c('td', [_c('span', {
     staticClass: "label",
     class: [_vm.model.muted_flag ? 'label-danger' : 'label-success'],
     domProps: {

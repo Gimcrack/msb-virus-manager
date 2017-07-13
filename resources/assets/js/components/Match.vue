@@ -16,7 +16,7 @@
         </td>
         <td>{{ model.client.name }}</td>
         <td>{{ model.pattern.name }}</td>
-        <td>{{ model.file.split(' ').pop() }}</td>
+        <td>{{ fileName }}</td>
         <td>{{ model.times_matched }}</td>
         <td>{{ lastMatch }}</td>
         <td><span :class="[ model.muted_flag ? 'label-danger' : 'label-success']" class="label" v-text="model.muted_flag ? 'Muted' : ''"></span></td>
@@ -82,6 +82,12 @@
         computed: {
             lastMatch() {
                 return fromNow(this.model.updated_at);
+            },
+
+            fileName() {
+                return ( this.model.file.indexOf('\\') > -1 ) ?
+                    this.model.file.split('\\').pop() :
+                    this.model.file.split(' ').pop()
             }
         },
 
