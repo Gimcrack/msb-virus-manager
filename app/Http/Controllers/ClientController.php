@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\Events\NewBuild;
 use Illuminate\Http\Request;
+use App\Events\ClientShouldScan;
 use App\Events\ClientShouldUpgrade;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
@@ -43,6 +44,19 @@ class ClientController extends Controller
     public function upgrade(Client $client)
     {
         event( new ClientShouldUpgrade($client));
+
+        return response()->json( [], 202);
+    }
+
+    /**
+     * Instruct the client to scan
+     * @method scan
+     *
+     * @return   App\Client
+     */
+    public function scan(Client $client)
+    {
+        event( new ClientShouldScan($client));
 
         return response()->json( [], 202);
     }
@@ -133,6 +147,40 @@ class ClientController extends Controller
     public function destroy(Client $client)
     {
         $client->delete();
+
+        return response()->json([],202);
+    }
+
+    /**
+     * Set the client's scanned files count
+     * @method count
+     *
+     * @return   void
+     */
+    public function count(Client $client)
+    {
+        $this->validate( request(), [
+            'count' => 'required|integer'
+        ]);
+
+        $client->scannedCount( request('count') );
+
+        return response()->json([],202);
+    }
+
+    /**
+     * Set the client's scanned files countCurrent
+     * @method countCurrent
+     *
+     * @return   void
+     */
+    public function countCurrent(Client $client)
+    {
+        $this->validate( request(), [
+            'count' => 'required|integer'
+        ]);
+
+        $client->scannedCurrent( request('count') );
 
         return response()->json([],202);
     }

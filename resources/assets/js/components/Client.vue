@@ -10,7 +10,14 @@
     >
         <td>{{ model.name }}</td>
         <td>{{ model.version }}</td>
+        <td>{{ scan_status }}</td>
         <td>{{ updated }}</td>
+
+        <template slot="menu">
+            <button @click.prevent="scanClient" :disabled="busy" class="btn btn-success btn-xs btn-outline" :class="{disabled : busy}"> 
+                <i :class="[ 'fa-bug', {'fa-spin' : updating}]" class="fa fa-fw"></i> 
+            </button>
+        </template>
     </item>
 </template>
 
@@ -23,7 +30,15 @@
         computed : {
             updated() {
                 return fromNow(this.model.updated_at);
-            }
+            },
+
+            scan_status() {
+                if (this.model.scanned_files_count == this.model.scanned_files_current) {
+                    return `${this.model.scanned_files_count} Files Watched`;
+                }
+
+                return `Scanned ${this.model.scanned_files_current}/${this.model.scanned_files_count} Files`;
+            },
         },
 
         data() {
@@ -43,6 +58,12 @@
                 Bus.$emit('ShouldFetchAgentBuild');
             },
 
+            scanClient() {
+                this.updating = true;
+                Api.post(`clients/${this.model.name}/scan`)
+                    .then( this.scanSuccess, this.error );
+            },
+
             update() {
                 this.updating = true;
                 Api.post(`clients/${this.model.name}/upgrade`)
@@ -53,6 +74,12 @@
                 this.updating = false;
 
                 flash.success('The client was told to upgrade.');
+            },
+
+            scanSuccess(response) {
+                this.updating = false;
+
+                flash.success('The client was told to scan.');
             },
         }
     }

@@ -7,6 +7,7 @@ use App\Client;
 use Carbon\Carbon;
 use Tests\TestCase;
 use App\Events\NewBuild;
+use App\Events\ClientShouldScan;
 use App\Events\ClientShouldUpgrade;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -199,6 +200,24 @@ class ClientTest extends TestCase
     }
 
     /** @test */
+    function a_client_can_be_told_to_scan_via_event()
+    {
+        $client = factory(Client::class)->create();
+
+        $this->disableExceptionHandling();
+
+        $this
+        ->actingAsAdmin()
+        ->post("/api/v1/clients/{$client->name}/scan")
+
+
+        ->response()
+            ->assertStatus(202);
+
+        $this->assertEvent(ClientShouldScan::class, ['client' => $client]);
+    }
+
+    /** @test */
     function a_client_can_be_deleted_by_an_admin()
     {
         $client = factory(Client::class)->create();
@@ -211,7 +230,39 @@ class ClientTest extends TestCase
             ->assertStatus(202);
 
         $this->assertFalse( $client->exists() );
-    }   
+    }  
+
+    /** @test */
+    function a_clients_scanned_file_count_can_be_updated()
+    {
+        $client = factory(Client::class)->create();
+
+        $this
+            ->post("/api/v1/clients/{$client->name}/count", ['count' => 123456])
+
+        ->response()
+            ->assertStatus(202);
+
+        $this->assertDatabaseHas('clients',[
+            'scanned_files_count' => 123456
+        ]);
+    } 
+
+    /** @test */
+    function a_clients_current_scanned_file_count_can_be_updated()
+    {
+        $client = factory(Client::class)->create();
+
+        $this
+            ->post("/api/v1/clients/{$client->name}/count_current", ['count' => 1234])
+
+        ->response()
+            ->assertStatus(202);
+
+        $this->assertDatabaseHas('clients',[
+            'scanned_files_current' => 1234
+        ]);
+    }
 
     /** @test */
     function the_latest_agent_build_can_be_obtained()

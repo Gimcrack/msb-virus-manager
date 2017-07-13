@@ -20,6 +20,10 @@
                         'id',
                         'name',
                         'version',
+                        {
+                            title : 'Status',
+                            key : 'scanned_files_current'
+                        },
                         'updated'
                     ],
                     type : 'client',

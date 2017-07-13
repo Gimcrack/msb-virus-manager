@@ -130,4 +130,32 @@ class ClientTest extends TestCase
 
         $this->assertEvent(ClientWasDestroyed::class, [ 'client' => $client ]);
     }
+
+    /** @test */
+    function a_client_can_keep_track_of_scanned_file_count()
+    {
+         // given a client
+        $client = factory(Client::class)->create(); 
+
+        // act on the client
+        $client->scannedCount(123456);
+
+        $this->assertDatabaseHas('clients',[
+            'scanned_files_count' => 123456
+        ]);
+    }
+
+    /** @test */
+    function a_client_can_keep_track_of_current_scanned_file_count()
+    {
+         // given a client
+        $client = factory(Client::class)->create(); 
+
+        // act on the client
+        $client->scannedCurrent(1234);
+
+        $this->assertDatabaseHas('clients',[
+            'scanned_files_current' => 1234
+        ]);
+    }
 }

@@ -62,6 +62,28 @@ class Client extends Model
     }
 
     /**
+     * Set the scanned file count
+     * @method scannedCount
+     *
+     * @return   void
+     */
+    public function scannedCount($count)
+    {
+        $this->update( ['scanned_files_count' => $count]);
+    }
+
+    /**
+     * Set the current scanned file count
+     * @method scannedCurrent
+     *
+     * @return   void
+     */
+    public function scannedCurrent($count)
+    {
+        $this->update( ['scanned_files_current' => $count]);
+    }
+
+    /**
      * Get the max version
      * @method max_version
      *

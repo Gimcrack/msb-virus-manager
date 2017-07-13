@@ -24788,6 +24788,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mixins: [mixins.item],
@@ -24795,6 +24802,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         updated: function updated() {
             return fromNow(this.model.updated_at);
+        },
+        scan_status: function scan_status() {
+            if (this.model.scanned_files_count == this.model.scanned_files_current) {
+                return this.model.scanned_files_count + ' Files Watched';
+            }
+
+            return 'Scanned ' + this.model.scanned_files_current + '/' + this.model.scanned_files_count + ' Files';
         }
     },
 
@@ -24815,6 +24829,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         postUpdated: function postUpdated(event) {
             Bus.$emit('ShouldFetchAgentBuild');
         },
+        scanClient: function scanClient() {
+            this.updating = true;
+            Api.post('clients/' + this.model.name + '/scan').then(this.scanSuccess, this.error);
+        },
         update: function update() {
             this.updating = true;
             Api.post('clients/' + this.model.name + '/upgrade').then(this.upgradeSuccess, this.error);
@@ -24823,6 +24841,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.updating = false;
 
             flash.success('The client was told to upgrade.');
+        },
+        scanSuccess: function scanSuccess(response) {
+            this.updating = false;
+
+            flash.success('The client was told to scan.');
         }
     }
 });
@@ -24851,7 +24874,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
 
             details: {
-                columns: ['id', 'name', 'version', 'updated'],
+                columns: ['id', 'name', 'version', {
+                    title: 'Status',
+                    key: 'scanned_files_current'
+                }, 'updated'],
                 type: 'client',
                 heading: 'Clients',
                 endpoint: 'clients',
@@ -57339,7 +57365,28 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "update": _vm.update,
       "destroy": _vm.destroy
     }
-  }, [_c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.updated))])])
+  }, [_c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.scan_status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.updated))]), _vm._v(" "), _c('template', {
+    slot: "menu"
+  }, [_c('button', {
+    staticClass: "btn btn-success btn-xs btn-outline",
+    class: {
+      disabled: _vm.busy
+    },
+    attrs: {
+      "disabled": _vm.busy
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.scanClient($event)
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-fw",
+    class: ['fa-bug', {
+      'fa-spin': _vm.updating
+    }]
+  })])])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

@@ -30,7 +30,8 @@ Route::get('logs', 'LogEntryController@index');
 
 Route::get('clients/{client}/logs', 'ClientLogEntryController@index');
 Route::post('clients/{client}/logs', 'ClientLogEntryController@store');
-
+Route::post('clients/{client}/count', 'ClientController@count');
+Route::post('clients/{client}/count_current', 'ClientController@countCurrent');
 Route::post('clients/{client}/matches', 'ClientMatchedFilesController@store');
 
 Route::get('clients', 'ClientController@index');

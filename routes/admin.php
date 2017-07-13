@@ -37,3 +37,4 @@ Route::post('clients/{client}/matches/{match}/acknowledge', 'ClientMatchedFilesC
 Route::post('matches/acknowledge', 'MatchedFileController@acknowledge');
 
 Route::post('clients/{client}/upgrade', 'ClientController@upgrade');
+Route::post('clients/{client}/scan', 'ClientController@scan');
