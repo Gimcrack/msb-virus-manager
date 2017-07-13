@@ -28,11 +28,6 @@ class Client extends Model
         'deleting' => ClientWasDestroyed::class,
     ];
 
-    protected $appends = [
-        'scanned_files_count',
-        'scanned_files_current'
-    ];
-
     /**
      * Set the name attribute
      * @method setNameAttribute
