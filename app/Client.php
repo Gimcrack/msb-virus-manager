@@ -80,7 +80,20 @@ class Client extends Model
      */
     public function scannedCurrent($count)
     {
-        $this->update( ['scanned_files_current' => $count]);
+        if ( $count > $this->scanned_files_count )
+        {
+            $this->update( [
+                'scanned_files_current' => $count,
+                'scanned_files_count' => $count
+            ]);
+        }
+
+        else
+        {
+            $this->update( [
+                'scanned_files_current' => $count,
+            ]);
+        }
     }
 
     /**
