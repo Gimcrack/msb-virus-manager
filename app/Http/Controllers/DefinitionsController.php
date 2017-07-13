@@ -20,7 +20,7 @@ class DefinitionsController extends Controller
         
         $lastUpdated = Definitions::lastUpdated();
 
-        return response()->json( $definitions->all(), 200);
+        return response()->json( $definitions->values(), 200);
     }
 
     /**
