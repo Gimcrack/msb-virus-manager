@@ -26603,6 +26603,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 email: null,
                 password: null
             };
+
+            this.page.busy = false;
         },
         deleted: function deleted(event) {}
     }

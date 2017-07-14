@@ -104,6 +104,8 @@
                     email : null,
                     password : null
                 }
+
+                this.page.busy = false;
             },
 
             deleted(event) {
