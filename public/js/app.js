@@ -26482,9 +26482,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     methods: {
-        postUpdated: function postUpdated(event) {},
+        postUpdated: function postUpdated(event) {
+            this.updating = false;
+        },
         update: function update() {},
-        upgradeSuccess: function upgradeSuccess(response) {},
         toggleAdmin: function toggleAdmin() {
             if (this.model.admin_flag) return this.unpromote();
 

@@ -51,13 +51,10 @@
 
         methods : {
             postUpdated(event) {
+                this.updating = false;
             },
 
             update() {
-
-            },
-
-            upgradeSuccess(response) {
 
             },
 
