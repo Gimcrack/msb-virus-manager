@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Tests\TestCase;
 use App\Events\NewBuild;
 use App\Events\ClientShouldScan;
+use App\Events\ClientWasUpgraded;
 use App\Events\ClientShouldUpgrade;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -181,6 +182,25 @@ class ClientTest extends TestCase
         ->post("/api/v1/clients/{$client->name}/upgrade");
 
         $this->assertEvent(ClientShouldUpgrade::class, ['client' => $client]);
+    }
+
+    /** @test */
+    function an_event_is_fired_after_a_client_is_upgraded()
+    {
+        $this->disableExceptionHandling();
+        
+        $client = factory(Client::class)->create(['version' => '1.0.0']);
+
+        $this->assertDatabaseHas('clients', [
+            'version' => '1.0.0'
+        ])
+
+        // act
+        ->patch("/api/v1/clients/{$client->name}", [
+            'version' => '1.0.1'
+        ]);
+
+        $this->assertEvent(ClientWasUpgraded::class, ['client' => $client]);
     }
 
     /** @test */

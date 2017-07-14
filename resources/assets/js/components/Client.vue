@@ -49,12 +49,18 @@
                     endpoint : 'clients',
                     channel : `clients.${this.initial.name.toLowerCase()}`,
                     updated : 'ClientWasUpdated',
+                    events : [
+                        {
+                            event : 'ClientWasUpgraded',
+                            handler : this.upgradedEvent
+                        },
+                    ]
                 }
             }
         },
 
         methods : {
-            postUpdated(event) {
+            upgradedEvent(event) {
                 Bus.$emit('ShouldFetchAgentBuild');
             },
 

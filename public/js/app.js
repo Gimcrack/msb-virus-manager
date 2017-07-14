@@ -24819,14 +24819,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 type: 'client',
                 endpoint: 'clients',
                 channel: 'clients.' + this.initial.name.toLowerCase(),
-                updated: 'ClientWasUpdated'
+                updated: 'ClientWasUpdated',
+                events: [{
+                    event: 'ClientWasUpgraded',
+                    handler: this.upgradedEvent
+                }]
             }
         };
     },
 
 
     methods: {
-        postUpdated: function postUpdated(event) {
+        upgradedEvent: function upgradedEvent(event) {
             Bus.$emit('ShouldFetchAgentBuild');
         },
         scanClient: function scanClient() {

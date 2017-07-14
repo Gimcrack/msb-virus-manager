@@ -6,6 +6,7 @@ use App\Client;
 use App\Events\NewBuild;
 use Illuminate\Http\Request;
 use App\Events\ClientShouldScan;
+use App\Events\ClientWasUpgraded;
 use App\Events\ClientShouldUpgrade;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
@@ -104,9 +105,15 @@ class ClientController extends Controller
      */
     public function update(Client $client)
     {
+        if ( request('version') != $client->version )
+        {
+            event( new ClientWasUpgraded($client) );
+        }
+
         $client->update([
             'version' => request('version')
         ]);
+
 
         return response()->json([],202);
     }
