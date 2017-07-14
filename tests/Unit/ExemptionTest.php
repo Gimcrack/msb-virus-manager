@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Pattern;
 use App\LogEntry;
 use App\Exemption;
 use Tests\TestCase;

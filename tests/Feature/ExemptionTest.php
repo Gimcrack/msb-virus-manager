@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Client;
+use App\Pattern;
 use App\Exemption;
 use Carbon\Carbon;
 use Tests\TestCase;
@@ -69,6 +70,28 @@ class ExemptionTest extends TestCase
             ->assertStatus(201);
 
         $this->assertDatabaseHas('exemptions', ['pattern' => 'hello']);
+    }
+
+    /** @test */
+    function matched_files_that_match_are_muted_and_acked_when_an_exemption_is_created()
+    {
+        $pattern = factory(Pattern::class)->create();
+        
+        factory(MatchedFile::class,3)->create(['pattern_id' => $pattern->id]);
+        factory(MatchedFile::class)->create(['file' => 'some-file-path']);
+
+        $this->assertDatabaseHas('matched_files', ['pattern_id' => $pattern->id]);
+        $this->assertDatabaseHas('matched_files', ['file' => 'some-file-path']);
+        $this->assertDatabaseMissing('matched_files',['muted_flag' => true]);
+        $this->assertDatabaseMissing('matched_files',['acknowledged_flag' => true]);
+
+        // act - create the exemption
+        $this->actingAsAdmin()
+            ->post('/api/v1/exemptions', ['pattern' => $pattern->name])
+            ->post('/api/v1/exemptions', ['pattern' => 'some-file-path']);
+
+        $this->assertDatabaseMissing('matched_files',['muted_flag' => false]);
+        $this->assertDatabaseMissing('matched_files',['acknowledged_flag' => false]);
     }
 
     /** @test */

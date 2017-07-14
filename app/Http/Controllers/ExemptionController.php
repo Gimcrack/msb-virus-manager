@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exemption;
+use App\MatchedFile;
 use Illuminate\Http\Request;
 
 class ExemptionController extends Controller
@@ -43,7 +44,14 @@ class ExemptionController extends Controller
      */
     public function create()
     {
-        Exemption::create( request()->only(['pattern']) );
+        $ex = Exemption::create( request()->only(['pattern']) );
+
+        MatchedFile::where('file',$ex->pattern)->get()->each->mute();
+
+        MatchedFile::whereHas('pattern', function($query) use ($ex) {
+            return $query->where('name',$ex->pattern);
+        })->get()->each->mute();
+
         return response()->json([],201);
     }
 

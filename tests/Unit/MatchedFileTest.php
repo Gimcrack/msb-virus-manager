@@ -138,6 +138,19 @@ class MatchedFileTest extends TestCase
     }
 
     /** @test */
+    function a_file_is_acknowldeged_when_it_is_muted()
+    {
+        // given a matched file
+        $matched_file = factory(MatchedFile::class)->create();
+
+        // mute the file
+        $matched_file->mute();
+
+        // assert
+        $this->assertTrue( !! $matched_file->acknowledged_flag );
+    }
+
+    /** @test */
     function a_muted_matched_file_can_be_unmuted()
     {   
         // given a matched file

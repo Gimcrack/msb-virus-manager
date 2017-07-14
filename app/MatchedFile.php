@@ -21,8 +21,9 @@ class MatchedFile extends Model
     protected $casts = [
         'client_id' => 'int',
         'pattern_id' => 'int',
+        'times_matched' => 'int',
         'muted_flag' => 'bool',
-        'acknowledged_flag' => 'bool'
+        'acknowledged_flag' => 'bool',
     ];
 
     /**
@@ -96,6 +97,11 @@ class MatchedFile extends Model
     {
         $this->muted_flag = 1;
         $this->save();
+
+        if ( ! $this->acknowledged_flag )
+        {
+            $this->acknowledge();
+        }
 
         event(new MatchedFileWasMuted($this));
 
