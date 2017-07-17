@@ -17,6 +17,7 @@
 
                 details : {
                     columns : [
+                        '__blank__',
                         'id',
                         'name',
                         'version',

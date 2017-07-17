@@ -24882,7 +24882,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
 
             details: {
-                columns: ['id', 'name', 'version', {
+                columns: ['__blank__', 'id', 'name', 'version', {
                     title: 'Status',
                     key: 'scanned_files_current'
                 }, 'updated'],
@@ -68354,7 +68354,7 @@ if(false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(6)();
-exports.push([module.i, "\n.heartbeat-status {\n  border-radius: 50%;\n  height: 28px;\n  width: 28px;\n}\n.heartbeat-status.success {\n    background: #2ab27b;\n}\n.heartbeat-status.warning {\n    background: #cbb956;\n}\n.heartbeat-status.danger {\n    background: #bf5329;\n}\n", ""]);
+exports.push([module.i, "\n.heartbeat-status {\n  border-radius: 50%;\n  height: 15px;\n  width: 15px;\n  margin-top: 5px;\n}\n.heartbeat-status.success {\n    background: #2ab27b;\n}\n.heartbeat-status.warning {\n    background: #cbb956;\n}\n.heartbeat-status.danger {\n    background: #bf5329;\n}\n", ""]);
 
 /***/ }),
 /* 400 */

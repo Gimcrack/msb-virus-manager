@@ -99,8 +99,9 @@
 
     .heartbeat-status {
         border-radius: 50%;
-        height: 28px;
-        width: 28px;
+        height: 15px;
+        width: 15px;
+        margin-top: 5px;
 
         &.success {
             background: $brand-success;
