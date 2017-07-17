@@ -10,6 +10,7 @@ use App\MatchedFile;
 use App\Events\ClientWasCreated;
 use App\Events\ClientWasUpdated;
 use App\Events\ClientWasDestroyed;
+use App\Events\ClientShouldSendHeartbeat;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -172,5 +173,17 @@ class ClientTest extends TestCase
         $client->heartbeat();
 
         $this->assertTrue( $client->fresh()->heartbeat_at->gt( Carbon::yesterday() ) );
+    }
+
+    /** @test */
+    function a_client_can_be_instructed_to_send_a_request_for_a_heartbeat()
+    {
+        // given a client
+        $client = factory(Client::class)->create();
+
+        // act
+        $client->requestHeartbeat();
+
+        $this->assertEvent(ClientShouldSendHeartbeat::class, [ 'client' => $client ]);
     }
 }

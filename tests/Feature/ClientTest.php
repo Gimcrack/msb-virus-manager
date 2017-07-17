@@ -10,6 +10,7 @@ use App\Events\NewBuild;
 use App\Events\ClientShouldScan;
 use App\Events\ClientWasUpgraded;
 use App\Events\ClientShouldUpgrade;
+use App\Events\ClientShouldSendHeartbeat;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -143,6 +144,21 @@ class ClientTest extends TestCase
             ->assertStatus(202);
 
         $this->assertTrue( $client->fresh()->heartbeat_at->gt($original_timestamp) );   
+    }
+
+    /** @test */
+    function a_client_can_be_instructed_to_request_a_heartbeat()
+    {
+        $this->disableExceptionHandling();
+        
+        $client = factory(Client::class)->create();
+
+        // act
+        $this->get("/api/v1/clients/{$client->name}/marco")
+            ->response()
+            ->assertStatus(202);
+
+        $this->assertEvent(ClientShouldSendHeartbeat::class, [ 'client' => $client ]);
     }
 
     /** @test */

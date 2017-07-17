@@ -8,6 +8,7 @@ use App\Events\ClientWasCreated;
 use App\Events\ClientWasUpdated;
 use App\Events\ClientWasDestroyed;
 use Illuminate\Database\Eloquent\Model;
+use App\Events\ClientShouldSendHeartbeat;
 
 class Client extends Model
 {
@@ -131,6 +132,17 @@ class Client extends Model
     public function heartbeat()
     {
         $this->update(['heartbeat_at' => Carbon::now()]);
+    }
+
+    /**
+     * Request a heartbeat from the client
+     * @method requestHeartbeat
+     *
+     * @return   void
+     */
+    public function requestHeartbeat()
+    {
+        event( new ClientShouldSendHeartbeat($this) );
     }
 
     /**

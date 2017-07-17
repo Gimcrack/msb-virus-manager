@@ -24841,6 +24841,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         upgradedEvent: function upgradedEvent(event) {
             Bus.$emit('ShouldFetchAgentBuild');
         },
+        requestHeartbeat: function requestHeartbeat() {
+            Api.get('clients/' + this.model.name + '/marco');
+        },
         scanClient: function scanClient() {
             this.updating = true;
             Api.post('clients/' + this.model.name + '/scan').then(this.scanSuccess, this.error);
@@ -57393,9 +57396,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('td', {
     slot: "pre"
-  }, [_c('div', {
+  }, [_c('button', {
     staticClass: "heartbeat-status",
-    class: [_vm.model.heartbeat_status]
+    class: [_vm.model.heartbeat_status],
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.requestHeartbeat($event)
+      }
+    }
   })]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.scan_status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.updated))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.heartbeat))]), _vm._v(" "), _c('template', {
     slot: "menu"
   }, [_c('button', {

@@ -98,6 +98,19 @@ class ClientController extends Controller
     }
 
     /**
+     * Update the client's heartbeat_at timestamp
+     * @method requestHeartbeat
+     *
+     * @return   response
+     */
+    public function requestHeartbeat(Client $client)
+    {
+        $client->requestHeartbeat();
+
+        return response()->json([],202);
+    }
+
+    /**
      * Update the client with the new data
      * @method update
      *

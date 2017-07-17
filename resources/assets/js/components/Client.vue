@@ -9,7 +9,7 @@
         @destroy="destroy"
     >
         <td slot="pre">
-            <div class="heartbeat-status" :class="[ model.heartbeat_status ]"></div>
+            <button @click.prevent="requestHeartbeat" class="heartbeat-status" :class="[ model.heartbeat_status ]"></button>
         </td>
         <td>{{ model.name }}</td>
         <td>{{ model.version }}</td>
@@ -71,6 +71,10 @@
             upgradedEvent(event) {
                 Bus.$emit('ShouldFetchAgentBuild');
             },
+
+            requestHeartbeat() {
+                Api.get(`clients/${this.model.name}/marco`);
+            },  
 
             scanClient() {
                 this.updating = true;

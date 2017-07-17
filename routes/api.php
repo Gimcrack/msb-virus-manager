@@ -36,6 +36,7 @@ Route::post('clients/{client}/matches', 'ClientMatchedFilesController@store');
 
 Route::get('clients', 'ClientController@index');
 Route::get('clients/{client}/heartbeat', 'ClientController@heartbeat');
+Route::get('clients/{client}/marco', 'ClientController@requestHeartbeat');
 Route::get('clients/{client}', 'ClientController@show');
 Route::patch('clients/{client}', 'ClientController@update');
 Route::post('clients/{name}', 'ClientController@store');
