@@ -48,6 +48,8 @@ class ExemptionController extends Controller
 
         MatchedFile::where('file',$ex->pattern)->get()->each->mute();
 
+        MatchedFile::where('file','like',"%{$ex->pattern}")->get()->each->mute();
+
         MatchedFile::whereHas('pattern', function($query) use ($ex) {
             return $query->where('name',$ex->pattern);
         })->get()->each->mute();

@@ -29508,7 +29508,7 @@ exports.push([module.i, "\n.vinput {\n  position: relative;\n  display: -webkit-
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(6)();
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\n.definitions-status a span {\n  font-family: \"Courier New\";\n}\n", ""]);
 
 /***/ }),
 /* 244 */
@@ -29543,7 +29543,7 @@ exports.push([module.i, "\n.new-exemption-from-match {\n  width: 600px;\n  min-h
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(6)();
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\n.agent-build-status a span {\n  font-family: \"Courier New\";\n}\n", ""]);
 
 /***/ }),
 /* 249 */
@@ -56964,7 +56964,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       rawName: "v-show",
       value: (_vm.loaded),
       expression: "loaded"
-    }]
+    }],
+    staticClass: "definitions-status"
   }, [_c('a', {
     attrs: {
       "href": "#"
@@ -57855,7 +57856,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       rawName: "v-show",
       value: (_vm.loaded),
       expression: "loaded"
-    }]
+    }],
+    staticClass: "agent-build-status"
   }, [_c('a', {
     attrs: {
       "href": "#"

@@ -1,5 +1,5 @@
 <template>
-    <li v-show="loaded">
+    <li class="definitions-status" v-show="loaded">
         <a href="#">
             <span class="label label-info">{{ definitions }}</span>
         </a>
@@ -45,5 +45,9 @@
 </script>
 
 <style lang="less">
-
+    .definitions-status {
+        a span {
+            font-family: "Courier New";
+        }
+    }
 </style>

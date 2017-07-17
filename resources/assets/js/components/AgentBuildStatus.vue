@@ -1,5 +1,5 @@
 <template>
-    <li v-show="loaded">
+    <li class="agent-build-status" v-show="loaded">
         <a href="#">  
             <span class="label label-info">Agent {{ build }}</span>
         </a>
@@ -44,5 +44,9 @@
 </script>
 
 <style lang="less">
-
+    .agent-build-status {
+        a span {
+            font-family: "Courier New";
+        }
+    }
 </style>
