@@ -85,14 +85,14 @@ class ClientController extends Controller
     }
 
     /**
-     * Update the client's updated_at timestamp
-     * @method touch
+     * Update the client's heartbeat_at timestamp
+     * @method heartbeat
      *
      * @return   response
      */
-    public function touch(Client $client)
+    public function heartbeat(Client $client)
     {
-        $client->touch();
+        $client->heartbeat();
 
         return response()->json([],202);
     }

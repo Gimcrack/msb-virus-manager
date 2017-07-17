@@ -89,6 +89,7 @@
                 flash.success('Password Reset')
 
                 this.busy = false;
+                this.visible = false;
             },
 
             error(error) {

@@ -126,14 +126,14 @@ class ClientTest extends TestCase
     }
 
     /** @test */
-    function a_client_heartbeat_advances_the_update_timestamp_of_the_client()
+    function a_client_heartbeat_advances_the_heartbeat_timestamp_of_the_client()
     {
         // setup
         $client = factory(Client::class)->create([
-            'updated_at' => Carbon::now()->subDay()
+            'heartbeat_at' => Carbon::now()->subDay()
         ]);
 
-        $original_timestamp = $client->updated_at;
+        $original_timestamp = $client->heartbeat_at;
 
         // act
         $this->get("/api/v1/clients/{$client->name}/heartbeat")
@@ -142,7 +142,7 @@ class ClientTest extends TestCase
         ->response()
             ->assertStatus(202);
 
-        $this->assertTrue( $client->fresh()->updated_at->gt($original_timestamp) );   
+        $this->assertTrue( $client->fresh()->heartbeat_at->gt($original_timestamp) );   
     }
 
     /** @test */

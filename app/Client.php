@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use App\MatchedFile;
 use App\Events\ClientWasCreated;
 use App\Events\ClientWasUpdated;
@@ -26,6 +27,10 @@ class Client extends Model
         'created' => ClientWasCreated::class,
         'updated' => ClientWasUpdated::class,
         'deleting' => ClientWasDestroyed::class,
+    ];
+
+    protected $dates = [
+        'heartbeat_at'
     ];
 
     /**
@@ -94,6 +99,17 @@ class Client extends Model
                 'scanned_files_current' => $count,
             ]);
         }
+    }
+
+    /**
+     * Advance the heartbeat timestamp
+     * @method heartbeat
+     *
+     * @return   void
+     */
+    public function heartbeat()
+    {
+        $this->update(['heartbeat_at' => Carbon::now()]);
     }
 
     /**

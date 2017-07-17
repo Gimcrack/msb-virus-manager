@@ -68144,6 +68144,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             flash.success('Password Reset');
 
             this.busy = false;
+            this.visible = false;
         },
         error: function error(_error) {
             flash.error('There was an error performing the operation. See the console for more details');

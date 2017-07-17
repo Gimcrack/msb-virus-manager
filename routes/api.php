@@ -35,7 +35,7 @@ Route::post('clients/{client}/count_current', 'ClientController@countCurrent');
 Route::post('clients/{client}/matches', 'ClientMatchedFilesController@store');
 
 Route::get('clients', 'ClientController@index');
-Route::get('clients/{client}/heartbeat', 'ClientController@touch');
+Route::get('clients/{client}/heartbeat', 'ClientController@heartbeat');
 Route::get('clients/{client}', 'ClientController@show');
 Route::patch('clients/{client}', 'ClientController@update');
 Route::post('clients/{name}', 'ClientController@store');

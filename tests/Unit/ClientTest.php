@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Client;
 use App\LogEntry;
+use Carbon\Carbon;
 use Tests\TestCase;
 use App\MatchedFile;
 use App\Events\ClientWasCreated;
@@ -157,5 +158,19 @@ class ClientTest extends TestCase
         $this->assertDatabaseHas('clients',[
             'scanned_files_current' => 1234
         ]);
+    }
+
+    /** @test */
+    function a_client_heartbeat_advances_the_heartbeat_timestamp()
+    {
+        // given a client
+        $client = factory(Client::class)->create([
+            'heartbeat_at' => Carbon::parse("1900-01-01")
+        ]); 
+
+        // act
+        $client->heartbeat();
+
+        $this->assertTrue( $client->fresh()->heartbeat_at->gt( Carbon::yesterday() ) );
     }
 }
