@@ -15,6 +15,7 @@
         <td>{{ model.version }}</td>
         <td>{{ scan_status }}</td>
         <td>{{ updated }}</td>
+        <td>{{ heartbeat }}</td>
 
         <template slot="menu">
             <button @click.prevent="scanClient" :disabled="busy" class="btn btn-success btn-xs btn-outline" :class="{disabled : busy}"> 
@@ -33,6 +34,10 @@
         computed : {
             updated() {
                 return fromNow(this.model.updated_at);
+            },
+
+            heartbeat() {
+                return fromNow(this.model.heartbeat_at);
             },
 
             scan_status() {

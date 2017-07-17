@@ -24,8 +24,13 @@
                         {
                             title : 'Status',
                             key : 'scanned_files_current'
-                        },
-                        'updated'
+                        },{
+                            title : 'Updated',
+                            key : 'updated_at'
+                        },{
+                            title : 'Heartbeat',
+                            key : 'heartbeat_at'
+                        }
                     ],
                     type : 'client',
                     heading : 'Clients',

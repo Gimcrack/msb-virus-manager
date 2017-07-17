@@ -24799,6 +24799,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mixins: [mixins.item],
@@ -24806,6 +24807,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         updated: function updated() {
             return fromNow(this.model.updated_at);
+        },
+        heartbeat: function heartbeat() {
+            return fromNow(this.model.heartbeat_at);
         },
         scan_status: function scan_status() {
             if (this.model.scanned_files_count == this.model.scanned_files_current) {
@@ -24885,7 +24889,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 columns: ['__blank__', 'id', 'name', 'version', {
                     title: 'Status',
                     key: 'scanned_files_current'
-                }, 'updated'],
+                }, {
+                    title: 'Updated',
+                    key: 'updated_at'
+                }, {
+                    title: 'Heartbeat',
+                    key: 'heartbeat_at'
+                }],
                 type: 'client',
                 heading: 'Clients',
                 endpoint: 'clients',
@@ -57386,7 +57396,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "heartbeat-status",
     class: [_vm.model.heartbeat_status]
-  })]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.scan_status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.updated))]), _vm._v(" "), _c('template', {
+  })]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.scan_status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.updated))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.heartbeat))]), _vm._v(" "), _c('template', {
     slot: "menu"
   }, [_c('button', {
     staticClass: "btn btn-success btn-xs btn-outline",
