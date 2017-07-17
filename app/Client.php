@@ -33,6 +33,10 @@ class Client extends Model
         'heartbeat_at'
     ];
 
+    protected $appends = [
+        'heartbeat_status'
+    ];
+
     /**
      * Set the name attribute
      * @method setNameAttribute
@@ -42,6 +46,23 @@ class Client extends Model
     public function setNameAttribute($name)
     {
         $this->attributes['name'] = strtolower($name) ?: null;
+    }
+
+    /**
+     * Get the heartbeat_status attribute
+     * @method getHeartbeatStatusAttribute
+     *
+     * @return   success|warning|danger
+     */
+    public function getHeartbeatStatusAttribute()
+    {
+        if (! $this->heartbeat_at ) return 'danger';
+
+        $diff = Carbon::now()->diffInMinutes($this->heartbeat_at);
+
+        if ( $diff < 30 ) return 'success';
+        if ( $diff < 300 ) return 'warning';
+        return 'danger';
     }
 
     /**

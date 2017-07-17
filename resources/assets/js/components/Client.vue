@@ -8,6 +8,9 @@
         @update="update"
         @destroy="destroy"
     >
+        <td slot="pre">
+            <div class="heartbeat-status" :class="[ model.heartbeat_status ]"></div>
+        </td>
         <td>{{ model.name }}</td>
         <td>{{ model.version }}</td>
         <td>{{ scan_status }}</td>
@@ -90,3 +93,25 @@
         }
     }
 </script>
+
+<style lang="scss">
+    @import "./../../sass/_variables";
+
+    .heartbeat-status {
+        border-radius: 50%;
+        height: 28px;
+        width: 28px;
+
+        &.success {
+            background: $brand-success;
+        }
+
+        &.warning {
+            background: $brand-warning;
+        }
+
+        &.danger {
+            background: $brand-danger;
+        }
+    }
+</style>
