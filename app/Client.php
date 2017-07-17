@@ -132,6 +132,8 @@ class Client extends Model
     public function heartbeat()
     {
         $this->update(['heartbeat_at' => Carbon::now()]);
+
+        event( new ClientWasUpdated($this) );
     }
 
     /**
