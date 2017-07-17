@@ -42,6 +42,11 @@ class Kernel extends HttpKernel
             // 'auth',
         ],
 
+        'api:user' => [
+            'api',
+            'auth:api'
+        ],
+
         'api:admin' => [
             'api',
             'admin',
