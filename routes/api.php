@@ -39,3 +39,5 @@ Route::get('clients/{client}/heartbeat', 'ClientController@touch');
 Route::get('clients/{client}', 'ClientController@show');
 Route::patch('clients/{client}', 'ClientController@update');
 Route::post('clients/{name}', 'ClientController@store');
+
+Route::post('profile/reset', 'ProfileController@reset');

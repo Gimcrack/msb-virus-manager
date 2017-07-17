@@ -49,6 +49,12 @@
                                     Logout
                                 </a>
 
+                                <a href="#"
+                                    onclick="event.preventDefault();
+                                             Bus.$emit('ShowPasswordForm')">
+                                    Reset Password
+                                </a>
+
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     {{ csrf_field() }}
                                 </form>

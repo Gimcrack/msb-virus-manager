@@ -59,7 +59,7 @@
             position: absolute;
             top: 3px;
             right: 3px;
-            z-index: 1000;
+            z-index: 2;
             font-size: 12px;
         }
     }

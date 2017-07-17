@@ -84,6 +84,34 @@ class UserTest extends TestCase
     }
 
     /** @test */
+    function a_logged_in_user_can_reset_his_password()
+    {
+        $this
+            ->actingAsUser()
+            ->post("api/v1/profile/reset", [
+                'password' => 'Password1',
+                'password_confirmation' => 'Password1'
+            ])
+
+        ->response()
+            ->assertStatus(202);
+    }
+
+    /** @test */
+    function an_error_is_thrown_when_resetting_password_with_nonmatching_password()
+    {
+        $this
+            ->actingAsUser()
+            ->post("api/v1/profile/reset", [
+                'password' => 'Password1',
+                'password_confirmation' => 'Does-Not-Match'
+            ])
+
+        ->response()
+            ->assertStatus(422);
+    }
+
+    /** @test */
     function a_nonadmin_can_be_deleted_by_an_admin()
     {
         $user = factory(User::class)->create();

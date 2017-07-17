@@ -25,6 +25,7 @@ Vue.component('vinput', require('./components/Vinput.vue'));
 Vue.component('flash', require('./components/Flash.vue'));
 Vue.component('newBuild', require('./components/NewBuild.vue'));
 Vue.component('newExemptionFromMatch', require('./components/NewExemptionFromMatch.vue'));
+Vue.component('resetPassword', require('./components/ResetPassword.vue'));
 Vue.component('agentBuildStatus', require('./components/AgentBuildStatus.vue'));
 Vue.component('definitionsStatus', require('./components/DefinitionsStatus.vue'));
 Vue.component('newFilesShortcut', require('./components/NewFilesShortcut.vue'));

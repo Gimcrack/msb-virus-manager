@@ -23836,6 +23836,7 @@ Vue.component('vinput', __webpack_require__(336));
 Vue.component('flash', __webpack_require__(320));
 Vue.component('newBuild', __webpack_require__(328));
 Vue.component('newExemptionFromMatch', __webpack_require__(329));
+Vue.component('resetPassword', __webpack_require__(396));
 Vue.component('agentBuildStatus', __webpack_require__(312));
 Vue.component('definitionsStatus', __webpack_require__(317));
 Vue.component('newFilesShortcut', __webpack_require__(330));
@@ -29501,7 +29502,7 @@ exports.push([module.i, "/*!\n * bootstrap-vertical-tabs - v1.2.2\n * https://db
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(6)();
-exports.push([module.i, "\n.vinput {\n  position: relative;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n}\n.vinput .vinput__input {\n  text-indent: 34px;\n  font-size: 20px;\n}\n.vinput .vinput__icon {\n  position: absolute;\n  top: 4px;\n  left: 0px;\n  color: #ccc;\n  font-size: inherit;\n}\n.vinput .vinput__reset {\n  position: absolute;\n  top: 3px;\n  right: 3px;\n  z-index: 1000;\n  font-size: 12px;\n}\n", ""]);
+exports.push([module.i, "\n.vinput {\n  position: relative;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n}\n.vinput .vinput__input {\n  text-indent: 34px;\n  font-size: 20px;\n}\n.vinput .vinput__icon {\n  position: absolute;\n  top: 4px;\n  left: 0px;\n  color: #ccc;\n  font-size: inherit;\n}\n.vinput .vinput__reset {\n  position: absolute;\n  top: 3px;\n  right: 3px;\n  z-index: 2;\n  font-size: 12px;\n}\n", ""]);
 
 /***/ }),
 /* 243 */
@@ -68033,6 +68034,307 @@ return Vue$3;
 __webpack_require__(190);
 module.exports = __webpack_require__(191);
 
+
+/***/ }),
+/* 375 */,
+/* 376 */,
+/* 377 */,
+/* 378 */,
+/* 379 */,
+/* 380 */,
+/* 381 */,
+/* 382 */,
+/* 383 */,
+/* 384 */,
+/* 385 */,
+/* 386 */,
+/* 387 */,
+/* 388 */,
+/* 389 */,
+/* 390 */,
+/* 391 */,
+/* 392 */,
+/* 393 */,
+/* 394 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    mounted: function mounted() {
+        this.listen();
+    },
+    data: function data() {
+        return {
+            visible: false,
+            password: null,
+            password_confirmation: null,
+            busy: false
+        };
+    },
+
+
+    methods: {
+        listen: function listen() {
+            var _this = this;
+
+            Bus.$on('ShowPasswordForm', function (event) {
+                _this.show();
+            });
+        },
+        show: function show() {
+            this.visible = true;
+        },
+        cancel: function cancel() {
+            this.busy = false;
+            this.visible = false;
+            this.password = null;
+            this.password_confirmation = false;
+        },
+        submit: function submit() {
+            return swal({
+                title: "Confirm Password Reset",
+                text: this.exemption_pattern,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#bf5329",
+                confirmButtonText: "Yes, reset my password."
+            }).then(this.resetPassword, this.ignore);
+        },
+        resetPassword: function resetPassword() {
+            this.busy = true;
+
+            Api.post('profile/reset', { password: this.password, password_confirmation: this.password_confirmation }).then(this.success, this.error);
+        },
+        ignore: function ignore() {},
+        success: function success() {
+            flash.success('Password Reset');
+
+            this.busy = false;
+        },
+        error: function error(_error) {
+            flash.error('There was an error performing the operation. See the console for more details');
+            console.error(_error);
+
+            this.busy = false;
+        }
+    }
+
+});
+
+/***/ }),
+/* 395 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(6)();
+exports.push([module.i, "\n.reset-password {\n  width: 600px;\n  min-height: 400px;\n}\n.reset-password .panel-heading {\n  font-size: 24px;\n}\n.reset-password .panel-footer {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: end;\n      -ms-flex-pack: end;\n          justify-content: flex-end;\n}\n.reset-password .panel-body button {\n  font-weight: bold;\n}\n.reset-password .partial-path-form {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n.reset-password .partial-path-form input {\n  -webkit-box-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n}\n.reset-password .partial-path-form * + * {\n  margin-left: 15px;\n}\n.reset-password-wrapper {\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 1000;\n  height: 100vh;\n  width: 100vw;\n  background: rgba(0, 0, 0, 0.3);\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n", ""]);
+
+/***/ }),
+/* 396 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(398)
+
+var Component = __webpack_require__(2)(
+  /* script */
+  __webpack_require__(394),
+  /* template */
+  __webpack_require__(397),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\ResetPassword.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] ResetPassword.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4976b574", Component.options)
+  } else {
+    hotAPI.reload("data-v-4976b574", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 397 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return (_vm.visible) ? _c('div', {
+    staticClass: "reset-password-wrapper"
+  }, [_c('div', {
+    staticClass: "reset-password"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(1), _vm._v(" "), _c('p', [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.password),
+      expression: "password"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "placeholder": "Password",
+      "type": "password"
+    },
+    domProps: {
+      "value": (_vm.password)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.password = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('p', [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.password_confirmation),
+      expression: "password_confirmation"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "placeholder": "Confirm",
+      "type": "password"
+    },
+    domProps: {
+      "value": (_vm.password_confirmation)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.password_confirmation = $event.target.value
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "panel-footer"
+  }, [_c('button', {
+    staticClass: "btn btn-success btn-outline",
+    class: {
+      disabled: _vm.busy
+    },
+    attrs: {
+      "disabled": _vm.busy
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.submit($event)
+      }
+    }
+  }, [_vm._v("Go")]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-danger btn-outline",
+    class: {
+      disabled: _vm.busy
+    },
+    attrs: {
+      "disabled": _vm.busy,
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.cancel($event)
+      }
+    }
+  }, [_vm._v("Cancel")])])])])]) : _vm._e()
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "panel-heading"
+  }, [_c('span', {
+    staticClass: "text-success"
+  }, [_c('i', {
+    staticClass: "fa fa-fw fa-check"
+  }), _vm._v("\n                    Reset Password\n                ")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "alert alert-warning"
+  }, [_c('i', {
+    staticClass: "fa fa-fw fa-exclamation-circle"
+  }), _vm._v("\n                    Password must be at least 6 characters\n                ")])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-4976b574", module.exports)
+  }
+}
+
+/***/ }),
+/* 398 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(395);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(9)("c1530b9a", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-4976b574\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/less-loader/index.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ResetPassword.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-4976b574\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/less-loader/index.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ResetPassword.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

@@ -24,6 +24,7 @@
         @if( Auth::check() )
         <new-build></new-build>
         <new-exemption-from-match></new-exemption-from-match>
+        <reset-password></reset-password>
         <flash message="{{ session('flash') }}"></flash>
         @endif
     </div>
