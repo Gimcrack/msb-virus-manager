@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Client;
 use Illuminate\Console\Command;
+use App\Events\ClientWasUpdated;
 use Illuminate\Support\Facades\Redis;
 
 class RedisSubscribe extends Command
@@ -70,9 +71,9 @@ class RedisSubscribe extends Command
     {
         try {
             $client = Client::whereName(strtolower($client))->first();
-            print_r($client);
-
             $client->heartbeat();
+
+            event( new ClientWasUpdated($client) );
         }
         catch( \Exception $e)
         {
