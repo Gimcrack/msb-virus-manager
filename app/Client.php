@@ -133,7 +133,7 @@ class Client extends Model
     {
         $this->update(['heartbeat_at' => Carbon::now()]);
 
-        event( new ClientWasUpdated($this) );
+        event( new ClientWasUpdated($this->fresh()) );
     }
 
     /**
