@@ -40,7 +40,7 @@ class RedisSubscribe extends Command
      */
     public function handle()
     {
-        Redis::psubscribe(['*'],function($message, $channel) {
+        Redis::psubscribe(['clients.*.heartbeat'],function($message, $channel) {
             echo $channel . " " . $message . "\n";
             return $this->route($message,$channel);
         });
