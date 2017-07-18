@@ -69,7 +69,10 @@ class RedisSubscribe extends Command
     private function heartbeat($client)
     {
         try {
-            Client::whereName(strtolower($client))->first()->heartbeat();
+            $client = Client::whereName(strtolower($client))->first();
+            print_r($client);
+
+            $client->heartbeat();
         }
         catch( \Exception $e)
         {
