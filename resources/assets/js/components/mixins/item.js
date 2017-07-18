@@ -3,6 +3,12 @@ export default {
         'initial'
     ],
 
+    watch : {
+        initial(value) {
+            this.model = value;
+        }
+    },
+
     mounted() {
         this.highlight();
 

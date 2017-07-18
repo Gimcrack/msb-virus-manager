@@ -26985,6 +26985,12 @@ window.mixins = {
 /* harmony default export */ __webpack_exports__["a"] = ({
     props: ['initial'],
 
+    watch: {
+        initial: function initial(value) {
+            this.model = value;
+        }
+    },
+
     mounted: function mounted() {
         this.highlight();
 
