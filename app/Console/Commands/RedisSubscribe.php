@@ -40,7 +40,7 @@ class RedisSubscribe extends Command
      */
     public function handle()
     {
-        Redis::psubscribe(['clients.*.heartbeat'],function($message, $channel) {
+        Redis::psubscribe(['heartbeats.*'],function($message, $channel) {
             echo $channel . " " . $message . "\n";
             return $this->route($message,$channel);
         });
@@ -56,7 +56,7 @@ class RedisSubscribe extends Command
     {
         switch(true)
         {
-            case preg_match("/clients\/(.*)\/heartbeat/", $channel, $matches) :
+            case preg_match("/heartbeats\.(.*)/", $channel, $matches) :
                 return $this->heartbeat($matches[1]);
         }
     }
