@@ -69,15 +69,15 @@ class RedisSubscribe extends Command
      */
     private function heartbeat($client)
     {
-        try {
+        // try {
             $client = Client::whereName(strtolower($client))->first();
             $client->heartbeat();
 
             event( new ClientWasUpdated($client) );
-        }
-        catch( \Exception $e)
-        {
-            // do nothing
-        }
+        // }
+        // catch( \Exception $e)
+        // {
+        //     // do nothing
+        // }
     }
 }
