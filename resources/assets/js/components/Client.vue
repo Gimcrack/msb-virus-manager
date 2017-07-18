@@ -37,7 +37,7 @@
             },
 
             heartbeat() {
-                return fromNow(this.model.heartbeat_at);
+                return this.model.heartbeat_at;
             },
 
             scan_status() {

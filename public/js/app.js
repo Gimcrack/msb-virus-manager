@@ -24809,7 +24809,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return fromNow(this.model.updated_at);
         },
         heartbeat: function heartbeat() {
-            return fromNow(this.model.heartbeat_at);
+            return this.model.heartbeat_at;
         },
         scan_status: function scan_status() {
             if (this.model.scanned_files_count == this.model.scanned_files_current) {
