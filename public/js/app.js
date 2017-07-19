@@ -57884,7 +57884,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticStyle: {
       "cursor": "pointer",
       "font-size": "1.5em",
-      "line-height": "1.3"
+      "line-height": "1"
     },
     on: {
       "mouseover": function($event) {
