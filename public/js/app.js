@@ -57494,7 +57494,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.requestHeartbeat($event)
       }
     }
-  })]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.scan_status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.password_reset_recently))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.heartbeat))]), _vm._v(" "), _c('template', {
+  })]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.scan_status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.password_reset_recently))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.heartbeat))]), _vm._v(" "), _c('template', {
     slot: "menu"
   }, [_c('button', {
     staticClass: "btn btn-success btn-xs btn-outline",

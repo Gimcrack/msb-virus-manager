@@ -15,7 +15,7 @@
         <td>{{ model.name }}</td>
         <td>{{ model.version }}</td>
         <td>{{ scan_status }}</td>
-        <td>{{ password_reset_recently }}</td>
+        <td>{{ model.password_reset_recently }}</td>
         <td>{{ heartbeat }}</td>
 
         <template slot="menu">
