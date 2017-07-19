@@ -34,6 +34,7 @@
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
+                    <th>&nbsp;</th>
                     <header-sort-button 
                         v-for="(col,index) in params.columns" 
                         :order-by="orderBy" 

@@ -25523,6 +25523,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -26230,6 +26235,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -57878,6 +57884,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     ref: "row",
     class: {
       sticky: _vm.sticky, toggled: _vm.toggled
+    }
+  }, [_c('td', [_c('label', {
+    staticClass: "btn btn-default",
+    attrs: {
+      "for": ""
     },
     on: {
       "mouseover": function($event) {
@@ -57886,7 +57897,39 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       "mousedown": _vm.toggle
     }
-  }, [_vm._t("pre"), _vm._v(" "), _c('td', {
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.toggled),
+      expression: "toggled"
+    }],
+    attrs: {
+      "readonly": "true",
+      "type": "checkbox"
+    },
+    domProps: {
+      "checked": Array.isArray(_vm.toggled) ? _vm._i(_vm.toggled, null) > -1 : (_vm.toggled)
+    },
+    on: {
+      "__c": function($event) {
+        var $$a = _vm.toggled,
+          $$el = $event.target,
+          $$c = $$el.checked ? (true) : (false);
+        if (Array.isArray($$a)) {
+          var $$v = null,
+            $$i = _vm._i($$a, $$v);
+          if ($$c) {
+            $$i < 0 && (_vm.toggled = $$a.concat($$v))
+          } else {
+            $$i > -1 && (_vm.toggled = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+          }
+        } else {
+          _vm.toggled = $$c
+        }
+      }
+    }
+  })])]), _vm._v(" "), _vm._t("pre"), _vm._v(" "), _c('td', {
     staticClass: "relative"
   }, [_c('div', {
     staticClass: "btn-group"
@@ -58136,7 +58179,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), _c('table', {
     staticClass: "table table-striped table-hover"
-  }, [_c('thead', [_c('tr', _vm._l((_vm.params.columns), function(col, index) {
+  }, [_c('thead', [_c('tr', [_c('th', [_vm._v(" ")]), _vm._v(" "), _vm._l((_vm.params.columns), function(col, index) {
     return _c('header-sort-button', {
       key: index,
       attrs: {
@@ -58145,7 +58188,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "column": col
       }
     })
-  }))]), _vm._v(" "), (_vm.filtered.length) ? _c('tbody', [_vm._l((_vm.filtered), function(model) {
+  })], 2)]), _vm._v(" "), (_vm.filtered.length) ? _c('tbody', [_vm._l((_vm.filtered), function(model) {
     return [_c(_vm.params.component || _vm.params.type, {
       key: model.id,
       tag: "component",

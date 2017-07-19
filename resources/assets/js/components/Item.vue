@@ -1,5 +1,10 @@
 <template>
-    <tr @mouseover.prevent="checkToggle" @mousedown="toggle" ref="row" :class="{sticky, toggled}">
+    <tr ref="row" :class="{sticky, toggled}">
+        <td>
+            <label @mouseover.prevent="checkToggle" @mousedown="toggle" for="" class="btn btn-default">
+                <input readonly="true" type="checkbox" v-model="toggled">
+            </label>
+        </td>
         <slot name="pre"></slot> 
         <td class="relative">
             <div class="btn-group"> 
