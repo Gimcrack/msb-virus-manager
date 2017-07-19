@@ -68587,6 +68587,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -68740,6 +68743,13 @@ module.exports = Component.exports
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return (_vm.visible) ? _c('div', {
     staticClass: "client-password-reset-request-wrapper"
+  }, [_c('form', {
+    on: {
+      "submit": function($event) {
+        $event.preventDefault();
+        _vm.submit($event)
+      }
+    }
   }, [_c('div', {
     staticClass: "client-password-reset-request"
   }, [_c('div', {
@@ -68774,7 +68784,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })]), _vm._v(" "), _c('p', [_c('label', {
     attrs: {
-      "for": "clients"
+      "for": "master_password"
     }
   }, [_vm._v("Master Password (Required For Client Password Resets)")]), _vm._v(" "), _c('input', {
     directives: [{
@@ -68785,6 +68795,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }],
     staticClass: "form-control full",
     attrs: {
+      "id": "master_password",
       "placeholder": "Master Password",
       "type": "password",
       "required": "true"
@@ -68798,7 +68809,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.master_password = $event.target.value
       }
     }
-  })]), _vm._v(" "), _c('p', [_c('input', {
+  })]), _vm._v(" "), _c('p', [_c('label', {
+    attrs: {
+      "for": "password"
+    }
+  }, [_vm._v("New Password")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -68807,6 +68822,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }],
     staticClass: "form-control full",
     attrs: {
+      "id": "password",
       "placeholder": "New Password",
       "type": "password",
       "required": "true"
@@ -68852,13 +68868,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       disabled: _vm.busy
     },
     attrs: {
-      "disabled": _vm.busy
-    },
-    on: {
-      "click": function($event) {
-        $event.preventDefault();
-        _vm.submit($event)
-      }
+      "disabled": _vm.busy,
+      "type": "submit"
     }
   }, [_vm._v("Go")]), _vm._v(" "), _c('button', {
     staticClass: "btn btn-danger btn-outline",
@@ -68875,7 +68886,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.cancel($event)
       }
     }
-  }, [_vm._v("Cancel")])])])])])]) : _vm._e()
+  }, [_vm._v("Cancel")])])])])])])]) : _vm._e()
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "panel-heading"
@@ -68883,13 +68894,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "text-success"
   }, [_c('i', {
     staticClass: "fa fa-fw fa-exclamation-circle"
-  }), _vm._v("\n                    Reset Client Admin Password\n                ")])])
+  }), _vm._v("\n                        Reset Client Admin Password\n                    ")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "alert alert-warning"
   }, [_c('i', {
     staticClass: "fa fa-fw fa-exclamation-circle"
-  }), _vm._v(" "), _c('strong', [_vm._v("Note")]), _vm._v(" You are about to reset the "), _c('em', [_vm._v("Local Admin Password")]), _vm._v(" on the selected computers. Be careful.\n                    "), _c('h3', [_vm._v("Password Requirements")]), _vm._v(" "), _c('ul', [_c('li', [_vm._v("Must be at least 20 characters")]), _vm._v(" "), _c('li', [_vm._v("Must contain at least 3 of these: Uppercase, Lowercase, Numbers, or Symbols")])])])
+  }), _vm._v(" "), _c('strong', [_vm._v("Note")]), _vm._v(" You are about to reset the "), _c('em', [_vm._v("Local Admin Password")]), _vm._v(" on the selected computers. Be careful.\n                        "), _c('h3', [_vm._v("Password Requirements")]), _vm._v(" "), _c('ul', [_c('li', [_vm._v("Must be at least 20 characters")]), _vm._v(" "), _c('li', [_vm._v("Must contain at least 3 of these: Uppercase, Lowercase, Numbers, or Symbols")])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {

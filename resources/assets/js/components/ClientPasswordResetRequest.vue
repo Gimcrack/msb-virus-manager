@@ -1,50 +1,53 @@
 <template>
     <div v-if="visible" class="client-password-reset-request-wrapper">
-        <div class="client-password-reset-request">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <span class="text-success">
-                        <i class="fa fa-fw fa-exclamation-circle"></i>
-                        Reset Client Admin Password
-                    </span>
-                </div>
-                <div class="panel-body">
-                    
-                    <div class="alert alert-warning"><i class="fa fa-fw fa-exclamation-circle"></i>
-                        <strong>Note</strong> You are about to reset the <em>Local Admin Password</em> on the selected computers. Be careful.
-                        <h3>Password Requirements</h3>
-                        <ul>
-                            <li>Must be at least 20 characters</li>
-                            <li>Must contain at least 3 of these: Uppercase, Lowercase, Numbers, or Symbols</li>
-                        </ul>
+        <form @submit.prevent="submit">
+            <div class="client-password-reset-request">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span class="text-success">
+                            <i class="fa fa-fw fa-exclamation-circle"></i>
+                            Reset Client Admin Password
+                        </span>
                     </div>
-                    
-                    <p>
-                        <label for="clients">Clients</label>
-                        <textarea id="clients" rows="6" v-model="client" placeholder="Client(s)" class="form-control full"></textarea>
-                    </p>
+                    <div class="panel-body">
+                        
+                        <div class="alert alert-warning"><i class="fa fa-fw fa-exclamation-circle"></i>
+                            <strong>Note</strong> You are about to reset the <em>Local Admin Password</em> on the selected computers. Be careful.
+                            <h3>Password Requirements</h3>
+                            <ul>
+                                <li>Must be at least 20 characters</li>
+                                <li>Must contain at least 3 of these: Uppercase, Lowercase, Numbers, or Symbols</li>
+                            </ul>
+                        </div>
+                        
+                        <p>
+                            <label for="clients">Clients</label>
+                            <textarea id="clients" rows="6" v-model="client" placeholder="Client(s)" class="form-control full"></textarea>
+                        </p>
 
-                    <p>
-                        <label for="clients">Master Password (Required For Client Password Resets)</label>
-                        <input v-model="master_password" placeholder="Master Password" type="password" required="true" class="form-control full">
-                    </p>
+                        <p>
+                            <label for="master_password">Master Password (Required For Client Password Resets)</label>
+                            <input id="master_password" v-model="master_password" placeholder="Master Password" type="password" required="true" class="form-control full">
+                        </p>
 
-                    <p>
-                        <input v-model="password" placeholder="New Password" type="password" required="true" class="form-control full">
-                    </p>
-                    <p>
-                        <input v-model="password_confirmation" placeholder="Confirm" type="password" required="true" class="form-control full">
-                    </p>
-                    
-                </div>
-                <div class="panel-footer">
-                    <div class="btn-group">
-                        <button :disabled="busy" :class="{disabled:busy}" @click.prevent="submit" class="btn btn-success btn-outline">Go</button>
-                        <button :disabled="busy" :class="{disabled:busy}" type="button" @click.prevent="cancel" class="btn btn-danger btn-outline">Cancel</button>
+                        <p>
+                            <label for="password">New Password</label>
+                            <input id="password" v-model="password" placeholder="New Password" type="password" required="true" class="form-control full">
+                        </p>
+                        <p>
+                            <input v-model="password_confirmation" placeholder="Confirm" type="password" required="true" class="form-control full">
+                        </p>
+                        
+                    </div>
+                    <div class="panel-footer">
+                        <div class="btn-group">
+                            <button :disabled="busy" :class="{disabled:busy}" type="submit" class="btn btn-success btn-outline">Go</button>
+                            <button :disabled="busy" :class="{disabled:busy}" type="button" @click.prevent="cancel" class="btn btn-danger btn-outline">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 </template>
 
