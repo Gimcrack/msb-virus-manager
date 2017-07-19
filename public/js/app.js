@@ -57886,7 +57886,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       sticky: _vm.sticky, toggled: _vm.toggled
     }
   }, [_c('td', [_c('label', {
-    staticClass: "btn btn-default",
+    staticClass: "btn btn-default btn-xs",
     attrs: {
       "for": ""
     },

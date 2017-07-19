@@ -1,7 +1,7 @@
 <template>
     <tr ref="row" :class="{sticky, toggled}">
         <td>
-            <label @mouseover.prevent="checkToggle" @mousedown="toggle" for="" class="btn btn-default">
+            <label @mouseover.prevent="checkToggle" @mousedown="toggle" for="" class="btn btn-default btn-xs">
                 <input readonly="true" type="checkbox" v-model="toggled">
             </label>
         </td>
