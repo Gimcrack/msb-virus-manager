@@ -63,6 +63,10 @@
                             event : 'ClientWasUpgraded',
                             handler : this.upgradedEvent
                         },
+                        {
+                            event : 'ClientPasswordResetWasCompleted',
+                            handler : this.updatedEvent
+                        }
                     ]
                 }
             }

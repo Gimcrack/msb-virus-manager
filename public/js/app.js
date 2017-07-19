@@ -24844,6 +24844,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 events: [{
                     event: 'ClientWasUpgraded',
                     handler: this.upgradedEvent
+                }, {
+                    event: 'ClientPasswordResetWasCompleted',
+                    handler: this.updatedEvent
                 }]
             }
         };
@@ -68579,6 +68582,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -68589,6 +68597,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             visible: false,
             password: null,
             password_confirmation: null,
+            master_password: null,
             client: null,
             busy: false
         };
@@ -68624,6 +68633,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.busy = false;
             this.password = null;
             this.password_confirmation = null;
+            this.master_password = null;
             this.client = null;
         },
         submit: function submit() {
@@ -68646,7 +68656,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             Api.post('clients/' + this.client + '/admin-password-reset', {
                 password: this.password,
-                password_confirmation: this.password_confirmation
+                password_confirmation: this.password_confirmation,
+                master_password: this.master_password
             }).then(this.success, this.error);
         },
         resetMany: function resetMany() {
@@ -68655,7 +68666,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             Api.post('admin-password-reset', {
                 clients: this.clients,
                 password: this.password,
-                password_confirmation: this.password_confirmation
+                password_confirmation: this.password_confirmation,
+                master_password: this.master_password
             }).then(this.success, this.error);
         },
         ignore: function ignore() {},
@@ -68760,6 +68772,32 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.client = $event.target.value
       }
     }
+  })]), _vm._v(" "), _c('p', [_c('label', {
+    attrs: {
+      "for": "clients"
+    }
+  }, [_vm._v("Master Password (Required For Client Password Resets)")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.master_password),
+      expression: "master_password"
+    }],
+    staticClass: "form-control full",
+    attrs: {
+      "placeholder": "Master Password",
+      "type": "password",
+      "required": "true"
+    },
+    domProps: {
+      "value": (_vm.master_password)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.master_password = $event.target.value
+      }
+    }
   })]), _vm._v(" "), _c('p', [_c('input', {
     directives: [{
       name: "model",
@@ -68770,7 +68808,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "form-control full",
     attrs: {
       "placeholder": "New Password",
-      "type": "password"
+      "type": "password",
+      "required": "true"
     },
     domProps: {
       "value": (_vm.password)
@@ -68791,7 +68830,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "form-control full",
     attrs: {
       "placeholder": "Confirm",
-      "type": "password"
+      "type": "password",
+      "required": "true"
     },
     domProps: {
       "value": (_vm.password_confirmation)

@@ -55,6 +55,11 @@ return [
 
     'echo_host' => env('APP_ECHO_HOST', 'localhost:6001'),
 
+    /**
+     * The master password is required for resetting client passwords
+     */
+    'master_password' => env('APP_MASTER_PASSWORD','test-master-password'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

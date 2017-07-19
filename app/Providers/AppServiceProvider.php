@@ -22,6 +22,10 @@ class AppServiceProvider extends ServiceProvider
 
             return !! ( $hasUppercase + $hasLowercase + $hasNumbers + $hasSymbols > 2 );
         });
+
+        Validator::extend('master_password', function($attribute, $value, $parameters, $validator) {
+            return $value == config('app.master_password');
+        });
     }
 
     /**

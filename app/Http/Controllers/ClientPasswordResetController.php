@@ -26,7 +26,8 @@ class ClientPasswordResetController extends Controller
                 'confirmed',
                 'min:20',
                 'complex'
-            ]
+            ],
+            'master_password' => 'required|master_password'
         ]);
 
         ClientPasswordReset::forClient($client)->request(request('password'));
@@ -49,7 +50,8 @@ class ClientPasswordResetController extends Controller
                 'min:20',
                 'complex'
             ],
-            'clients' => 'required|array'
+            'clients' => 'required|array',
+            'master_password' => 'required|master_password'
         ]);
 
         collect(request('clients'))

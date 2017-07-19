@@ -25,10 +25,15 @@
                     </p>
 
                     <p>
-                        <input v-model="password" placeholder="New Password" type="password" class="form-control full">
+                        <label for="clients">Master Password (Required For Client Password Resets)</label>
+                        <input v-model="master_password" placeholder="Master Password" type="password" required="true" class="form-control full">
+                    </p>
+
+                    <p>
+                        <input v-model="password" placeholder="New Password" type="password" required="true" class="form-control full">
                     </p>
                     <p>
-                        <input v-model="password_confirmation" placeholder="Confirm" type="password" class="form-control full">
+                        <input v-model="password_confirmation" placeholder="Confirm" type="password" required="true" class="form-control full">
                     </p>
                     
                 </div>
@@ -54,6 +59,7 @@
                 visible : false,
                 password : null,
                 password_confirmation : null,
+                master_password : null,
                 client : null,
                 busy : false
             }
@@ -87,6 +93,7 @@
                 this.busy = false;
                 this.password = null;
                 this.password_confirmation = null;
+                this.master_password = null;
                 this.client = null;
             },
 
@@ -112,7 +119,8 @@
 
                 Api.post(`clients/${this.client}/admin-password-reset`, { 
                         password : this.password, 
-                        password_confirmation : this.password_confirmation 
+                        password_confirmation : this.password_confirmation,
+                        master_password : this.master_password,
                     })
                     .then( this.success, this.error );
             },
@@ -123,7 +131,8 @@
                 Api.post(`admin-password-reset`, { 
                         clients : this.clients,
                         password : this.password, 
-                        password_confirmation : this.password_confirmation 
+                        password_confirmation : this.password_confirmation,
+                        master_password : this.master_password, 
                     })
                     .then( this.success, this.error );
             },

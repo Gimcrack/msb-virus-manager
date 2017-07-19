@@ -24,6 +24,25 @@ class ClientPasswordResetTest extends TestCase
     use DatabaseMigrations;
 
     /** @test */
+    function a_master_password_is_required_to_request_a_client_password_reset()
+    {
+        $client = factory(Client::class)->create();
+        $password = 'SomeLongValidPassword123!@#';
+    
+        $this
+            ->actingAsAdmin()
+            ->post("api/v1/clients/{$client->name}/admin-password-reset", [
+                'master_password' => 'incorrect-master-password',
+                'password' => $password,
+                'password_confirmation' => $password
+            ])
+            ->response()
+                ->assertStatus(422);
+
+        $this->assertNotEvent(ClientPasswordResetWasRequested::class, compact('client','password'));
+    }
+
+    /** @test */
     function a_client_password_reset_can_be_requested_by_an_admin()
     {
         $client = factory(Client::class)->create();
@@ -32,6 +51,7 @@ class ClientPasswordResetTest extends TestCase
         $this
             ->actingAsAdmin()
             ->post("api/v1/clients/{$client->name}/admin-password-reset", [
+                'master_password' => 'test-master-password',
                 'password' => $password,
                 'password_confirmation' => $password
             ])
@@ -50,6 +70,7 @@ class ClientPasswordResetTest extends TestCase
         $this
             ->actingAsAdmin()
             ->post("api/v1/clients/{$client->name}/admin-password-reset", [
+                'master_password' => 'test-master-password',
                 'password' => $password,
                 'password_confirmation' => $password
             ])
@@ -68,6 +89,7 @@ class ClientPasswordResetTest extends TestCase
         $this
             ->actingAsAdmin()
             ->post("api/v1/clients/{$client->name}/admin-password-reset", [
+                'master_password' => 'test-master-password',
                 'password' => $password,
                 'password_confirmation' => 'not-a-matching-password'
             ])
@@ -86,6 +108,7 @@ class ClientPasswordResetTest extends TestCase
         $this
             ->actingAsAdmin()
             ->post("api/v1/clients/{$client->name}/admin-password-reset", [
+                'master_password' => 'test-master-password',
                 'password' => $password,
                 'password_confirmation' => $password
             ])
@@ -104,6 +127,7 @@ class ClientPasswordResetTest extends TestCase
         $this
             ->actingAsAdmin()
             ->post("api/v1/clients/{$client->name}/admin-password-reset", [
+                'master_password' => 'test-master-password',
                 'password' => $password,
                 'password_confirmation' => $password
             ])
@@ -126,6 +150,7 @@ class ClientPasswordResetTest extends TestCase
         $this
             ->actingAsAdmin()
             ->post("api/v1/admin-password-reset", [
+                'master_password' => 'test-master-password',
                 'clients' => $clients->pluck('name'),
                 'password' => $password,
                 'password_confirmation' => $password
