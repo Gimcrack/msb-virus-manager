@@ -24810,9 +24810,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mixins: [mixins.item],
@@ -24914,7 +24911,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
 
             details: {
-                columns: ['__blank__', 'id', 'name', 'version', {
+                columns: ['id', 'name', 'version', {
                     title: 'Status',
                     key: 'scanned_files_current'
                 }, {
@@ -25494,8 +25491,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
 //
 //
 //
@@ -57492,9 +57487,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.$emit('ToggledHasChanged')
       }
     }
-  }, [_c('td', {
-    slot: "pre"
-  }, [_c('button', {
+  }, [_c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.scan_status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.password_reset_recently))]), _vm._v(" "), _c('td', [_c('button', {
     staticClass: "heartbeat-status",
     class: [_vm.model.heartbeat_status],
     on: {
@@ -57503,7 +57496,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.requestHeartbeat($event)
       }
     }
-  })]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.scan_status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.password_reset_recently))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.heartbeat))]), _vm._v(" "), _c('template', {
+  }), _vm._v(" " + _vm._s(_vm.heartbeat))]), _vm._v(" "), _c('template', {
     slot: "menu"
   }, [_c('button', {
     staticClass: "btn btn-success btn-xs btn-outline",
@@ -57885,10 +57878,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     class: {
       sticky: _vm.sticky, toggled: _vm.toggled
     }
-  }, [_c('td', [_c('label', {
-    staticClass: "btn btn-default btn-xs",
-    attrs: {
-      "for": ""
+  }, [_c('td', [_c('i', {
+    staticClass: "fa fa-fw",
+    class: [_vm.toggled ? ['fa-check-square-o', 'text-success'] : 'fa-square-o'],
+    staticStyle: {
+      "cursor": "pointer",
+      "font-size": "1.5em",
+      "line-height": "1.3"
     },
     on: {
       "mouseover": function($event) {
@@ -57897,39 +57893,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       "mousedown": _vm.toggle
     }
-  }, [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.toggled),
-      expression: "toggled"
-    }],
-    attrs: {
-      "readonly": "true",
-      "type": "checkbox"
-    },
-    domProps: {
-      "checked": Array.isArray(_vm.toggled) ? _vm._i(_vm.toggled, null) > -1 : (_vm.toggled)
-    },
-    on: {
-      "__c": function($event) {
-        var $$a = _vm.toggled,
-          $$el = $event.target,
-          $$c = $$el.checked ? (true) : (false);
-        if (Array.isArray($$a)) {
-          var $$v = null,
-            $$i = _vm._i($$a, $$v);
-          if ($$c) {
-            $$i < 0 && (_vm.toggled = $$a.concat($$v))
-          } else {
-            $$i > -1 && (_vm.toggled = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
-          }
-        } else {
-          _vm.toggled = $$c
-        }
-      }
-    }
-  })])]), _vm._v(" "), _vm._t("pre"), _vm._v(" "), _c('td', {
+  })]), _vm._v(" "), _vm._t("pre"), _vm._v(" "), _c('td', {
     staticClass: "relative"
   }, [_c('div', {
     staticClass: "btn-group"
@@ -58116,7 +58080,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v("\n            " + _vm._s(_vm.refresh_btn_text) + "\n        ")]), _vm._v(" "), _c('span', {
     staticClass: "dropdown"
   }, [(_vm.toggled.length) ? _c('a', {
-    staticClass: "dropdown-toggle btn-info btn",
+    staticClass: "dropdown-toggle btn-success btn",
     class: _vm.busy ? 'disabled' : '',
     attrs: {
       "data-toggle": "dropdown",

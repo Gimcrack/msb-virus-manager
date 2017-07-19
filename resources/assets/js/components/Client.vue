@@ -9,14 +9,11 @@
         @destroy="destroy"
         @ToggledHasChanged="$emit('ToggledHasChanged')"
     >
-        <td slot="pre">
-            <button @click.prevent="requestHeartbeat" class="heartbeat-status" :class="[ model.heartbeat_status ]"></button>
-        </td>
         <td>{{ model.name }}</td>
         <td>{{ model.version }}</td>
         <td>{{ scan_status }}</td>
         <td>{{ model.password_reset_recently }}</td>
-        <td>{{ heartbeat }}</td>
+        <td><button @click.prevent="requestHeartbeat" class="heartbeat-status" :class="[ model.heartbeat_status ]"></button> {{ heartbeat }}</td>
 
         <template slot="menu">
             <button @click.prevent="scanClient" :disabled="busy" class="btn btn-success btn-xs btn-outline" :class="{disabled : busy}"> 

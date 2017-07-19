@@ -1,9 +1,7 @@
 <template>
     <tr ref="row" :class="{sticky, toggled}">
         <td>
-            <label @mouseover.prevent="checkToggle" @mousedown="toggle" for="" class="btn btn-default btn-xs">
-                <input readonly="true" type="checkbox" v-model="toggled">
-            </label>
+            <i @mouseover.prevent="checkToggle" @mousedown="toggle" style="cursor:pointer; font-size:1.5em; line-height:1.3" class="fa fa-fw" :class="[toggled ? ['fa-check-square-o','text-success'] : 'fa-square-o']"></i>
         </td>
         <slot name="pre"></slot> 
         <td class="relative">

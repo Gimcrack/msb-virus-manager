@@ -8,7 +8,7 @@
             </button>
             
             <span class="dropdown">
-                <a v-if="toggled.length" data-toggle="dropdown" role="button" aria-expanded="false" :class="busy ? 'disabled' : ''" class="dropdown-toggle btn-info btn">
+                <a v-if="toggled.length" data-toggle="dropdown" role="button" aria-expanded="false" :class="busy ? 'disabled' : ''" class="dropdown-toggle btn-success btn">
                     <i class="fa fa-fw fa-bars" :class="{'fa-spin' : busy}"></i>
                     Do With Selected
                     <span class="caret"></span>
