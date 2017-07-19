@@ -20,10 +20,10 @@
                     </p>
                 </div>
                 <div class="panel-footer">
-                    <!-- <div class="btn-group"> -->
-                    <button :disabled="busy" :class="{disabled:busy}" @click.prevent="submit" class="btn btn-success btn-outline">Go</button>
-                    <button :disabled="busy" :class="{disabled:busy}" type="button" @click.prevent="cancel" class="btn btn-danger btn-outline">Cancel</button>
-                    <!-- </div> -->
+                    <div class="btn-group">
+                        <button :disabled="busy" :class="{disabled:busy}" @click.prevent="submit" class="btn btn-success btn-outline">Go</button>
+                        <button :disabled="busy" :class="{disabled:busy}" type="button" @click.prevent="cancel" class="btn btn-danger btn-outline">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@
             submit() {
                 return swal({
                   title: `Confirm Password Reset`,
-                  text: this.exemption_pattern,
+                  text: "Are you sure you want to reset your password?",
                   type: "warning",
                   showCancelButton: true,
                   confirmButtonColor: "#bf5329",

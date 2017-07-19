@@ -73,7 +73,7 @@
         right: 1em;
         bottom: 1em;
 
-        z-index: 4;
+        z-index: 1001;
         margin: 0;
     }
 </style>

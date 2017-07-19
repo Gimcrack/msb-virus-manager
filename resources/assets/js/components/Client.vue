@@ -7,6 +7,7 @@
         @view="view"
         @update="update"
         @destroy="destroy"
+        @ToggledHasChanged="$emit('ToggledHasChanged')"
     >
         <td slot="pre">
             <button @click.prevent="requestHeartbeat" class="heartbeat-status" :class="[ model.heartbeat_status ]"></button>
@@ -14,7 +15,7 @@
         <td>{{ model.name }}</td>
         <td>{{ model.version }}</td>
         <td>{{ scan_status }}</td>
-        <td>{{ updated }}</td>
+        <td>{{ password_reset_recently }}</td>
         <td>{{ heartbeat }}</td>
 
         <template slot="menu">

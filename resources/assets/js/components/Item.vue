@@ -1,9 +1,9 @@
 <template>
-    <tr ref="row" :class="{sticky}">
+    <tr @mouseover.prevent="checkToggle" @mousedown="toggle" ref="row" :class="{sticky, toggled}">
         <slot name="pre"></slot> 
         <td class="relative">
             <div class="btn-group"> 
-                <button @click.prevent="show_menu = !show_menu" class="btn btn-xs btn-default btn-outline" :class="{ active : show_menu }"> 
+                <button @click.prevent.stop="show_menu = !show_menu" class="btn btn-xs btn-default btn-outline" :class="{ active : show_menu }"> 
                     <i class="fa fa-bars"></i> 
                 </button>
                 <button @click.prevent="" class="btn btn-xs btn-default btn-outline"> 
@@ -11,14 +11,14 @@
                 </button>
             </div>
             <div v-if="show_menu" class="btn-submenu">
-                <button v-if="toggles.info" @click.prevent="$emit('view')" :disabled="busy" class="btn btn-info btn-xs btn-outline" :class="{disabled : busy}"> 
+                <button v-if="toggles.info" @click.prevent.stop="$emit('view')" :disabled="busy" class="btn btn-info btn-xs btn-outline" :class="{disabled : busy}"> 
                     <i class="fa fa-fw fa-info"></i> 
                 </button>
-                <button v-if="toggles.update" @click.prevent="$emit('update')" :disabled="busy" class="btn btn-success btn-xs btn-outline" :class="{disabled : busy}"> 
+                <button v-if="toggles.update" @click.prevent.stop="$emit('update')" :disabled="busy" class="btn btn-success btn-xs btn-outline" :class="{disabled : busy}"> 
                     <i class="fa fa-fw fa-refresh" :class="{'fa-spin' : updating}"></i> 
                 </button>
                 <slot name="menu"></slot>
-                <button v-if="toggles.delete" @click.prevent="$emit('destroy')" :disabled="busy" class="btn btn-danger btn-xs btn-outline" :class="{disabled : busy}"> 
+                <button v-if="toggles.delete" @click.prevent.stop="$emit('destroy')" :disabled="busy" class="btn btn-danger btn-xs btn-outline" :class="{disabled : busy}"> 
                     <i class="fa fa-fw fa-times" :class="{'fa-spin' : deleting}"></i> 
                 </button>
             </div> 
@@ -60,13 +60,36 @@
 
         data() {
             return {
-                show_menu : false
+                show_menu : false,
+                toggled : false
             }
         },
 
         computed : {
             busy() {
                 return this.updating || this.deleting;
+            }
+        },
+
+        methods: {
+            toggle() {
+                this.toggled = ! this.toggled;
+
+                sleep(100).then(() => {
+                    $('tr.toggled.top').removeClass('top');
+                    $('tr.toggled.bottom').removeClass('bottom');
+
+                    $('tr.toggled').first().addClass('top');
+                    $('tr.toggled').last().addClass('bottom');
+                });
+
+                this.$emit('ToggledHasChanged');
+            },
+
+            checkToggle() {
+                if ( window.mouseDown ) {
+                    this.toggle();
+                }
             }
         }
     }

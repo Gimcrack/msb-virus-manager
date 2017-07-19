@@ -26,6 +26,7 @@ Vue.component('flash', require('./components/Flash.vue'));
 Vue.component('newBuild', require('./components/NewBuild.vue'));
 Vue.component('newExemptionFromMatch', require('./components/NewExemptionFromMatch.vue'));
 Vue.component('resetPassword', require('./components/ResetPassword.vue'));
+Vue.component('clientPasswordResetRequest', require('./components/ClientPasswordResetRequest.vue'));
 Vue.component('agentBuildStatus', require('./components/AgentBuildStatus.vue'));
 Vue.component('definitionsStatus', require('./components/DefinitionsStatus.vue'));
 Vue.component('newFilesShortcut', require('./components/NewFilesShortcut.vue'));
@@ -65,4 +66,15 @@ window.flash = {
     error(message) {
         Bus.$emit('flash', { message, type : 'danger' } );
     },
+}
+
+window.mouseDown = false;
+
+document.body.onmousedown = function(evt) { 
+    if (evt.button == 0);
+        mouseDown = true;
+}
+document.body.onmouseup = function(evt) {
+    if (evt.button == 0);
+        mouseDown = false;
 }

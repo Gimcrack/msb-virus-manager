@@ -12,9 +12,23 @@
 // SWAL
 @import "node_modules/sweetalert2/src/sweetalert2.scss";
 
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
 .form-control {
   width: unset;
   flex: 1;
+}
+
+.form-control.full {
+  width: 100% !important;
 }
 
 .fa-badge {
@@ -70,7 +84,12 @@ body {
     background: linear-gradient(to right, #f5f8fa 12%, white 12%);
 }
 
+.table-hover {
+    border-collapse: collapse;
+}
+
  .table-hover tbody tr td {
+    @extend .noselect;
     transition: all 0.3s linear;
  }
 
@@ -81,6 +100,36 @@ body {
 
 .table-hover tbody tr.sticky td {
     background-color: lighten(#FFFF55, 20%);
+}
+
+.table-hover tbody {
+    tr.toggled {
+        td {
+            background-color: #d9edf7;
+            font-weight: bold;
+            color: #31708f;
+        }
+
+        td:first-child {
+            border-left: 1px solid #31708f;
+        }
+
+        td:last-child {
+            border-right: 1px solid #31708f;
+        }
+    }
+
+    tr.toggled.top {
+        td {
+            border-top: 1px solid #31708f;
+        }
+    }
+
+    tr.toggled.bottom {
+        td {
+            border-bottom: 1px solid #31708f;
+        }
+    }
 }
 
 .btn-submenu {

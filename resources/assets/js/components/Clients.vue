@@ -4,7 +4,16 @@
         :toggles="toggles"
         @created="created"
         @deleted="deleted"
-    ></page>
+    >
+        <template slot="selection-dropdown-menu">
+            <li>
+                <a href="#" @click.prevent="resetAdminPasswordSelected">
+                    Reset Admin Password
+                </a>
+            </li>
+        </template>
+
+    </page>
 </template>
 
 <script>
@@ -25,8 +34,8 @@
                             title : 'Status',
                             key : 'scanned_files_current'
                         },{
-                            title : 'Updated',
-                            key : 'updated_at'
+                            title : 'Recent Password',
+                            key : 'password_reset_recently'
                         },{
                             title : 'Heartbeat',
                             key : 'heartbeat_at'
@@ -54,6 +63,10 @@
             deleted(event) {
                 Bus.$emit('ShouldFetchAgentBuild');
             },
+
+            resetAdminPasswordSelected() {
+                Bus.$emit('ShowClientPasswordResetForm', { clients : this.page.toggled });
+            }
         },
     }
 </script>

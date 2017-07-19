@@ -25,6 +25,7 @@
         <new-build></new-build>
         <new-exemption-from-match></new-exemption-from-match>
         <reset-password></reset-password>
+        <client-password-reset-request></client-password-reset-request>
         <flash message="{{ session('flash') }}"></flash>
         @endif
     </div>

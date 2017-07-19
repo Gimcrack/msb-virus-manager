@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Validator::extend('complex', function($attribute, $value, $parameters, $validator) {
+            $hasUppercase = preg_match("/[A-Z]/", $value);
+            $hasLowercase = preg_match("/[a-z]/", $value);
+            $hasNumbers = preg_match("/\d/", $value);
+            $hasSymbols = preg_match("/\W/", $value);
+
+            return !! ( $hasUppercase + $hasLowercase + $hasNumbers + $hasSymbols > 2 );
+        });
     }
 
     /**

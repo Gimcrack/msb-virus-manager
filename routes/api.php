@@ -34,6 +34,8 @@ Route::post('clients/{client}/count', 'ClientController@count');
 Route::post('clients/{client}/count_current', 'ClientController@countCurrent');
 Route::post('clients/{client}/matches', 'ClientMatchedFilesController@store');
 
+Route::post('clients/{client}/admin-password-reset-complete', 'ClientPasswordResetController@complete');
+
 Route::get('clients', 'ClientController@index');
 Route::get('clients/{client}/heartbeat', 'ClientController@heartbeat');
 Route::get('clients/{client}/marco', 'ClientController@requestHeartbeat');

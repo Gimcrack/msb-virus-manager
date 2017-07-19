@@ -7,6 +7,18 @@
                 {{ refresh_btn_text }}
             </button>
             
+            <span class="dropdown">
+                <a v-if="toggled.length" data-toggle="dropdown" role="button" aria-expanded="false" :class="busy ? 'disabled' : ''" class="dropdown-toggle btn-info btn">
+                    <i class="fa fa-fw fa-bars" :class="{'fa-spin' : busy}"></i>
+                    Do With Selected
+                    <span class="caret"></span>
+                </a>
+    
+                <ul class="dropdown-menu" role="menu">
+                    <slot name="selection-dropdown-menu"></slot>
+                </ul>
+            </span>
+            
             <button v-if="toggles.new" :class="{ disabled : busy }" @click.prevent="$emit('new')" :disabled="busy" class="btn btn-success">
                 <i class="fa fa-fw fa-circle-o-notch" :class="{'fa-spin' : busy}"></i>
                 <template v-if="params.newBtnText">{{ params.newBtnText}}</template>
@@ -33,7 +45,7 @@
             </thead>
             <tbody v-if="filtered.length">
                 <template v-for="model in filtered" >
-                    <component :is="params.component || params.type" :initial="model" :key="model.id"></component>
+                    <component :is="params.component || params.type" :initial="model" :key="model.id" @ToggledHasChanged="setToggled"></component>
                 </template>
             </tbody>
             <tfoot>
@@ -94,7 +106,8 @@
         data() {
             return {
                 orderBy : this.params.order || 'name',
-                asc : ( this.params.orderDir != null ) ? this.params.orderDir : true
+                asc : ( this.params.orderDir != null ) ? this.params.orderDir : true,
+                toggled : this.getToggled()
             }
         },
 
@@ -106,6 +119,15 @@
             postDeleted(event) {
                 this.$emit('deleted',event)
             },
+
+            setToggled() {
+                this.toggled = this.getToggled();
+            },
+
+            getToggled() {
+                return this.$children
+                    .filter( child => { return child.$children.length && child.$children[0].toggled; } );
+            }
         }
     }
 </script>

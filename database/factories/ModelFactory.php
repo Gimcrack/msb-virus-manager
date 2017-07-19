@@ -74,6 +74,14 @@ $factory->state(App\MatchedFile::class, 'muted', function(Faker\Generator $faker
     ];
 });
 
+$factory->define(App\ClientPasswordReset::class, function(Faker\Generator $faker) {
+    return [
+        'client_id' => function() use ($faker) {
+            return factory(App\Client::class)->create()->id;
+        },
+    ];
+});
+
 
 
 $factory->define(App\Pattern::class, function(Faker\Generator $faker) {

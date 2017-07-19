@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use App\MatchedFile;
+use App\ClientPasswordReset;
 use App\Events\ClientWasCreated;
 use App\Events\ClientWasUpdated;
 use App\Events\ClientWasDestroyed;
@@ -35,7 +36,8 @@ class Client extends Model
     ];
 
     protected $appends = [
-        'heartbeat_status'
+        'heartbeat_status',
+        'password_reset_recently'
     ];
 
     /**
@@ -86,6 +88,17 @@ class Client extends Model
     public function matched_files()
     {
         return $this->hasMany(MatchedFile::class);
+    }
+
+    /**
+     * A client may have one password reset record
+     * @method password_reset
+     *
+     * @return   App\ClientPasswordReset
+     */
+    public function password_reset()
+    {
+        return $this->hasOne(ClientPasswordReset::class);
     }
 
     /**
@@ -173,5 +186,18 @@ class Client extends Model
                     return 1 * $part;
                 })
                 ->implode('.');
+    }
+
+    /**
+     * Get the password_recent_recently attribute
+     * @method getPasswordResetRecentlyAttribute
+     *
+     * @return   bool
+     */
+    public function getPasswordResetRecentlyAttribute()
+    {
+        if ( ! $this->password_reset || ! $this->password_reset->completed_at ) return false;
+
+        return $this->password_reset->completed_at->gt( Carbon::now()->subDays(30) );
     }
 }

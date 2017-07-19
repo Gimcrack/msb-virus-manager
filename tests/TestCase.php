@@ -109,7 +109,13 @@ abstract class TestCase extends BaseTestCase
         Event::assertDispatched($event, function($e) use ($models) {
             // make sure the event has the expected models
             foreach($models as $model_type => $model) {
-                if ( ! $e->$model_type->is($model) ) return false;
+                if ( ! is_object($model) ) {
+                    if ( $e->$model_type != $model ) return false;
+                }
+                else {
+                    if ( ! $e->$model_type->is($model) ) return false;
+                }
+                    
             }
             return true;
         });

@@ -38,3 +38,7 @@ Route::post('matches/acknowledge', 'MatchedFileController@acknowledge');
 
 Route::post('clients/{client}/upgrade', 'ClientController@upgrade');
 Route::post('clients/{client}/scan', 'ClientController@scan');
+
+
+Route::post('admin-password-reset', 'ClientPasswordResetController@multiRequest');
+Route::post('clients/{client}/admin-password-reset', 'ClientPasswordResetController@request');

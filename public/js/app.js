@@ -23837,6 +23837,7 @@ Vue.component('flash', __webpack_require__(320));
 Vue.component('newBuild', __webpack_require__(328));
 Vue.component('newExemptionFromMatch', __webpack_require__(329));
 Vue.component('resetPassword', __webpack_require__(396));
+Vue.component('clientPasswordResetRequest', __webpack_require__(403));
 Vue.component('agentBuildStatus', __webpack_require__(312));
 Vue.component('definitionsStatus', __webpack_require__(317));
 Vue.component('newFilesShortcut', __webpack_require__(330));
@@ -23873,6 +23874,17 @@ window.flash = {
     error: function error(message) {
         Bus.$emit('flash', { message: message, type: 'danger' });
     }
+};
+
+window.mouseDown = false;
+
+document.body.onmousedown = function (evt) {
+    if (evt.button == 0) ;
+    mouseDown = true;
+};
+document.body.onmouseup = function (evt) {
+    if (evt.button == 0) ;
+    mouseDown = false;
 };
 
 /***/ }),
@@ -24800,6 +24812,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mixins: [mixins.item],
@@ -24880,6 +24893,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -24893,8 +24915,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     title: 'Status',
                     key: 'scanned_files_current'
                 }, {
-                    title: 'Updated',
-                    key: 'updated_at'
+                    title: 'Recent Password',
+                    key: 'password_reset_recently'
                 }, {
                     title: 'Heartbeat',
                     key: 'heartbeat_at'
@@ -24919,6 +24941,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         deleted: function deleted(event) {
             Bus.$emit('ShouldFetchAgentBuild');
+        },
+        resetAdminPasswordSelected: function resetAdminPasswordSelected() {
+            Bus.$emit('ShowClientPasswordResetForm', { clients: this.page.toggled });
         }
     }
 });
@@ -25528,7 +25553,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     data: function data() {
         return {
-            show_menu: false
+            show_menu: false,
+            toggled: false
         };
     },
 
@@ -25536,6 +25562,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         busy: function busy() {
             return this.updating || this.deleting;
+        }
+    },
+
+    methods: {
+        toggle: function toggle() {
+            this.toggled = !this.toggled;
+
+            sleep(100).then(function () {
+                $('tr.toggled.top').removeClass('top');
+                $('tr.toggled.bottom').removeClass('bottom');
+
+                $('tr.toggled').first().addClass('top');
+                $('tr.toggled').last().addClass('bottom');
+            });
+
+            this.$emit('ToggledHasChanged');
+        },
+        checkToggle: function checkToggle() {
+            if (window.mouseDown) {
+                this.toggle();
+            }
         }
     }
 });
@@ -26231,6 +26278,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mixins: [mixins.collection],
@@ -26275,7 +26334,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             orderBy: this.params.order || 'name',
-            asc: this.params.orderDir != null ? this.params.orderDir : true
+            asc: this.params.orderDir != null ? this.params.orderDir : true,
+            toggled: this.getToggled()
         };
     },
 
@@ -26286,6 +26346,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         postDeleted: function postDeleted(event) {
             this.$emit('deleted', event);
+        },
+        setToggled: function setToggled() {
+            this.toggled = this.getToggled();
+        },
+        getToggled: function getToggled() {
+            return this.$children.filter(function (child) {
+                return child.$children.length && child.$children[0].toggled;
+            });
         }
     }
 });
@@ -29587,7 +29655,7 @@ exports.push([module.i, "\n.page .page-header {\n  padding: 1em 0;\n  display: -
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(6)();
-exports.push([module.i, "\n.alert-flash {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    position: fixed;\n    right: 1em;\n    bottom: 1em;\n\n    z-index: 4;\n    margin: 0;\n}\n", ""]);
+exports.push([module.i, "\n.alert-flash {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    position: fixed;\n    right: 1em;\n    bottom: 1em;\n\n    z-index: 1001;\n    margin: 0;\n}\n", ""]);
 
 /***/ }),
 /* 252 */
@@ -57308,7 +57376,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "created": _vm.created,
       "deleted": _vm.deleted
     }
-  })
+  }, [_c('template', {
+    slot: "selection-dropdown-menu"
+  }, [_c('li', [_c('a', {
+    attrs: {
+      "href": "#"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.resetAdminPasswordSelected($event)
+      }
+    }
+  }, [_vm._v("\n                Reset Admin Password\n            ")])])])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -57398,7 +57478,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "view": _vm.view,
       "update": _vm.update,
-      "destroy": _vm.destroy
+      "destroy": _vm.destroy,
+      "ToggledHasChanged": function($event) {
+        _vm.$emit('ToggledHasChanged')
+      }
     }
   }, [_c('td', {
     slot: "pre"
@@ -57411,7 +57494,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.requestHeartbeat($event)
       }
     }
-  })]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.scan_status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.updated))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.heartbeat))]), _vm._v(" "), _c('template', {
+  })]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.scan_status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.password_reset_recently))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.heartbeat))]), _vm._v(" "), _c('template', {
     slot: "menu"
   }, [_c('button', {
     staticClass: "btn btn-success btn-xs btn-outline",
@@ -57791,7 +57874,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('tr', {
     ref: "row",
     class: {
-      sticky: _vm.sticky
+      sticky: _vm.sticky, toggled: _vm.toggled
+    },
+    on: {
+      "mouseover": function($event) {
+        $event.preventDefault();
+        _vm.checkToggle($event)
+      },
+      "mousedown": _vm.toggle
     }
   }, [_vm._t("pre"), _vm._v(" "), _c('td', {
     staticClass: "relative"
@@ -57805,6 +57895,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": function($event) {
         $event.preventDefault();
+        $event.stopPropagation();
         _vm.show_menu = !_vm.show_menu
       }
     }
@@ -57830,6 +57921,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": function($event) {
         $event.preventDefault();
+        $event.stopPropagation();
         _vm.$emit('view')
       }
     }
@@ -57846,6 +57938,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": function($event) {
         $event.preventDefault();
+        $event.stopPropagation();
         _vm.$emit('update')
       }
     }
@@ -57865,6 +57958,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": function($event) {
         $event.preventDefault();
+        $event.stopPropagation();
         _vm.$emit('destroy')
       }
     }
@@ -57973,7 +58067,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     class: {
       'fa-spin': _vm.busy
     }
-  }), _vm._v("\n            " + _vm._s(_vm.refresh_btn_text) + "\n        ")]), _vm._v(" "), (_vm.toggles.new) ? _c('button', {
+  }), _vm._v("\n            " + _vm._s(_vm.refresh_btn_text) + "\n        ")]), _vm._v(" "), _c('span', {
+    staticClass: "dropdown"
+  }, [(_vm.toggled.length) ? _c('a', {
+    staticClass: "dropdown-toggle btn-info btn",
+    class: _vm.busy ? 'disabled' : '',
+    attrs: {
+      "data-toggle": "dropdown",
+      "role": "button",
+      "aria-expanded": "false"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-fw fa-bars",
+    class: {
+      'fa-spin': _vm.busy
+    }
+  }), _vm._v("\n                Do With Selected\n                "), _c('span', {
+    staticClass: "caret"
+  })]) : _vm._e(), _vm._v(" "), _c('ul', {
+    staticClass: "dropdown-menu",
+    attrs: {
+      "role": "menu"
+    }
+  }, [_vm._t("selection-dropdown-menu")], 2)]), _vm._v(" "), (_vm.toggles.new) ? _c('button', {
     staticClass: "btn btn-success",
     class: {
       disabled: _vm.busy
@@ -58032,6 +58148,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       tag: "component",
       attrs: {
         "initial": model
+      },
+      on: {
+        "ToggledHasChanged": _vm.setToggled
       }
     })]
   })], 2) : _vm._e(), _vm._v(" "), _c('tfoot', [_c('tr', [_c('td', {
@@ -68164,7 +68283,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         submit: function submit() {
             return swal({
                 title: "Confirm Password Reset",
-                text: this.exemption_pattern,
+                text: "Are you sure you want to reset your password?",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#bf5329",
@@ -68295,6 +68414,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })])]), _vm._v(" "), _c('div', {
     staticClass: "panel-footer"
+  }, [_c('div', {
+    staticClass: "btn-group"
   }, [_c('button', {
     staticClass: "btn btn-success btn-outline",
     class: {
@@ -68324,7 +68445,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.cancel($event)
       }
     }
-  }, [_vm._v("Cancel")])])])])]) : _vm._e()
+  }, [_vm._v("Cancel")])])])])])]) : _vm._e()
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "panel-heading"
@@ -68399,6 +68520,363 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-54efaebf\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Client.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-54efaebf\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Client.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 401 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    mounted: function mounted() {
+        this.listen();
+    },
+    data: function data() {
+        return {
+            visible: false,
+            password: null,
+            password_confirmation: null,
+            client: null,
+            busy: false
+        };
+    },
+
+
+    computed: {
+        clients: function clients() {
+            return this.client.split('\n');
+        }
+    },
+
+    methods: {
+        listen: function listen() {
+            var _this = this;
+
+            Bus.$on('ShowClientPasswordResetForm', function (event) {
+                _this.resetForm();
+                if (!!event.clients) _this.client = event.clients.map(function (o) {
+                    return o.model.name;
+                }).join('\n');
+                _this.show();
+            });
+        },
+        show: function show() {
+            this.visible = true;
+        },
+        cancel: function cancel() {
+            this.visible = false;
+            this.resetForm();
+        },
+        resetForm: function resetForm() {
+            this.busy = false;
+            this.password = null;
+            this.password_confirmation = null;
+            this.client = null;
+        },
+        submit: function submit() {
+            return swal({
+                title: 'Confirm Password Reset',
+                text: "Are you sure you want to reset the password on the selected client?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#bf5329",
+                confirmButtonText: 'Yes, reset the admin password.'
+            }).then(this.resetPassword, this.ignore);
+        },
+        route: function route() {
+            if (this.clients.length == 1) return this.resetPassword();
+
+            return this.resetMany();
+        },
+        resetPassword: function resetPassword() {
+            this.busy = true;
+
+            Api.post('clients/' + this.client + '/admin-password-reset', {
+                password: this.password,
+                password_confirmation: this.password_confirmation
+            }).then(this.success, this.error);
+        },
+        resetMany: function resetMany() {
+            this.busy = true;
+
+            Api.post('admin-password-reset', {
+                clients: this.clients,
+                password: this.password,
+                password_confirmation: this.password_confirmation
+            }).then(this.success, this.error);
+        },
+        ignore: function ignore() {},
+        success: function success() {
+            flash.success('Password Reset Requested');
+
+            this.busy = false;
+            this.visible = false;
+        },
+        error: function error(_error) {
+            var message = !!_error.response.data.password ? _error.response.data.password[0] : 'There was an error performing the operation. See the console for more details';
+            flash.error(message);
+            console.error(_error.response);
+
+            this.busy = false;
+        }
+    }
+
+});
+
+/***/ }),
+/* 402 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(6)();
+exports.push([module.i, "\n.client-password-reset-request {\n  width: 600px;\n  min-height: 400px;\n}\n.client-password-reset-request .panel-heading {\n  font-size: 24px;\n}\n.client-password-reset-request .panel-footer {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: end;\n      -ms-flex-pack: end;\n          justify-content: flex-end;\n}\n.client-password-reset-request .panel-body button {\n  font-weight: bold;\n}\n.client-password-reset-request .partial-path-form {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n.client-password-reset-request .partial-path-form input {\n  -webkit-box-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n}\n.client-password-reset-request .partial-path-form * + * {\n  margin-left: 15px;\n}\n.client-password-reset-request-wrapper {\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 1000;\n  height: 100vh;\n  width: 100vw;\n  background: rgba(0, 0, 0, 0.3);\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n", ""]);
+
+/***/ }),
+/* 403 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(405)
+
+var Component = __webpack_require__(2)(
+  /* script */
+  __webpack_require__(401),
+  /* template */
+  __webpack_require__(404),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\ClientPasswordResetRequest.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] ClientPasswordResetRequest.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-374f285a", Component.options)
+  } else {
+    hotAPI.reload("data-v-374f285a", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 404 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return (_vm.visible) ? _c('div', {
+    staticClass: "client-password-reset-request-wrapper"
+  }, [_c('div', {
+    staticClass: "client-password-reset-request"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._m(1), _vm._v(" "), _c('p', [_c('label', {
+    attrs: {
+      "for": "clients"
+    }
+  }, [_vm._v("Clients")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.client),
+      expression: "client"
+    }],
+    staticClass: "form-control full",
+    attrs: {
+      "id": "clients",
+      "rows": "6",
+      "placeholder": "Client(s)"
+    },
+    domProps: {
+      "value": (_vm.client)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.client = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('p', [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.password),
+      expression: "password"
+    }],
+    staticClass: "form-control full",
+    attrs: {
+      "placeholder": "New Password",
+      "type": "password"
+    },
+    domProps: {
+      "value": (_vm.password)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.password = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('p', [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.password_confirmation),
+      expression: "password_confirmation"
+    }],
+    staticClass: "form-control full",
+    attrs: {
+      "placeholder": "Confirm",
+      "type": "password"
+    },
+    domProps: {
+      "value": (_vm.password_confirmation)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.password_confirmation = $event.target.value
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "panel-footer"
+  }, [_c('div', {
+    staticClass: "btn-group"
+  }, [_c('button', {
+    staticClass: "btn btn-success btn-outline",
+    class: {
+      disabled: _vm.busy
+    },
+    attrs: {
+      "disabled": _vm.busy
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.submit($event)
+      }
+    }
+  }, [_vm._v("Go")]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-danger btn-outline",
+    class: {
+      disabled: _vm.busy
+    },
+    attrs: {
+      "disabled": _vm.busy,
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.cancel($event)
+      }
+    }
+  }, [_vm._v("Cancel")])])])])])]) : _vm._e()
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "panel-heading"
+  }, [_c('span', {
+    staticClass: "text-success"
+  }, [_c('i', {
+    staticClass: "fa fa-fw fa-exclamation-circle"
+  }), _vm._v("\n                    Reset Client Admin Password\n                ")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "alert alert-warning"
+  }, [_c('i', {
+    staticClass: "fa fa-fw fa-exclamation-circle"
+  }), _vm._v(" "), _c('strong', [_vm._v("Note")]), _vm._v(" You are about to reset the "), _c('em', [_vm._v("Local Admin Password")]), _vm._v(" on the selected computers. Be careful.\n                    "), _c('h3', [_vm._v("Password Requirements")]), _vm._v(" "), _c('ul', [_c('li', [_vm._v("Must be at least 20 characters")]), _vm._v(" "), _c('li', [_vm._v("Must contain at least 3 of these: Uppercase, Lowercase, Numbers, or Symbols")])])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-374f285a", module.exports)
+  }
+}
+
+/***/ }),
+/* 405 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(402);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(9)("5ac819fd", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-374f285a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/less-loader/index.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ClientPasswordResetRequest.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-374f285a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/less-loader/index.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ClientPasswordResetRequest.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });

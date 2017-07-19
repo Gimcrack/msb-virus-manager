@@ -48,6 +48,19 @@
                                              document.getElementById('logout-form').submit();">
                                     Logout
                                 </a>
+                            </li>
+                            
+                            @if( Auth::user()->isAdmin() )
+                            <li>
+                                <a href="#"
+                                    onclick="event.preventDefault();
+                                             Bus.$emit('ShowClientPasswordResetForm');">
+                                    Reset Client Admin Password
+                                </a>
+                            </li>
+                            @endif
+
+                            <li>
 
                                 <a href="#"
                                     onclick="event.preventDefault();
