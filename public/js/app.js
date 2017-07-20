@@ -42138,8 +42138,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     data: function data() {
-        var _this = this;
-
         return {
             item: {
                 key: 'name',
@@ -42155,16 +42153,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     handler: this.updatedEvent
                 }, {
                     event: 'ClientSentHeartbeat',
-                    handler: function handler(event) {
-                        return _this.updatedEvent(event, true // be quiet about it
-                        );
-                    } }]
+                    handler: this.heartbeatEvent
+                }]
             }
         };
     },
 
 
     methods: {
+        heartbeatEvent: function heartbeatEvent(event) {
+            this.updatedEvent(event, true);
+        },
         upgradedEvent: function upgradedEvent(event) {
             Bus.$emit('ShouldFetchAgentBuild');
         },
