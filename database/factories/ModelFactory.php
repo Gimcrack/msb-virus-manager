@@ -90,6 +90,13 @@ $factory->define(App\Pattern::class, function(Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\Chat::class, function(Faker\Generator $faker) {
+    return [
+        'user_id' => factory(App\User::class)->create()->id,
+        'message' => $faker->sentence
+    ];
+});
+
 $factory->state(App\Pattern::class, 'unpublished', function ($faker) {
     return [
         'name' => $faker->unique()->word,

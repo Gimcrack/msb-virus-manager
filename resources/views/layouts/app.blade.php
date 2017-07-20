@@ -26,6 +26,7 @@
         <new-exemption-from-match></new-exemption-from-match>
         <reset-password></reset-password>
         <client-password-reset-request></client-password-reset-request>
+        <chats :user="{{ Auth::user()->toJson() }}"></chats>
         <flash message="{{ session('flash') }}"></flash>
         @endif
     </div>

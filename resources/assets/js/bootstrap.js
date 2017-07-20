@@ -66,7 +66,20 @@ import swal from 'sweetalert2';
 window.swal = swal;
 
 Array.prototype.$remove = function(key) {
+    if ( typeof key !== "number"  )
+    {
+        return this.$remove( this.indexOf(key) );
+    }
+
     Vue.delete(this, key);
+    return this;
+}
+
+Array.prototype.$add = function(value) {
+    if ( this.indexOf(value) === -1  )
+    {
+        this.push(value);
+    }
     return this;
 }
 

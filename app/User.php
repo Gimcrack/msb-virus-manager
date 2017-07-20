@@ -74,4 +74,15 @@ class User extends Authenticatable
     {
         return $query->whereAdminFlag(1);
     }
+
+    /**
+     * A user can have many chat messages
+     * @method chats
+     *
+     * @return   Collection<App\Chat>
+     */
+    public function chats()
+    {
+        return $this->hasMany(Chat::class);
+    }
 }

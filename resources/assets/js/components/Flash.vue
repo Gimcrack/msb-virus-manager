@@ -47,8 +47,13 @@
 
         methods: {
             flash({ message, type }) {
+
+                if ( type == 'notify' ) {
+                    return this.notify(message);
+                }
                 
                 console.log(message, type);
+                this.notify(message, type);
                 this.body = message;
                 this.message_type = type;
                 this.show = true;
@@ -60,6 +65,35 @@
                 sleep(3000).then(() => {
                     this.show = false;
                 });
+            },
+
+            notify(message, type) {
+                let options;
+
+                // Let's check if the browser supports notifications
+                if (!("Notification" in window)) {
+                    return false;
+                }
+
+                if ( !! type ) {
+                    options = {
+                        icon : `img/${type}.png`
+                    }
+                }
+
+                if (Notification.permission === "granted") {
+                    return new Notification(message, options);
+                }
+
+                if (Notification.permission !== "denied") {
+                    Notification.requestPermission( (permission) => {
+                        // If the user accepts, let's create a notification
+                        if (permission === "granted") {
+                            return new Notification(message, options);
+                        }
+                    });
+                }
+
             }
         }
     };

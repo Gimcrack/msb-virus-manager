@@ -44,3 +44,6 @@ Route::patch('clients/{client}', 'ClientController@update');
 Route::post('clients/{name}', 'ClientController@store');
 
 Route::post('profile/reset', 'ProfileController@reset');
+
+Route::get('chat', 'ChatController@index');
+Route::post('chat', 'ChatController@store');

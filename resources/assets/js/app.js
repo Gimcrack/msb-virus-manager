@@ -45,6 +45,8 @@ Vue.component('logs', require('./components/Logs.vue'));
 Vue.component('log', require('./components/Log.vue'));
 Vue.component('users', require('./components/Users.vue'));
 Vue.component('user', require('./components/User.vue'));
+Vue.component('chats', require('./components/Chats.vue'));
+Vue.component('chat', require('./components/Chat.vue'));
 
 const app = new Vue({
     el: '#app'
@@ -66,6 +68,10 @@ window.flash = {
     error(message) {
         Bus.$emit('flash', { message, type : 'danger' } );
     },
+
+    notify(message) {
+        Bus.$emit('flash', {message, type : 'notify'});
+    }
 }
 
 window.mouseDown = false;
