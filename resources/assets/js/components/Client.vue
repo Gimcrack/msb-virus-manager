@@ -66,7 +66,7 @@
                         },
                         {
                             event : 'ClientSentHeartbeat',
-                            handler : (event) => this.updatedEvent(event,true) // be quiet about it
+                            handler : this.heartbeatEvent
                         }
                     ]
                 }
@@ -74,6 +74,10 @@
         },
 
         methods : {
+            heartbeatEvent(event) {
+                this.updatedEvent(event,true);
+            },
+            
             upgradedEvent(event) {
                 Bus.$emit('ShouldFetchAgentBuild');
             },
