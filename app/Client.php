@@ -8,6 +8,7 @@ use App\ClientPasswordReset;
 use App\Events\ClientWasCreated;
 use App\Events\ClientWasUpdated;
 use App\Events\ClientWasDestroyed;
+use App\Events\ClientSentHeartbeat;
 use Illuminate\Database\Eloquent\Model;
 use App\Events\ClientShouldSendHeartbeat;
 
@@ -144,9 +145,9 @@ class Client extends Model
      */
     public function heartbeat()
     {
-        $this->update(['heartbeat_at' => Carbon::now()]);
+        \DB::statement(vsprintf("UPDATE `clients` SET `heartbeat_at` = '%s' WHERE id = %s", [Carbon::now(), $this->id]));
 
-        event( new ClientWasUpdated($this->fresh()) );
+        event( new ClientSentHeartbeat($this->fresh()) );
     }
 
     /**

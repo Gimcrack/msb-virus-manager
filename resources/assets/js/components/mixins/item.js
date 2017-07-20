@@ -119,7 +119,7 @@ export default {
             }
         },
 
-        updatedEvent(event) {
+        updatedEvent(event, quiet) {
             console.log(event);
             let model = this.eventModel(event);
 
@@ -133,7 +133,8 @@ export default {
             this.$forceUpdate();
             this.highlight();
 
-            flash.success(`${model.type} '${model.name}' Was Updated`);
+            if ( ! quiet )
+                flash.success(`${model.type} '${model.name}' Was Updated`);
 
             if ( !! this.postUpdated )
                 this.postUpdated(event);

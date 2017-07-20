@@ -10,6 +10,7 @@ use App\MatchedFile;
 use App\Events\ClientWasCreated;
 use App\Events\ClientWasUpdated;
 use App\Events\ClientWasDestroyed;
+use App\Events\ClientSentHeartbeat;
 use App\Events\ClientShouldSendHeartbeat;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -173,6 +174,9 @@ class ClientTest extends TestCase
         $client->heartbeat();
 
         $this->assertTrue( $client->fresh()->heartbeat_at->gt( Carbon::yesterday() ) );
+
+        $this->assertEvent( ClientSentHeartbeat::class, [ 'client' => $client ]);
+        $this->assertNotEvent( ClientWasUpdated::class, [ 'client' => $client ]);
     }
 
     /** @test */

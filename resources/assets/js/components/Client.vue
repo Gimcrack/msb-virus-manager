@@ -63,6 +63,10 @@
                         {
                             event : 'ClientPasswordResetWasCompleted',
                             handler : this.updatedEvent
+                        },
+                        {
+                            event : 'ClientSentHeartbeat',
+                            handler : (event) => this.updatedEvent(event,true) // be quiet about it
                         }
                     ]
                 }
