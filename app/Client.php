@@ -145,7 +145,7 @@ class Client extends Model
      */
     public function heartbeat()
     {
-        \DB::statement(vsprintf("UPDATE `clients` SET `heartbeat_at` = '%s' WHERE id = %s", [Carbon::now(), $this->id]));
+        \DB::statement(vsprintf("UPDATE clients SET heartbeat_at='%s' WHERE id = %s", [Carbon::now(), $this->id]));
 
         event( new ClientSentHeartbeat($this->fresh()) );
     }
