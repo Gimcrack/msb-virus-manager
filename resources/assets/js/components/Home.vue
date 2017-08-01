@@ -115,5 +115,7 @@
 </script>
 
 <style lang="less">
-
+    #home-container {
+        width: 1400px;
+    }
 </style>

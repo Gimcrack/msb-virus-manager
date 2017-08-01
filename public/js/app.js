@@ -47314,7 +47314,7 @@ exports.push([module.i, "\n.client-password-reset-request {\n  width: 600px;\n  
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(4)();
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\n#home-container {\n  width: 1400px;\n}\n", ""]);
 
 /***/ }),
 /* 253 */
