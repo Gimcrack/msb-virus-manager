@@ -266,7 +266,25 @@ class ClientTest extends TestCase
             ->assertStatus(202);
 
         $this->assertFalse( $client->exists() );
-    }  
+    } 
+
+    /** @test */
+     function clients_can_be_mass_deleted_by_an_admin()
+     {
+        $this->disableExceptionHandling();
+        
+         $clients = factory(Client::class, 5)->create();
+
+         $this->actingAsAdmin()
+            ->post("/api/v1/clients/_delete", [
+                'clients' => $clients->pluck('id')
+            ])
+
+        ->response()
+            ->assertStatus(202);
+
+        $this->assertEquals(0, Client::count());
+     } 
 
     /** @test */
     function a_clients_scanned_file_count_can_be_updated()

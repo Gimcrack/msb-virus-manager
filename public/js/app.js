@@ -42375,6 +42375,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -42417,6 +42422,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         resetAdminPasswordSelected: function resetAdminPasswordSelected() {
             Bus.$emit('ShowClientPasswordResetForm', { clients: this.page.toggled });
+        },
+        deleteSelected: function deleteSelected() {
+            Bus.$emit('DeleteSelected', { model: 'client', clients: this.page.toggled });
+        },
+        destroy: function destroy() {
+            return swal({
+                title: 'Remove Selected Clients?',
+                text: 'This cannot be undone.',
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#bf5329",
+                confirmButtonText: 'Yes, remove them.'
+            }).then(this.performDestroy, this.ignore);
+        },
+        performDestroy: function performDestroy() {
+
+            this.page.busy = true;
+            Api.post('clients/_delete', { clients: this.page.toggled.map(function (o) {
+                    return o.model.id;
+                }) }).then(this.deleteSuccess, this.error);
+        },
+        deleteSuccess: function deleteSuccess(response) {
+            this.page.busy = false;
         }
     }
 });
@@ -43799,6 +43827,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mixins: [mixins.collection],
@@ -43849,6 +43879,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
 
+    computed: {
+        hasToggled: function hasToggled() {
+            return !!this.toggled.length;
+        },
+        allToggled: function allToggled() {
+            return this.toggled.length == this.filtered.length;
+        },
+        toggleAllClass: function toggleAllClass() {
+            if (this.allToggled) return ['fa-check-square-o'];
+            if (this.hasToggled) return ['fa-minus-square-o'];
+            return ['fa-square-o'];
+        }
+    },
+
     methods: {
         postCreated: function postCreated(event) {
             this.$emit('created', event);
@@ -43862,6 +43906,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getToggled: function getToggled() {
             return this.$children.filter(function (child) {
                 return child.$children.length && child.$children[0].toggled;
+            });
+        },
+        getUntoggled: function getUntoggled() {
+            return this.$children.filter(function (child) {
+                return child.$children.length && !child.$children[0].toggled;
+            });
+        },
+        toggleAll: function toggleAll() {
+            if (this.hasToggled) {
+                return this.getToggled().forEach(function (child) {
+                    child.$children[0].toggle();
+                });
+            }
+
+            return this.getUntoggled().forEach(function (child) {
+                child.$children[0].toggle();
             });
         }
     }
@@ -47305,7 +47365,7 @@ exports.push([module.i, "", ""]);
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(4)();
-exports.push([module.i, "\n.page .page-header {\n  padding: 1em 0;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n.page .page-header h2 {\n    margin: 0;\n}\n.page .page-header * + * {\n    margin-left: 0.5em;\n}\n", ""]);
+exports.push([module.i, "\n.page .page-header {\n  padding: 1em 0;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n.page .page-header h2 {\n    margin: 0;\n}\n.page .page-header > * + * {\n    margin-left: 0.5em;\n}\n", ""]);
 
 /***/ }),
 /* 261 */
@@ -58485,7 +58545,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.resetAdminPasswordSelected($event)
       }
     }
-  }, [_vm._v("\n                Reset Admin Password\n            ")])])])], 2)
+  }, [_vm._v("\n                Reset Admin Password\n            ")])]), _vm._v(" "), _c('li', [_c('a', {
+    attrs: {
+      "href": "#"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.destroy($event)
+      }
+    }
+  }, [_vm._v("\n                Delete\n            ")])])])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -59262,7 +59332,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), _c('table', {
     staticClass: "table table-striped table-hover"
-  }, [_c('thead', [_c('tr', [_c('th', [_vm._v(" ")]), _vm._v(" "), _vm._l((_vm.params.columns), function(col, index) {
+  }, [_c('thead', [_c('tr', [_c('th', [_c('i', {
+    staticClass: "fa fa-fw",
+    class: _vm.toggleAllClass,
+    staticStyle: {
+      "cursor": "pointer",
+      "font-size": "1.5em",
+      "line-height": "1"
+    },
+    on: {
+      "click": _vm.toggleAll
+    }
+  })]), _vm._v(" "), _vm._l((_vm.params.columns), function(col, index) {
     return _c('header-sort-button', {
       key: index,
       attrs: {

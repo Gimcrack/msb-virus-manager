@@ -11,6 +11,11 @@
                     Reset Admin Password
                 </a>
             </li>
+            <li>
+                <a href="#" @click.prevent="destroy">
+                    Delete
+                </a>
+            </li>
         </template>
 
     </page>
@@ -65,7 +70,34 @@
 
             resetAdminPasswordSelected() {
                 Bus.$emit('ShowClientPasswordResetForm', { clients : this.page.toggled });
-            }
+            },
+
+            deleteSelected() {
+                Bus.$emit('DeleteSelected', { model : 'client', clients : this.page.toggled });
+            },
+
+            destroy() {
+                return swal({
+                      title: `Remove Selected Clients?`,
+                      text: `This cannot be undone.`,
+                      type: "warning",
+                      showCancelButton: true,
+                      confirmButtonColor: "#bf5329",
+                      confirmButtonText: `Yes, remove them.`,
+                    }
+                ).then( this.performDestroy, this.ignore );
+            },
+
+            performDestroy() {
+                
+                this.page.busy = true;
+                Api.post(`clients/_delete`, { clients : this.page.toggled.map(o => o.model.id) })
+                    .then(this.deleteSuccess, this.error);
+            },
+
+            deleteSuccess(response) {
+                this.page.busy = false;
+            },
         },
     }
 </script>

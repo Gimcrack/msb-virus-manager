@@ -172,6 +172,21 @@ class ClientController extends Controller
     }
 
     /**
+     * Destroy several clients
+     * @method destroyMany
+     *
+     * @return    void
+     */
+    public function destroyMany()
+    {
+        $ids = request('clients');
+
+        Client::find($ids)->each->delete();
+
+        return response()->json([],202);
+    }
+
+    /**
      * Set the client's scanned files count
      * @method count
      *

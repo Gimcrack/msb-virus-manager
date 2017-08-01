@@ -34,7 +34,9 @@
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th>&nbsp;</th>
+                    <th>
+                        <i @click="toggleAll" style="cursor:pointer; font-size:1.5em; line-height:1" class="fa fa-fw" :class="toggleAllClass"></i>
+                    </th>
                     <header-sort-button 
                         v-for="(col,index) in params.columns" 
                         :order-by="orderBy" 
@@ -112,6 +114,24 @@
             }
         },
 
+        computed : {
+
+            hasToggled() {
+                return !! this.toggled.length;
+            },
+
+            allToggled() {
+                return this.toggled.length == this.filtered.length;
+            },
+
+            toggleAllClass() {
+                if ( this.allToggled ) return ['fa-check-square-o'];
+                if ( this.hasToggled ) return ['fa-minus-square-o'];
+                return ['fa-square-o'];
+            }
+
+        },
+
         methods : {
             postCreated(event) {
                 this.$emit('created',event);
@@ -128,7 +148,20 @@
             getToggled() {
                 return this.$children
                     .filter( child => { return child.$children.length && child.$children[0].toggled; } );
-            }
+            },
+
+            getUntoggled() {
+                return this.$children
+                    .filter( child => { return child.$children.length && ! child.$children[0].toggled; } );
+            },
+
+            toggleAll() {
+                if ( this.hasToggled ) {
+                    return this.getToggled().forEach( child => { child.$children[0].toggle() } );
+                }
+
+                return this.getUntoggled().forEach( child => { child.$children[0].toggle() } );
+            },
         }
     }
 </script>
@@ -145,7 +178,7 @@
             display: flex;
             align-items: center;
 
-            * + * {
+            & > * + * {
                 margin-left: 0.5em;
             }
         }
