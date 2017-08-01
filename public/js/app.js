@@ -42135,6 +42135,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             return 'Scanned ' + this.model.scanned_files_current + '/' + this.model.scanned_files_count + ' Files';
+        },
+        os: function os() {
+            return (this.model.os || '').replace('Microsoft Windows', '');
         }
     },
 
@@ -58655,7 +58658,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.$emit('ToggledHasChanged')
       }
     }
-  }, [_c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.scan_status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.password_reset_recently))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.os))]), _vm._v(" "), _c('td', [_c('button', {
+  }, [_c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.scan_status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.password_reset_recently))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.os))]), _vm._v(" "), _c('td', [_c('button', {
     staticClass: "heartbeat-status",
     class: [_vm.model.heartbeat_status],
     on: {

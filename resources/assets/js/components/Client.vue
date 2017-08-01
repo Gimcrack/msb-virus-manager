@@ -13,7 +13,7 @@
         <td>{{ model.version }}</td>
         <td>{{ scan_status }}</td>
         <td>{{ model.password_reset_recently }}</td>
-        <td>{{ model.os }}</td>
+        <td>{{ os }}</td>
         <td><button @click.prevent="requestHeartbeat" class="heartbeat-status" :class="[ model.heartbeat_status ]"></button> {{ heartbeat }}</td>
 
         <template slot="menu">
@@ -46,6 +46,10 @@
 
                 return `Scanned ${this.model.scanned_files_current}/${this.model.scanned_files_count} Files`;
             },
+
+            os() {
+                return (this.model.os || '').replace('Microsoft Windows',''); 
+            }
         },
 
         data() {
