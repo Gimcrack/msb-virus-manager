@@ -13,6 +13,7 @@
         <td>{{ model.version }}</td>
         <td>{{ scan_status }}</td>
         <td>{{ model.password_reset_recently }}</td>
+        <td>{{ model.os }}</td>
         <td><button @click.prevent="requestHeartbeat" class="heartbeat-status" :class="[ model.heartbeat_status ]"></button> {{ heartbeat }}</td>
 
         <template slot="menu">

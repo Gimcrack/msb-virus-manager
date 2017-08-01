@@ -41,6 +41,9 @@
                             title : 'Recent Password',
                             key : 'password_reset_recently'
                         },{
+                            title : 'OS',
+                            key : 'os'
+                        },{
                             title : 'Heartbeat',
                             key : 'heartbeat_at'
                         }

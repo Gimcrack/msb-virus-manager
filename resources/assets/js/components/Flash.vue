@@ -77,7 +77,8 @@
 
                 if ( !! type ) {
                     options = {
-                        icon : `img/${type}.png`
+                        icon : `img/${type}.png`,
+                        tag : type
                     }
                 }
 

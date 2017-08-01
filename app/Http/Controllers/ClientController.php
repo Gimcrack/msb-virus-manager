@@ -80,7 +80,8 @@ class ClientController extends Controller
             'name' => strtolower($name),
         ], 
         [ 
-            'version' => request('version') 
+            'version' => request('version'),
+            'os' => request('os')
         ]), $exists ? 202 : 201);
     }
 
@@ -124,7 +125,8 @@ class ClientController extends Controller
         }
 
         $client->update([
-            'version' => request('version')
+            'version' => request('version'),
+            'os' => request('os')
         ]);
 
 

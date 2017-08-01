@@ -42117,6 +42117,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mixins: [mixins.item],
@@ -42395,6 +42396,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }, {
                     title: 'Recent Password',
                     key: 'password_reset_recently'
+                }, {
+                    title: 'OS',
+                    key: 'os'
                 }, {
                     title: 'Heartbeat',
                     key: 'heartbeat_at'
@@ -42833,7 +42837,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             if (!!type) {
                 options = {
-                    icon: 'img/' + type + '.png'
+                    icon: 'img/' + type + '.png',
+                    tag: type
                 };
             }
 
@@ -58650,7 +58655,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.$emit('ToggledHasChanged')
       }
     }
-  }, [_c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.scan_status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.password_reset_recently))]), _vm._v(" "), _c('td', [_c('button', {
+  }, [_c('td', [_vm._v(_vm._s(_vm.model.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.version))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.scan_status))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.password_reset_recently))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.os))]), _vm._v(" "), _c('td', [_c('button', {
     staticClass: "heartbeat-status",
     class: [_vm.model.heartbeat_status],
     on: {
