@@ -44851,8 +44851,8 @@ window.mixins = {
 
             if (!!this.$parent.add) {
                 this.$parent.add(model);
-                this.$parent.orderBy = null;
-                this.$parent.orderBy = 'id';
+                //this.$parent.orderBy = null;
+                //this.$parent.orderBy = 'id';
             }
 
             this.model = model.entity;
@@ -47317,7 +47317,7 @@ exports.push([module.i, "\n.client-password-reset-request {\n  width: 600px;\n  
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(4)();
-exports.push([module.i, "\n#home-container {\n  width: 1400px;\n}\n", ""]);
+exports.push([module.i, "\n#home-container {\n  background: white;\n  width: 1400px;\n  padding: 0;\n}\n#home-container .col-xs-1 {\n  padding: 0;\n}\n", ""]);
 
 /***/ }),
 /* 253 */

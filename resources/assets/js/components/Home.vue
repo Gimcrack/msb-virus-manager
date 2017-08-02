@@ -116,6 +116,12 @@
 
 <style lang="less">
     #home-container {
+        background: white;
         width: 1400px;
+        padding: 0;
+
+        .col-xs-1 {
+            padding: 0;
+        }
     }
 </style>

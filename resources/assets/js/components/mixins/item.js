@@ -125,8 +125,8 @@ export default {
 
             if ( !! this.$parent.add ) {
                 this.$parent.add(model);
-                this.$parent.orderBy = null;
-                this.$parent.orderBy = 'id';
+                //this.$parent.orderBy = null;
+                //this.$parent.orderBy = 'id';
             }
 
             this.model = model.entity;
