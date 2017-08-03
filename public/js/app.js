@@ -44612,8 +44612,8 @@ window.mixins = {
 
     computed: {
         filtered: function filtered() {
-
-            var models = _(this.models).filter(this.searchModel).filter(this.params.where).reject(this.params.reject).sortBy(this.orderBy);
+            var reject = _.isEmpty(this.params.reject) ? { placeholder: 'gibberish-value' } : this.params.reject,
+                models = _(this.models).filter(this.searchModel).filter(this.params.where).reject(reject).sortBy(this.orderBy);
 
             return this.asc ? models.value() : models.reverse().value();
         },
