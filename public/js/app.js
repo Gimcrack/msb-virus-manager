@@ -42851,7 +42851,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return this.notify(message);
             }
 
-            console.log(message, type);
+            // console.log(message, type);
             this.notify(message, type);
             this.body = message;
             this.message_type = type;
@@ -44670,10 +44670,10 @@ window.mixins = {
 
             // if the model exists, replace it
             if (index > -1) {
-                console.log('Updating model');
+                // console.log('Updating model');
                 return this.models[index] = model.entity;
             } else {
-                console.log('New model');
+                // console.log('New model');
                 this.models.push(model.entity);
                 flash.success('New ' + model.type.$title_case() + ': ' + model.name);
             }
@@ -44698,7 +44698,7 @@ window.mixins = {
             var _this = this;
 
             Echo.channel(this.params.events.channel).listen(this.params.events.created, function (event) {
-                console.log(event);
+                // console.log(event);
                 _this.add(_this.model(event));
 
                 if (!!_this.postCreated) _this.postCreated(event);
@@ -44890,7 +44890,7 @@ window.mixins = {
             };
         },
         updatedEvent: function updatedEvent(event, quiet) {
-            console.log(event);
+            // console.log(event);
             var model = this.eventModel(event);
 
             if (!!this.$parent.add) {
@@ -44913,7 +44913,7 @@ window.mixins = {
             Echo.channel(this.item.channel).listen(this.item.updated, this.updatedEvent);
 
             if (!!this.item.events) {
-                console.log('Binding custom events');
+                // console.log('Binding custom events');
                 this.item.events.forEach(function (e) {
                     Echo.channel(_this2.item.channel).listen(e.event, e.handler);
                 });

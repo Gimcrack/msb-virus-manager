@@ -85,11 +85,11 @@ export default {
 
             // if the model exists, replace it
             if ( index > -1 ) {
-                console.log('Updating model');
+                // console.log('Updating model');
                 return this.models[index] = model.entity;
             }
             else {
-                console.log('New model');
+                // console.log('New model');
                 this.models.push(model.entity);
                 flash.success(`New ${model.type.$title_case()}: ${model.name}`);
             }
@@ -116,7 +116,7 @@ export default {
         listen() {
             Echo.channel(this.params.events.channel)
                 .listen( this.params.events.created, (event) => {
-                    console.log(event);
+                    // console.log(event);
                     this.add( this.model(event) );
 
                     if ( !! this.postCreated )

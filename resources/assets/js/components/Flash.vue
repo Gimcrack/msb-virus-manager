@@ -52,7 +52,7 @@
                     return this.notify(message);
                 }
                 
-                console.log(message, type);
+                // console.log(message, type);
                 this.notify(message, type);
                 this.body = message;
                 this.message_type = type;

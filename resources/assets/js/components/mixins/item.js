@@ -120,7 +120,7 @@ export default {
         },
 
         updatedEvent(event, quiet) {
-            console.log(event);
+            // console.log(event);
             let model = this.eventModel(event);
 
             if ( !! this.$parent.add ) {
@@ -145,7 +145,7 @@ export default {
                 .listen(this.item.updated, this.updatedEvent)
 
             if ( !! this.item.events ) {
-                console.log('Binding custom events');
+                // console.log('Binding custom events');
                 this.item.events.forEach( ( e ) => {
                     Echo.channel(this.item.channel)
                         .listen( e.event, e.handler )
