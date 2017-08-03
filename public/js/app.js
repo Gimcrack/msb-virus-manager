@@ -42572,6 +42572,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
+        var _this = this;
+
         return {
             toggles: {
                 new: false
@@ -42589,7 +42591,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     created: 'DefinitionWasCreated',
                     destroyed: 'DefinitionWasDestroyed',
                     global: {
-                        ShouldFetchDefinitions: 'fetch'
+                        ShouldFetchDefinitions: function ShouldFetchDefinitions() {
+                            sleep(2000).then(_this.page.fetch);
+                        }
                     }
                 }
             }
@@ -42627,7 +42631,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         listen: function listen() {
-            Bus.$on('ShouldFetchDefinitions', this.fetch);
+            var _this = this;
+
+            Bus.$on('ShouldFetchDefinitions', function () {
+                sleep(2000).then(_this.fetch);
+            });
         },
         fetch: function fetch() {
             Api.get('definitions-status').then(this.success, this.error);
@@ -44716,9 +44724,16 @@ window.mixins = {
             var g = this.params.events.global;
             if (!!g) {
                 var _loop2 = function _loop2(type) {
-                    Bus.$on(type, function (event) {
-                        _this[g[type]](event);
-                    });
+
+                    if (typeof g[type] === 'function') {
+                        Bus.$on(type, function (event) {
+                            g[type](event);
+                        });
+                    } else {
+                        Bus.$on(type, function (event) {
+                            _this[g[type]](event);
+                        });
+                    }
                 };
 
                 for (var type in g) {

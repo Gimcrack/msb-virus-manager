@@ -24,7 +24,9 @@
         methods : {
 
             listen() {
-                Bus.$on('ShouldFetchDefinitions', this.fetch);
+                Bus.$on('ShouldFetchDefinitions', () => {
+                    sleep(2000).then( this.fetch )
+                });
             },
 
             fetch() {

@@ -140,7 +140,16 @@ export default {
             let g = this.params.events.global;
             if ( !! g ) {
                 for( let type in g ) {
-                    Bus.$on(type, (event) => { this[g[type]](event) });
+
+                    if ( typeof g[type] === 'function' )
+                    {
+                        Bus.$on(type, (event) => { g[type](event) });
+                    }
+                    else
+                    {
+                        Bus.$on(type, (event) => { this[g[type]](event) });
+                    }
+
                 }
             }
         },
