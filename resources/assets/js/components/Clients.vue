@@ -18,6 +18,13 @@
             </li>
         </template>
 
+        <template slot="menu">
+            <button @click.prevent="toggleUptodate" class="btn btn-primary">
+                <i class="fa fa-fw fa-check" :class="[ show_up_to_date ? 'fa-toggle-on' : 'fa-toggle-off', { active : show_up_to_date } ]"></i>
+                Toggle Up-To-Date
+            </button>
+        </template>
+
     </page>
 </template>
 
@@ -25,6 +32,10 @@
     export default {
         data() {
             return {
+
+                show_up_to_date : true,
+                current_version : null,
+
                 toggles : {
                     new : false,
                 },
@@ -56,9 +67,16 @@
                         channel : 'clients',
                         created : 'ClientWasCreated',
                         destroyed : 'ClientWasDestroyed',
+                    },
+                    reject : {
+                        placeholder : 'some-nonsense-value'
                     }
                 },
             }
+        },
+
+        mounted() {
+            Bus.$on('AgentBuild', event => this.current_version = event.build);
         },
 
         methods : {
@@ -101,6 +119,12 @@
             deleteSuccess(response) {
                 this.page.busy = false;
             },
+
+            toggleUptodate() {
+                this.show_up_to_date = ! this.show_up_to_date;
+
+                this.details.reject =  ( this.show_up_to_date ) ? { placeholder : 'some-nonsense-value' } : { version : this.current_version };
+            }
         },
     }
 </script>

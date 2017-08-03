@@ -34,6 +34,8 @@
             success(response) {
                 this.build = response.data.version;
                 this.loaded = !! this.build;
+
+                Bus.$emit('AgentBuild', { build : this.build });
             },
 
             error(error) {

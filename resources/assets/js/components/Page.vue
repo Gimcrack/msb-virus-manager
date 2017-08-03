@@ -93,7 +93,8 @@
                             destroyed : '',
                             global : null
                         },
-                        where : {}
+                        where : {},
+                        reject : { placeholder : 'some-nonsense-value'}
                     }
                 }
             },

@@ -64,7 +64,7 @@
                     },
                     where : {
                         muted_flag : false
-                    }
+                    },
                 },
                 toggles : {
                     new : false

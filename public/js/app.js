@@ -41869,6 +41869,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         success: function success(response) {
             this.build = response.data.version;
             this.loaded = !!this.build;
+
+            Bus.$emit('AgentBuild', { build: this.build });
         },
         error: function error(_error) {
             flash.error('There was a problem fetching the latest agent build');
@@ -42384,10 +42386,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
+
+            show_up_to_date: true,
+            current_version: null,
+
             toggles: {
                 new: false
             },
@@ -42414,9 +42427,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     channel: 'clients',
                     created: 'ClientWasCreated',
                     destroyed: 'ClientWasDestroyed'
+                },
+                reject: {
+                    placeholder: 'some-nonsense-value'
                 }
             }
         };
+    },
+    mounted: function mounted() {
+        var _this = this;
+
+        Bus.$on('AgentBuild', function (event) {
+            return _this.current_version = event.build;
+        });
     },
 
 
@@ -42452,6 +42475,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         deleteSuccess: function deleteSuccess(response) {
             this.page.busy = false;
+        },
+        toggleUptodate: function toggleUptodate() {
+            this.show_up_to_date = !this.show_up_to_date;
+
+            this.details.reject = this.show_up_to_date ? { placeholder: 'some-nonsense-value' } : { version: this.current_version };
         }
     }
 });
@@ -43865,7 +43893,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         destroyed: '',
                         global: null
                     },
-                    where: {}
+                    where: {},
+                    reject: { placeholder: 'some-nonsense-value' }
                 };
             }
         },
@@ -44584,7 +44613,7 @@ window.mixins = {
     computed: {
         filtered: function filtered() {
 
-            var models = _(this.models).filter(this.searchModel).filter(this.params.where).sortBy(this.orderBy);
+            var models = _(this.models).filter(this.searchModel).filter(this.params.where).reject(this.params.reject).sortBy(this.orderBy);
 
             return this.asc ? models.value() : models.reverse().value();
         },
@@ -58563,7 +58592,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.destroy($event)
       }
     }
-  }, [_vm._v("\n                Delete\n            ")])])])], 2)
+  }, [_vm._v("\n                Delete\n            ")])])]), _vm._v(" "), _c('template', {
+    slot: "menu"
+  }, [_c('button', {
+    staticClass: "btn btn-primary",
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.toggleUptodate($event)
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-fw fa-check",
+    class: [_vm.show_up_to_date ? 'fa-toggle-on' : 'fa-toggle-off', {
+      active: _vm.show_up_to_date
+    }]
+  }), _vm._v("\n            Toggle Up-To-Date\n        ")])])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
