@@ -27,10 +27,12 @@ class ClientMatchedFilesController extends Controller
          
         $this->validate(request(), [
             'pattern_id' => 'sometimes|required|exists:patterns,id',
+            //'file_created_at' => 'required|date',
+            //'file_modified_at' => 'required|date',
             'file' => 'required'
         ]);
         
-        $data = request()->only(['pattern_id','file','pattern']);
+        $data = request()->only(['pattern_id','file','pattern','file_created_at','file_modified_at']);
 
         if ( ! $data['pattern_id'] )
         {

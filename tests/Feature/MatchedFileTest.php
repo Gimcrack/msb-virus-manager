@@ -26,12 +26,16 @@ class MatchedFileTest extends TestCase
         // act
         $this->post("/api/v1/clients/{$client->name}/matches", [
             'file' => 'some_file',
+            'file_created_at' => '2017-01-01 12:00:00',
+            'file_modified_at' => '2017-01-01 12:00:00',
             'pattern_id' => factory(Pattern::class)->create()->id
         ])
 
         // database assertions
         ->assertDatabaseHas('matched_files', [
             'client_id' => $client->id,
+            'file_created_at' => '2017-01-01 12:00:00',
+            'file_modified_at' => '2017-01-01 12:00:00',
             'file' => 'some_file'
         ])
         
@@ -46,17 +50,22 @@ class MatchedFileTest extends TestCase
         // given a client
         $client = factory(Client::class)->create();
         $pattern = factory(Pattern::class)->create(['name' => 'foo']);
+        $now = Carbon::now()->format('Y-m-d H:i:s');
 
         // act
         $this->post("/api/v1/clients/{$client->name}/matches", [
             'file' => 'some_file',
-            'pattern' => $pattern->name
+            'pattern' => $pattern->name,
+            'file_modified_at' => $now,
+            'file_created_at' => $now,
         ])
 
         // database assertions
         ->assertDatabaseHas('matched_files', [
             'client_id' => $client->id,
             'pattern_id' => $pattern->id,
+            'file_modified_at' => $now,
+            'file_created_at' => $now,
             'file' => 'some_file'
         ])
         
@@ -112,11 +121,14 @@ class MatchedFileTest extends TestCase
     {   
         // given a matched file
         $file = factory(MatchedFile::class)->create();
+        $now = Carbon::now()->format('Y-m-d H:i:s');
 
         // act
         $this->post("/api/v1/clients/{$file->client->name}/matches", [
             'file' => $file->file,
-            'pattern_id' => $file->pattern_id
+            'pattern_id' => $file->pattern_id,
+            'file_created_at' => $now,
+            'file_modified_at' => $now
         ])
 
         ->response()

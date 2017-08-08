@@ -18,6 +18,11 @@ class MatchedFile extends Model
         'created' => MatchedFileWasCreated::class,
     ];
 
+    protected $dates = [
+        'file_created_at',
+        'file_modified_at',
+    ];
+
     protected $casts = [
         'client_id' => 'int',
         'pattern_id' => 'int',
@@ -134,8 +139,11 @@ class MatchedFile extends Model
     {
         $f = static::firstOrNew( [
             'client_id' => $client->id,
+            'file' => $params['file'],            
             'pattern_id' => $params['pattern_id'],
-            'file' => $params['file']
+        ], [
+            'file_created_at' => $params['file_created_at'],
+            'file_modified_at' => $params['file_modified_at'],
         ]);
 
         $exists = $f->exists();
