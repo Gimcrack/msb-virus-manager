@@ -33,7 +33,7 @@
 
 
     <!-- Scripts -->
-    <script src="http://{{ config('app.echo_host') }}/socket.io/socket.io.js"></script>
+    <script src="//{{ config('app.echo_host') }}/socket.io/socket.io.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>
