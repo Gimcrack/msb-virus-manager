@@ -46,7 +46,7 @@
 
         mounted() {
             this.listen();
-            this.fetch();
+            this.scroll();
         },
 
         computed : {
@@ -57,7 +57,7 @@
 
         data() {
             return {
-                models : [],
+                models : this.getInitialState(),
                 busy : false,
                 message : '',
                 show : true,
@@ -105,6 +105,13 @@
                             this.other_typing_name.$remove(event.user.name.split(' ')[0]);
                         }
                     })
+            },
+
+            getInitialState() {
+                let key = 'chats',
+                    state = INITIAL_STATE[key] || [];
+
+                return state;
             },
 
             type() {

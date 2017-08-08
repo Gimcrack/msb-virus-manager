@@ -16,6 +16,10 @@ class LogEntry extends Model
         'created' => LogEntryWasCreated::class
     ];
 
+    protected $casts = [
+        'client_id' => 'int',
+    ];
+
     /**
      * A LogEntry belongs to one Client
      * @method client

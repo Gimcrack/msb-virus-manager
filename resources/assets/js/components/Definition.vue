@@ -36,6 +36,7 @@
                 },
 
                 toggles : {
+                    info : false,
                     update : false,
                     delete : false
                 }

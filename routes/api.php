@@ -21,12 +21,14 @@ Route::get('exemptions', 'ExemptionController@index');
 Route::get('exemptions/{exemption}', 'ExemptionController@show');
 
 Route::get('matches', 'MatchedFileController@index');
+Route::get('matches/{match}', 'MatchedFileController@show');
 
 Route::get('patterns', 'PatternController@index');
 Route::post('patterns', 'PatternController@store');
 Route::get('patterns/{pattern}', 'PatternController@show');
 
 Route::get('logs', 'LogEntryController@index');
+Route::get('logs/{log}', 'LogEntryController@show');
 
 Route::get('clients/{client}/logs', 'ClientLogEntryController@index');
 Route::post('clients/{client}/logs', 'ClientLogEntryController@store');

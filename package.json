@@ -24,6 +24,8 @@
     "moment-timezone": "^0.5.13",
     "nodemon": "^1.11.0",
     "onchange": "^3.2.1",
+    "pretty-print-object": "^1.1.0",
+    "prettyprint": "^1.1.1",
     "sleep-promise": "^2.0.0",
     "sweetalert2": "^6.6.5",
     "vue": "^2.1.10",

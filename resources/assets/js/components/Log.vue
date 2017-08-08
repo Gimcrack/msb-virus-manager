@@ -31,6 +31,7 @@
             },
 
             status() {
+                if ( ! this.model || ! this.model.status ) return '';
                 return ( this.model.status.length > 30 ) ? this.model.status.slice(0,30) + '...' : this.model.status;
             }
         },

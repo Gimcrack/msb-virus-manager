@@ -19,6 +19,18 @@ class MatchedFileController extends Controller
     }
 
     /**
+     * Get a single matched file
+     * @method show
+     *
+     * @return   response
+     */
+    public function show(MatchedFile $file)
+    {
+        $file->load(['client','pattern']);
+        return response()->json($file,200);
+    }
+
+    /**
      * Acknowledge all unacked files
      * @method acknowledge
      *

@@ -3,7 +3,7 @@ export default {
     data() {
         return {
             busy : false,
-            models : [],
+            //models : [],
             refresh_btn_text : 'Refresh',
             search : null,
             orderBy : 'name',
@@ -13,7 +13,7 @@ export default {
 
     mounted() {
         this.listen();
-        this.fetch();
+        //this.fetch();
     },
 
     computed : {

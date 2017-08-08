@@ -33,12 +33,18 @@ class Client extends Model
     ];
 
     protected $dates = [
-        'heartbeat_at'
+        'heartbeat_at',
+        'password_reset'
     ];
 
     protected $appends = [
         'heartbeat_status',
         'password_reset_recently'
+    ];
+
+    protected $casts = [
+        'scanned_files_count' => 'int',
+        'scanned_files_current' => 'int'
     ];
 
     /**

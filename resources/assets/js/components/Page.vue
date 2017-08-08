@@ -111,7 +111,8 @@
             return {
                 orderBy : this.params.order || 'name',
                 asc : ( this.params.orderDir != null ) ? this.params.orderDir : true,
-                toggled : this.getToggled()
+                toggled : this.getToggled(),
+                models : this.getInitialState(),
             }
         },
 
@@ -134,6 +135,18 @@
         },
 
         methods : {
+            getInitialState() {
+                let key = this.params.endpoint,
+                    state = INITIAL_STATE[key] || [];
+
+                // get the data if it has a key (like when paginating)
+                if ( this.params.data_key ) {
+                    state = state[this.params.data_key];
+                }
+
+                return state;
+            },
+
             postCreated(event) {
                 this.$emit('created',event);
             },

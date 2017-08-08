@@ -47,6 +47,7 @@ Vue.component('users', require('./components/Users.vue'));
 Vue.component('user', require('./components/User.vue'));
 Vue.component('chats', require('./components/Chats.vue'));
 Vue.component('chat', require('./components/Chat.vue'));
+Vue.component('itemDetail',require('./components/ItemDetail.vue'));
 
 const app = new Vue({
     el: '#app'

@@ -65,7 +65,8 @@ export default {
         },
 
         view() {
-            console.warn('The view method has not been implemented on the instance.')
+            //console.warn('The view method has not been implemented on the instance.')
+            Bus.$emit('ShowItemDetail', { endpoint : this.item.endpoint, id : this.model[this.item.key] })
         },
 
         update() {

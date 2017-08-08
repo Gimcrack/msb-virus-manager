@@ -95,6 +95,18 @@ class LogEntryTest extends TestCase
             ->assertJsonFragment( $logs->first()->fresh()->toArray() );
     }
 
+    /** @test */
+    function a_single_log_entry_can_be_viewed()
+    {
+        $log = factory(LogEntry::class)->create();
+
+        $this->get("/api/v1/logs/{$log->id}")
+
+        ->response()
+            ->assertStatus(200)
+            ->assertJsonFragment( $log->toArray() );
+    }
+
     
     
 }

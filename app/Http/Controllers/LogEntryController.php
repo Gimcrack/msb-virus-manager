@@ -17,4 +17,16 @@ class LogEntryController extends Controller
     {
         return response()->json( LogEntry::with('client')->latest()->paginate(25), 200);
     }
+
+    /**
+     * Get a single log entry
+     * @method show
+     *
+     * @return   response
+     */
+    public function show(LogEntry $log)
+    {
+        $log->load('client');
+        return response()->json( $log, 200);
+    }
 }

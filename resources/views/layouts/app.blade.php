@@ -9,6 +9,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @if( Auth::check() )
     <meta name="token" content="{{ auth()->user()->api_token }}">
+
+    <script>
+        window.INITIAL_STATE = {!! isset($initial_state) ? $initial_state->toJson() : '{}' !!}
+    </script>
     @endif
 
     <title>{{ config('app.name', 'Laravel') }}</title>
@@ -22,6 +26,9 @@
 
         @yield('content')
         @if( Auth::check() )
+
+
+        <item-detail></item-detail>
         <new-build></new-build>
         <new-exemption-from-match></new-exemption-from-match>
         <reset-password></reset-password>

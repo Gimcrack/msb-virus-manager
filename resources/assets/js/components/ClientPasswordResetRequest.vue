@@ -78,7 +78,7 @@
             listen() {
                 Bus.$on('ShowClientPasswordResetForm', (event) => {
                     this.resetForm();
-                    if ( !! event.clients ) this.client = event.clients.map(o => o.model.name).join('\n');
+                    if ( !!event && !! event.clients ) this.client = event.clients.map(o => o.model.name).join('\n');
                     this.show();
                 })
             },

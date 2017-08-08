@@ -265,6 +265,17 @@ class MatchedFileTest extends TestCase
         $this->assertJsonCount(5);
     }
 
+    /** @test */
+    function a_single_matched_file_can_be_fetched()
+    {
+        $file = factory(MatchedFile::class)->create();
+
+        $this
+            ->get("/api/v1/matches/{$file->id}")
+            ->response()
+                ->assertStatus(200)
+                ->assertJson(['file' => $file->file]);
+    }
 
     
 }
