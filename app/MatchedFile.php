@@ -31,6 +31,8 @@ class MatchedFile extends Model
         'acknowledged_flag' => 'bool',
     ];
 
+    protected $dateFormat = 'Y-m-d H:i:s';
+
     /**
      * A MatchedFile belongs to a Client
      * @method client
@@ -62,7 +64,7 @@ class MatchedFile extends Model
     public function incrementMatch()
     {
         $this->increment('times_matched');
-        
+
         if ( ! $this->muted_flag ) {
             $this->acknowledged_flag = 0;
             $this->save();
@@ -85,7 +87,7 @@ class MatchedFile extends Model
         if ( ! $this->muted_flag)
             event(new MatchedFileWasUpdated($this));
 
-        if ( ! static::whereAcknowledgedFlag(0)->count() ) 
+        if ( ! static::whereAcknowledgedFlag(0)->count() )
             event(new AllMatchedFilesAcknowledged);
 
         return $this;
@@ -139,7 +141,7 @@ class MatchedFile extends Model
     {
         $f = static::firstOrNew( [
             'client_id' => $client->id,
-            'file' => $params['file'],            
+            'file' => $params['file'],
             'pattern_id' => $params['pattern_id'],
         ], [
             'file_created_at' => $params['file_created_at'],
