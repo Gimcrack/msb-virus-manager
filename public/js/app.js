@@ -59889,7 +59889,7 @@ exports.push([module.i, "\n.reset-password {\n  width: 600px;\n  min-height: 400
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(3)();
-exports.push([module.i, "\n.heartbeat-status {\n  border-radius: 50%;\n  height: 15px;\n  width: 15px;\n  margin-top: 5px;\n}\n.heartbeat-status.success {\n    background: #2ab27b;\n}\n.heartbeat-status.warning {\n    background: #cbb956;\n}\n.heartbeat-status.danger {\n    background: #bf5329;\n}\n", ""]);
+exports.push([module.i, "\n.heartbeat-status {\n  border-radius: 50%;\n  height: 15px;\n  width: 15px;\n  margin-top: 5px;\n  outline: none !important;\n}\n.heartbeat-status.success {\n    background: #2ab27b;\n}\n.heartbeat-status.warning {\n    background: #cbb956;\n}\n.heartbeat-status.danger {\n    background: #bf5329;\n}\n", ""]);
 
 /***/ }),
 /* 258 */

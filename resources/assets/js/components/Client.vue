@@ -1,5 +1,5 @@
 <template>
-    <item 
+    <item
         :id="model.id"
         :deleting="deleting"
         :updating="updating"
@@ -17,8 +17,8 @@
         <td><button @click.prevent="requestHeartbeat" class="heartbeat-status" :class="[ model.heartbeat_status ]"></button> {{ heartbeat }}</td>
 
         <template slot="menu">
-            <button @click.prevent="scanClient" :disabled="busy" class="btn btn-success btn-xs btn-outline" :class="{disabled : busy}"> 
-                <i :class="[ 'fa-bug', {'fa-spin' : updating}]" class="fa fa-fw"></i> 
+            <button @click.prevent="scanClient" :disabled="busy" class="btn btn-success btn-xs btn-outline" :class="{disabled : busy}">
+                <i :class="[ 'fa-bug', {'fa-spin' : updating}]" class="fa fa-fw"></i>
             </button>
         </template>
     </item>
@@ -48,7 +48,7 @@
             },
 
             os() {
-                return (this.model.os || '').replace('Microsoft Windows',''); 
+                return (this.model.os || '').replace('Microsoft Windows','');
             }
         },
 
@@ -82,14 +82,14 @@
             heartbeatEvent(event) {
                 this.updatedEvent(event,true);
             },
-            
+
             upgradedEvent(event) {
                 Bus.$emit('ShouldFetchAgentBuild');
             },
 
             requestHeartbeat() {
                 Api.get(`clients/${this.model.name}/marco`);
-            },  
+            },
 
             scanClient() {
                 this.updating = true;
@@ -126,6 +126,8 @@
         height: 15px;
         width: 15px;
         margin-top: 5px;
+
+        outline: none !important;
 
         &.success {
             background: $brand-success;
