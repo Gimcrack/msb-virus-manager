@@ -47,6 +47,10 @@ class Client extends Model
         'scanned_files_current' => 'int'
     ];
 
+    protected $with = [
+        'password_reset'
+    ];
+
     /**
      * Set the name attribute
      * @method setNameAttribute
@@ -187,7 +191,7 @@ class Client extends Model
 
         if ( ! $v ) return null;
 
-         return  
+         return
             collect( explode('.',$v) )
                 ->transform( function($part) {
                     return 1 * $part;
