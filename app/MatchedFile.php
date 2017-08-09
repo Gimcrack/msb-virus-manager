@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Log;
 use App\Events\MatchedFileWasMuted;
 use App\Events\MatchedFileWasCreated;
 use App\Events\MatchedFileWasUnmuted;
@@ -30,8 +31,6 @@ class MatchedFile extends Model
         'muted_flag' => 'bool',
         'acknowledged_flag' => 'bool',
     ];
-
-    protected $dateFormat = 'Y-m-d H:i:s';
 
     /**
      * A MatchedFile belongs to a Client
@@ -139,6 +138,9 @@ class MatchedFile extends Model
      */
     public static function createOrIncrement(Client $client, $params)
     {
+
+        Log::debug($params);
+
         $f = static::firstOrNew( [
             'client_id' => $client->id,
             'file' => $params['file'],
