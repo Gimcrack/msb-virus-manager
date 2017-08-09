@@ -53280,8 +53280,10 @@ window.Bus = new Vue();
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_localstorage___default.a, { name: 'ls' });
 
-window.Store = new Vue();
+var Store = new Vue();
 Store.$ls.addProperty('viewChat', Boolean, true);
+
+window.Store = Store;
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

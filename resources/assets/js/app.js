@@ -14,8 +14,10 @@ window.Bus = new Vue();
 import VueLocalStorage from 'vue-localstorage'
 Vue.use( VueLocalStorage, { name : 'ls'} );
 
-window.Store = new Vue();
+var Store = new Vue();
 Store.$ls.addProperty('viewChat',Boolean,true);
+
+window.Store = Store;
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
