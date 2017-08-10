@@ -11,7 +11,7 @@
                     <i class="fa fa-fw fa-refresh fa-spin fa-5x"></i>
                 </div>
             <div ref="body" class="panel-body">
-                
+
                 <template v-if="models.length">
                     <chat v-for="chat in sorted_models" :key="chat.id" :model="chat"></chat>
 
@@ -60,13 +60,13 @@
                 models : this.getInitialState(),
                 busy : false,
                 message : '',
-                show : true,
+                show : Store.$ls.get('viewChat',true),
                 other_typing_name : [],
                 channel : null,
                 here: []
             }
         },
-        
+
         methods: {
             listen() {
                 this.channel = Echo.join('chat');
@@ -136,7 +136,7 @@
                 this.busy = true;
 
                 Api.get( 'chat' )
-                    .then( this.success, this.error ) 
+                    .then( this.success, this.error )
             },
 
             send() {
@@ -155,12 +155,12 @@
             success({data}) {
                 this.busy = false;
                 sleep(3000).then( () => {
-                    this.$refs.input.focus(); 
+                    this.$refs.input.focus();
                 });
                 this.models = data;
                 this.scroll();
 
-                
+
             },
 
             sendSuccess() {
@@ -258,7 +258,7 @@
 
         .spinner {
             position: absolute;
-            
+
             left: 0;
             top: 43px;
             right: 0;

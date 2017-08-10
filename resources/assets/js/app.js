@@ -11,6 +11,14 @@ window.Vue = require('vue');
 
 window.Bus = new Vue();
 
+import VueLocalStorage from 'vue-localstorage'
+Vue.use( VueLocalStorage, { name : 'ls'} );
+
+var Store = new Vue();
+Store.$ls.addProperty('viewChat',Boolean,true);
+
+window.Store = Store;
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -77,7 +85,7 @@ window.flash = {
 
 window.mouseDown = false;
 
-document.body.onmousedown = function(evt) { 
+document.body.onmousedown = function(evt) {
     if (evt.button == 0);
         mouseDown = true;
 }

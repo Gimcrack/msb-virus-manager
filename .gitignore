@@ -13,3 +13,4 @@ redis-subscribe.log
 .gitignore
 storage/debugbar/
 worker.log
+
