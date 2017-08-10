@@ -175,6 +175,7 @@
 
             toggle() {
                 this.show = ! this.show;
+                Store.$ls.set('viewChat',this.show);
             }
         }
     }

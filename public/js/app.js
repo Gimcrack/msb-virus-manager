@@ -54462,6 +54462,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         toggle: function toggle() {
             this.show = !this.show;
+            Store.$ls.set('viewChat', this.show);
         }
     }
 });
