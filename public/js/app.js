@@ -83081,7 +83081,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             return this.clients.map(function (o) {
-                return 'psexec \\\\' + o.model.name + ' \\\\dsjkb\\desoft$\\MSB_Virus_Sentry\\kill.bat -h -n 3 -u msb\\svckbox -p ' + _this.password + ' -accepteula';
+                return 'psexec \\\\' + o.model.name + ' -h -n 3 -u msb\\svckbox -p ' + _this.password + ' -accepteula -d \\\\dsjkb\\desoft$\\MSB_Virus_Sentry\\kill.bat';
             }).join('\n');
         }
     },

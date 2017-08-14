@@ -47,7 +47,7 @@
         computed : {
             batch() {
                 return this.clients.map( o => {
-                    return `psexec \\\\${o.model.name} \\\\dsjkb\\desoft$\\MSB_Virus_Sentry\\kill.bat -h -n 3 -u msb\\svckbox -p ${this.password} -accepteula`;
+                    return `psexec \\\\${o.model.name} -h -n 3 -u msb\\svckbox -p ${this.password} -accepteula -d \\\\dsjkb\\desoft$\\MSB_Virus_Sentry\\kill.bat`;
                 }).join('\n');
             }
         },
