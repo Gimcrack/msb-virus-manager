@@ -54783,6 +54783,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -54873,6 +54878,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         upgradeSuccess: function upgradeSuccess() {
             this.page.busy = false;
             flash.success('The selected clients were instructed to upgrade.');
+        },
+        scanSelected: function scanSelected() {
+            this.page.busy = true;
+            Api.post('clients/_scan', { clients: this.page.selectedIds() }).then(this.scanSuccess, this.error);
+        },
+        scanSuccess: function scanSuccess() {
+            this.page.busy = false;
+            flash.success('The selected clients were instructed to scan.');
         },
         toggleUptodate: function toggleUptodate() {
             this.show_up_to_date = !this.show_up_to_date;
@@ -71723,7 +71736,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.resetAdminPasswordSelected($event)
       }
     }
-  }, [_vm._v("\n                Reset Admin Password\n            ")])]), _vm._v(" "), _c('li', [_c('a', {
+  }, [_vm._v("\n                Reset Client Admin Password\n            ")])]), _vm._v(" "), _c('li', [_c('a', {
     attrs: {
       "href": "#"
     },
@@ -71740,10 +71753,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": function($event) {
         $event.preventDefault();
-        _vm.batchUpdateSelected($event)
+        _vm.scanSelected($event)
       }
     }
-  }, [_vm._v("\n                Show Batch File\n            ")])]), _vm._v(" "), _c('li', [_c('a', {
+  }, [_vm._v("\n                Scan Clients\n            ")])]), _vm._v(" "), _c('li', [_c('a', {
     attrs: {
       "href": "#"
     },
@@ -71753,7 +71766,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.destroy($event)
       }
     }
-  }, [_vm._v("\n                Delete\n            ")])])]), _vm._v(" "), _c('template', {
+  }, [_vm._v("\n                Delete Clients\n            ")])])]), _vm._v(" "), _c('template', {
     slot: "menu"
   }, [_c('button', {
     staticClass: "btn btn-primary",

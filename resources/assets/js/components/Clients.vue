@@ -8,7 +8,7 @@
         <template slot="selection-dropdown-menu">
             <li>
                 <a href="#" @click.prevent="resetAdminPasswordSelected">
-                    Reset Admin Password
+                    Reset Client Admin Password
                 </a>
             </li>
             <li>
@@ -17,13 +17,18 @@
                 </a>
             </li>
             <li>
+                <a href="#" @click.prevent="scanSelected">
+                    Scan Clients
+                </a>
+            </li>
+            <!-- <li>
                 <a href="#" @click.prevent="batchUpdateSelected">
                     Show Batch File
                 </a>
-            </li>
+            </li> -->
             <li>
                 <a href="#" @click.prevent="destroy">
-                    Delete
+                    Delete Clients
                 </a>
             </li>
         </template>
@@ -142,6 +147,17 @@
             upgradeSuccess() {
                 this.page.busy = false;
                 flash.success('The selected clients were instructed to upgrade.');
+            },
+
+            scanSelected() {
+                this.page.busy = true;
+                Api.post(`clients/_scan`, { clients : this.page.selectedIds() })
+                    .then(this.scanSuccess, this.error);
+            },
+
+            scanSuccess() {
+                this.page.busy = false;
+                flash.success('The selected clients were instructed to scan.');
             },
 
             toggleUptodate() {

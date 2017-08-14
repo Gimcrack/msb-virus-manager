@@ -250,6 +250,24 @@ class ClientTest extends TestCase
     }
 
     /** @test */
+    function multiple_clients_can_be_told_to_scan_by_an_admin_via_an_event()
+    {
+        $this->disableExceptionHandling();
+
+        $client1 = factory(Client::class)->create();
+        $client2 = factory(Client::class)->create();
+
+        $this
+            ->actingAsAdmin()
+            ->post("api/v1/clients/_scan", [
+                "clients" => [ $client1->id, $client2->id ]
+            ]);
+
+        $this->assertEvent(ClientShouldScan::class, ['client' => $client1]);
+        $this->assertEvent(ClientShouldScan::class, ['client' => $client2]);
+    }
+
+    /** @test */
     function an_event_is_fired_after_a_client_is_upgraded()
     {
         $this->disableExceptionHandling();

@@ -82,6 +82,25 @@ class ClientController extends Controller
     }
 
     /**
+     * Instruct the selected clients to scan
+     * @method scanMany
+     *
+     * @return   App\Client
+     */
+    public function scanMany(Client $client)
+    {
+        $this->validate( request(), [
+            'clients' => 'required|array'
+        ]);
+
+        Client::find(request('clients'))
+            ->each
+            ->scan();
+
+        return response()->json([], 202);
+    }
+
+    /**
      * Store a client with the given name
      * @method store
      *
