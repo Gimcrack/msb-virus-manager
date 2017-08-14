@@ -1,5 +1,5 @@
 export default {
-    
+
     data() {
         return {
             busy : false,
@@ -39,12 +39,16 @@ export default {
 
     methods : {
 
+        selectedIds() {
+            return this.toggled.map( o => o.model.id );
+        },
+
         fetch() {
             if ( !! this.preFetch )
                 this.preFetch();
 
             Api.get( this.params.endpoint )
-                .then( this.success, this.error ) 
+                .then( this.success, this.error )
         },
 
         success(response) {
@@ -159,11 +163,11 @@ export default {
 
             for ( let prop in model )
             {
-                if ( typeof model[prop] === "string" ) 
+                if ( typeof model[prop] === "string" )
                 {
-                    if ( model[prop].toLowerCase().indexOf( this.search.toLowerCase() ) !== -1 ) return true;    
+                    if ( model[prop].toLowerCase().indexOf( this.search.toLowerCase() ) !== -1 ) return true;
                 }
-                else 
+                else
                 {
                     if ( this.searchModel( model[prop] ) ) return true;
                 }

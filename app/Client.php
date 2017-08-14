@@ -5,10 +5,12 @@ namespace App;
 use Carbon\Carbon;
 use App\MatchedFile;
 use App\ClientPasswordReset;
+use App\Events\ClientShouldScan;
 use App\Events\ClientWasCreated;
 use App\Events\ClientWasUpdated;
 use App\Events\ClientWasDestroyed;
 use App\Events\ClientSentHeartbeat;
+use App\Events\ClientShouldUpgrade;
 use Illuminate\Database\Eloquent\Model;
 use App\Events\ClientShouldSendHeartbeat;
 
@@ -169,6 +171,28 @@ class Client extends Model
     public function requestHeartbeat()
     {
         event( new ClientShouldSendHeartbeat($this) );
+    }
+
+    /**
+     * Perform a scan on the client
+     * @method scan
+     *
+     * @return   void
+     */
+    public function scan()
+    {
+        event( new ClientShouldScan($this));
+    }
+
+    /**
+     * Perform an upgrade on the client
+     * @method upgrade
+     *
+     * @return   void
+     */
+    public function upgrade()
+    {
+        event( new ClientShouldUpgrade($this));
     }
 
     /**

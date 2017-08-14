@@ -34,7 +34,7 @@ class ClientTest extends TestCase
             'name' => 'test-computer-name',
             'version' => '1.0.1.0'
         ])
-        
+
         // response assertions
         ->response()
             ->assertStatus(201)
@@ -60,7 +60,7 @@ class ClientTest extends TestCase
             'name' => 'test-computer-name',
             'version' => '1.0.1.0'
         ])
-        
+
         // response assertions
         ->response()
             ->assertStatus(202)
@@ -90,7 +90,7 @@ class ClientTest extends TestCase
             'version' => '1.0.1.0',
             'os' => 'Windows 10'
         ])
-        
+
         // response assertions
         ->response()
             ->assertStatus(202)
@@ -112,7 +112,7 @@ class ClientTest extends TestCase
             // act
             $this->post("/api/v1/clients/{$clientName}", [
                 'version' => '1.0.1.0'
-            ]);   
+            ]);
         }
 
         catch( MethodNotAllowedHttpException $e)
@@ -174,14 +174,14 @@ class ClientTest extends TestCase
         ->response()
             ->assertStatus(202);
 
-        $this->assertTrue( $client->fresh()->heartbeat_at->gt($original_timestamp) );   
+        $this->assertTrue( $client->fresh()->heartbeat_at->gt($original_timestamp) );
     }
 
     /** @test */
     function a_client_can_be_instructed_to_request_a_heartbeat()
     {
         $this->disableExceptionHandling();
-        
+
         $client = factory(Client::class)->create();
 
         // act
@@ -232,10 +232,28 @@ class ClientTest extends TestCase
     }
 
     /** @test */
+    function multiple_clients_can_be_told_to_upgrade_by_an_admin_via_an_event()
+    {
+        $this->disableExceptionHandling();
+
+        $client1 = factory(Client::class)->create();
+        $client2 = factory(Client::class)->create();
+
+        $this
+            ->actingAsAdmin()
+            ->post("api/v1/clients/_upgrade", [
+                "clients" => [ $client1->id, $client2->id ]
+            ]);
+
+        $this->assertEvent(ClientShouldUpgrade::class, ['client' => $client1]);
+        $this->assertEvent(ClientShouldUpgrade::class, ['client' => $client2]);
+    }
+
+    /** @test */
     function an_event_is_fired_after_a_client_is_upgraded()
     {
         $this->disableExceptionHandling();
-        
+
         $client = factory(Client::class)->create(['version' => '1.0.0']);
 
         $this->assertDatabaseHas('clients', [
@@ -297,13 +315,13 @@ class ClientTest extends TestCase
             ->assertStatus(202);
 
         $this->assertFalse( $client->exists() );
-    } 
+    }
 
     /** @test */
      function clients_can_be_mass_deleted_by_an_admin()
      {
         $this->disableExceptionHandling();
-        
+
          $clients = factory(Client::class, 5)->create();
 
          $this->actingAsAdmin()
@@ -315,7 +333,7 @@ class ClientTest extends TestCase
             ->assertStatus(202);
 
         $this->assertEquals(0, Client::count());
-     } 
+     }
 
     /** @test */
     function a_clients_scanned_file_count_can_be_updated()
@@ -331,7 +349,7 @@ class ClientTest extends TestCase
         $this->assertDatabaseHas('clients',[
             'scanned_files_count' => 123456
         ]);
-    } 
+    }
 
     /** @test */
     function a_clients_current_scanned_file_count_can_be_updated()
@@ -363,5 +381,5 @@ class ClientTest extends TestCase
             ->assertStatus(200)
             ->assertJsonFragment(['version' => '1.0.3.0']);
     }
-    
+
 }

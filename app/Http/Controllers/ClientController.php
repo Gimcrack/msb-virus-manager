@@ -40,13 +40,32 @@ class ClientController extends Controller
      * Instruct the client to upgrade
      * @method upgrade
      *
-     * @return   App\Client
+     * @return   response
      */
     public function upgrade(Client $client)
     {
-        event( new ClientShouldUpgrade($client));
+        $client->upgrade();
 
         return response()->json( [], 202);
+    }
+
+    /**
+     * Instruct the selected clients to upgrade
+     * @method upgradeMany
+     *
+     * @return   response
+     */
+    public function upgradeMany()
+    {
+        $this->validate( request(), [
+            'clients' => 'required|array'
+        ]);
+
+        Client::find(request('clients'))
+            ->each
+            ->upgrade();
+
+        return response()->json([], 202);
     }
 
     /**
@@ -57,7 +76,7 @@ class ClientController extends Controller
      */
     public function scan(Client $client)
     {
-        event( new ClientShouldScan($client));
+        $client->scan();
 
         return response()->json( [], 202);
     }
@@ -76,10 +95,10 @@ class ClientController extends Controller
 
         $exists = !! Client::whereName(strtolower($name))->first();
 
-        return response()->json(Client::updateOrCreate([ 
+        return response()->json(Client::updateOrCreate([
             'name' => strtolower($name),
-        ], 
-        [ 
+        ],
+        [
             'version' => request('version'),
             'os' => request('os')
         ]), $exists ? 202 : 201);
@@ -181,9 +200,11 @@ class ClientController extends Controller
      */
     public function destroyMany()
     {
-        $ids = request('clients');
+        $this->validate( request(), [
+            'clients' => 'required|array'
+        ]);
 
-        Client::find($ids)->each->delete();
+        Client::find(request('clients'))->each->delete();
 
         return response()->json([],202);
     }

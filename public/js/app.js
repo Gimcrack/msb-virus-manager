@@ -54772,6 +54772,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -54846,19 +54851,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(this.performDestroy, this.ignore);
         },
         performDestroy: function performDestroy() {
-
             this.page.busy = true;
-            Api.post('clients/_delete', { clients: this.page.toggled.map(function (o) {
-                    return o.model.id;
-                }) }).then(this.deleteSuccess, this.error);
+            Api.post('clients/_delete', { clients: this.page.selectedIds() }).then(this.deleteSuccess, this.error);
         },
         deleteSuccess: function deleteSuccess(response) {
             this.page.busy = false;
         },
+        upgradeSelected: function upgradeSelected() {
+            this.page.busy = true;
+            Api.post('clients/_upgrade', { clients: this.page.selectedIds() }).then(this.upgradeSuccess, this.error);
+        },
+        upgradeSuccess: function upgradeSuccess() {
+            this.page.busy = false;
+            flash.success('The selected clients were instructed to upgrade.');
+        },
         toggleUptodate: function toggleUptodate() {
             this.show_up_to_date = !this.show_up_to_date;
 
-            this.details.reject = this.show_up_to_date ? { placeholder: 'some-nonsense-value' } : { version: this.current_version };
+            this.details.reject = this.show_up_to_date ? {
+                placeholder: 'some-nonsense-value' // this is required or the reject filter won't work
+            } : {
+                version: this.current_version
+            };
         }
     }
 });
@@ -57153,6 +57167,11 @@ window.mixins = {
     },
 
     methods: {
+        selectedIds: function selectedIds() {
+            return this.toggled.map(function (o) {
+                return o.model.id;
+            });
+        },
         fetch: function fetch() {
             if (!!this.preFetch) this.preFetch();
 
@@ -71691,6 +71710,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }
   }, [_vm._v("\n                Reset Admin Password\n            ")])]), _vm._v(" "), _c('li', [_c('a', {
+    attrs: {
+      "href": "#"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.upgradeSelected($event)
+      }
+    }
+  }, [_vm._v("\n                Upgrade Clients\n            ")])]), _vm._v(" "), _c('li', [_c('a', {
     attrs: {
       "href": "#"
     },

@@ -2,6 +2,7 @@
 
 namespace App;
 
+
 use App\Events\ChatMessageReceived;
 use Illuminate\Database\Eloquent\Model;
 

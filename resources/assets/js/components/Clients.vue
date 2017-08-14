@@ -12,6 +12,11 @@
                 </a>
             </li>
             <li>
+                <a href="#" @click.prevent="upgradeSelected">
+                    Upgrade Clients
+                </a>
+            </li>
+            <li>
                 <a href="#" @click.prevent="destroy">
                     Delete
                 </a>
@@ -110,9 +115,8 @@
             },
 
             performDestroy() {
-                
                 this.page.busy = true;
-                Api.post(`clients/_delete`, { clients : this.page.toggled.map(o => o.model.id) })
+                Api.post(`clients/_delete`, { clients : this.page.selectedIds() })
                     .then(this.deleteSuccess, this.error);
             },
 
@@ -120,10 +124,25 @@
                 this.page.busy = false;
             },
 
+            upgradeSelected() {
+                this.page.busy = true;
+                Api.post(`clients/_upgrade`, { clients : this.page.selectedIds() })
+                    .then(this.upgradeSuccess, this.error);
+            },
+
+            upgradeSuccess() {
+                this.page.busy = false;
+                flash.success('The selected clients were instructed to upgrade.');
+            },
+
             toggleUptodate() {
                 this.show_up_to_date = ! this.show_up_to_date;
 
-                this.details.reject =  ( this.show_up_to_date ) ? { placeholder : 'some-nonsense-value' } : { version : this.current_version };
+                this.details.reject =  ( this.show_up_to_date ) ? {
+                    placeholder : 'some-nonsense-value' // this is required or the reject filter won't work
+                } : {
+                    version : this.current_version
+                };
             }
         },
     }

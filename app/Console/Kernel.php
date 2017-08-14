@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\ScanAllClients;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,7 +14,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\RedisSubscribe::class
+        ScanAllClients::class,
     ];
 
     /**
@@ -24,8 +25,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule
+            ->command(ScanAllClients::class)
+            ->cron('0 2 * * 6'); //  Saturdays at 2am
     }
 
     /**

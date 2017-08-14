@@ -29,6 +29,7 @@ Route::delete('patterns/{pattern}', 'PatternController@destroy');
 Route::post('patterns/{pattern}/unpublish', 'PatternController@unpublish');
 Route::post('patterns/{pattern}/publish', 'PatternController@publish');
 
+Route::post('clients/_upgrade', 'ClientController@upgradeMany');
 Route::post('clients/_delete','ClientController@destroyMany');
 Route::delete('clients/{client}', 'ClientController@destroy');
 Route::post('clients/{client}/matches/{match}/mute', 'ClientMatchedFilesController@mute');
