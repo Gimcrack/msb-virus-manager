@@ -83058,6 +83058,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -83066,6 +83070,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             visible: false,
+            password: null,
             clients: []
         };
     },
@@ -83073,20 +83078,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     computed: {
         batch: function batch() {
+            var _this = this;
+
             return this.clients.map(function (o) {
-                return 'psexec \\\\' + o.model.name + ' \\\\dsjkb\\desoft$\\MSB_Virus_Sentry\\kill.bat -h -n 3 -u msb\\svckbox -p [password] -accepteula';
+                return 'psexec \\\\' + o.model.name + ' \\\\dsjkb\\desoft$\\MSB_Virus_Sentry\\kill.bat -h -n 3 -u msb\\svckbox -p ' + _this.password + ' -accepteula';
             }).join('\n');
         }
     },
 
     methods: {
         listen: function listen() {
-            var _this = this;
+            var _this2 = this;
 
             Bus.$on('BatchUpdateSelected', function (event) {
-                _this.resetForm();
-                if (!!event && !!event.clients) _this.clients = event.clients;
-                _this.show();
+                _this2.resetForm();
+                if (!!event && !!event.clients) _this2.clients = event.clients;
+                _this2.show();
             });
         },
         show: function show() {
@@ -83098,6 +83105,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         resetForm: function resetForm() {
             this.busy = false;
+            this.password = null;
             this.clients = [];
         },
         submit: function submit() {
@@ -83218,6 +83226,30 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._m(0), _vm._v(" "), _c('div', {
     staticClass: "panel-body"
   }, [_c('p', [_c('label', {
+    attrs: {
+      "for": "password"
+    }
+  }, [_vm._v("Password")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.password),
+      expression: "password"
+    }],
+    staticClass: "form-control full",
+    attrs: {
+      "type": "password"
+    },
+    domProps: {
+      "value": (_vm.password)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.password = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('p', [_c('label', {
     attrs: {
       "for": "clients"
     }

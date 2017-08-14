@@ -11,6 +11,10 @@
                     </div>
                     <div class="panel-body">
                         <p>
+                            <label for="password">Password</label>
+                            <input type="password" v-model="password" class="form-control full">
+                        </p>
+                        <p>
                             <label for="clients">Batch File</label>
                             <textarea id="clients" rows="6" v-model="batch" class="form-control full"></textarea>
                         </p>
@@ -35,6 +39,7 @@
         data() {
             return {
                 visible : false,
+                password : null,
                 clients : []
             }
         },
@@ -42,7 +47,7 @@
         computed : {
             batch() {
                 return this.clients.map( o => {
-                    return `psexec \\\\${o.model.name} \\\\dsjkb\\desoft$\\MSB_Virus_Sentry\\kill.bat -h -n 3 -u msb\\svckbox -p [password] -accepteula`;
+                    return `psexec \\\\${o.model.name} \\\\dsjkb\\desoft$\\MSB_Virus_Sentry\\kill.bat -h -n 3 -u msb\\svckbox -p ${this.password} -accepteula`;
                 }).join('\n');
             }
         },
@@ -67,6 +72,7 @@
 
             resetForm() {
                 this.busy = false;
+                this.password = null;
                 this.clients = [];
             },
 
