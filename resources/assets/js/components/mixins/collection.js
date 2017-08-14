@@ -43,6 +43,10 @@ export default {
             return this.toggled.map( o => o.model.id );
         },
 
+        selectedNames() {
+            return this.toggled.map( o => o.model.name );
+        },
+
         fetch() {
             if ( !! this.preFetch )
                 this.preFetch();

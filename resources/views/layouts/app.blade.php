@@ -33,6 +33,7 @@
         <new-exemption-from-match></new-exemption-from-match>
         <reset-password></reset-password>
         <client-password-reset-request></client-password-reset-request>
+        <batch-update-selected></batch-update-selected>
         <chats :user="{{ Auth::user()->toJson() }}"></chats>
         <flash message="{{ session('flash') }}"></flash>
         @endif

@@ -17,6 +17,11 @@
                 </a>
             </li>
             <li>
+                <a href="#" @click.prevent="batchUpdateSelected">
+                    Show Batch File
+                </a>
+            </li>
+            <li>
                 <a href="#" @click.prevent="destroy">
                     Delete
                 </a>
@@ -100,6 +105,10 @@
 
             deleteSelected() {
                 Bus.$emit('DeleteSelected', { model : 'client', clients : this.page.toggled });
+            },
+
+            batchUpdateSelected() {
+                Bus.$emit('BatchUpdateSelected', { clients : this.page.toggled });
             },
 
             destroy() {

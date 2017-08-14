@@ -53301,6 +53301,7 @@ Vue.component('newBuild', __webpack_require__(354));
 Vue.component('newExemptionFromMatch', __webpack_require__(355));
 Vue.component('resetPassword', __webpack_require__(360));
 Vue.component('clientPasswordResetRequest', __webpack_require__(338));
+Vue.component('batchUpdateSelected', __webpack_require__(435));
 Vue.component('agentBuildStatus', __webpack_require__(334));
 Vue.component('definitionsStatus', __webpack_require__(342));
 Vue.component('newFilesShortcut', __webpack_require__(356));
@@ -54777,6 +54778,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -54839,6 +54845,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         deleteSelected: function deleteSelected() {
             Bus.$emit('DeleteSelected', { model: 'client', clients: this.page.toggled });
+        },
+        batchUpdateSelected: function batchUpdateSelected() {
+            Bus.$emit('BatchUpdateSelected', { clients: this.page.toggled });
         },
         destroy: function destroy() {
             return swal({
@@ -57170,6 +57179,11 @@ window.mixins = {
         selectedIds: function selectedIds() {
             return this.toggled.map(function (o) {
                 return o.model.id;
+            });
+        },
+        selectedNames: function selectedNames() {
+            return this.toggled.map(function (o) {
+                return o.model.name;
             });
         },
         fetch: function fetch() {
@@ -71726,6 +71740,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": function($event) {
         $event.preventDefault();
+        _vm.batchUpdateSelected($event)
+      }
+    }
+  }, [_vm._v("\n                Show Batch File\n            ")])]), _vm._v(" "), _c('li', [_c('a', {
+    attrs: {
+      "href": "#"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
         _vm.destroy($event)
       }
     }
@@ -82999,6 +83023,287 @@ return index;
 
 })));
 
+
+/***/ }),
+/* 433 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    mounted: function mounted() {
+        this.listen();
+    },
+    data: function data() {
+        return {
+            visible: false,
+            clients: []
+        };
+    },
+
+
+    computed: {
+        batch: function batch() {
+            return this.clients.map(function (o) {
+                return 'psexec \\\\' + o.model.name + ' \\\\dsjkb\\desoft$\\MSB_Virus_Sentry\\kill.bat -h -n 3 -u msb\\svckbox -p [password] -accepteula';
+            }).join('\n');
+        }
+    },
+
+    methods: {
+        listen: function listen() {
+            var _this = this;
+
+            Bus.$on('BatchUpdateSelected', function (event) {
+                _this.resetForm();
+                if (!!event && !!event.clients) _this.clients = event.clients;
+                _this.show();
+            });
+        },
+        show: function show() {
+            this.visible = true;
+        },
+        cancel: function cancel() {
+            this.visible = false;
+            this.resetForm();
+        },
+        resetForm: function resetForm() {
+            this.busy = false;
+            this.clients = [];
+        },
+        submit: function submit() {
+            return swal({
+                title: 'Confirm Password Reset',
+                text: "Are you sure you want to reset the password on the selected client?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#bf5329",
+                confirmButtonText: 'Yes, reset the admin password.'
+            }).then(this.resetPassword, this.ignore);
+        },
+        route: function route() {
+            if (this.clients.length == 1) return this.resetPassword();
+
+            return this.resetMany();
+        },
+        resetPassword: function resetPassword() {
+            this.busy = true;
+
+            Api.post('clients/' + this.client + '/admin-password-reset', {
+                password: this.password,
+                password_confirmation: this.password_confirmation,
+                master_password: this.master_password
+            }).then(this.success, this.error);
+        },
+        resetMany: function resetMany() {
+            this.busy = true;
+
+            Api.post('admin-password-reset', {
+                clients: this.clients,
+                password: this.password,
+                password_confirmation: this.password_confirmation,
+                master_password: this.master_password
+            }).then(this.success, this.error);
+        },
+        ignore: function ignore() {},
+        success: function success() {
+            flash.success('Password Reset Requested');
+
+            this.busy = false;
+            this.visible = false;
+        },
+        error: function error(_error) {
+            var message = !!_error.response.data.password ? _error.response.data.password[0] : 'There was an error performing the operation. See the console for more details';
+            flash.error(message);
+            console.error(_error.response);
+
+            this.busy = false;
+        }
+    }
+
+});
+
+/***/ }),
+/* 434 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)();
+exports.push([module.i, "\n.batch-update-selected {\n  width: 600px;\n  min-height: 400px;\n}\n.batch-update-selected .panel-heading {\n  font-size: 24px;\n}\n.batch-update-selected .panel-footer {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: end;\n      -ms-flex-pack: end;\n          justify-content: flex-end;\n}\n.batch-update-selected .panel-body button {\n  font-weight: bold;\n}\n.batch-update-selected .partial-path-form {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n.batch-update-selected .partial-path-form input {\n  -webkit-box-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n}\n.batch-update-selected .partial-path-form * + * {\n  margin-left: 15px;\n}\n.batch-update-selected-wrapper {\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 1000;\n  height: 100vh;\n  width: 100vw;\n  background: rgba(0, 0, 0, 0.3);\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n", ""]);
+
+/***/ }),
+/* 435 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(437)
+
+var Component = __webpack_require__(2)(
+  /* script */
+  __webpack_require__(433),
+  /* template */
+  __webpack_require__(436),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\b\\Code\\msb-virus-manager\\resources\\assets\\js\\components\\BatchUpdateSelected.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] BatchUpdateSelected.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-d43200cc", Component.options)
+  } else {
+    hotAPI.reload("data-v-d43200cc", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 436 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return (_vm.visible) ? _c('div', {
+    staticClass: "batch-update-selected-wrapper"
+  }, [_c('form', {
+    on: {
+      "submit": function($event) {
+        $event.preventDefault();
+        _vm.submit($event)
+      }
+    }
+  }, [_c('div', {
+    staticClass: "batch-update-selected"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "panel-body"
+  }, [_c('p', [_c('label', {
+    attrs: {
+      "for": "clients"
+    }
+  }, [_vm._v("Batch File")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.batch),
+      expression: "batch"
+    }],
+    staticClass: "form-control full",
+    attrs: {
+      "id": "clients",
+      "rows": "6"
+    },
+    domProps: {
+      "value": (_vm.batch)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.batch = $event.target.value
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "panel-footer"
+  }, [_c('div', {
+    staticClass: "btn-group"
+  }, [_c('button', {
+    staticClass: "btn btn-success btn-outline",
+    class: {
+      disabled: _vm.busy
+    },
+    attrs: {
+      "disabled": _vm.busy,
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.cancel($event)
+      }
+    }
+  }, [_vm._v("OK")])])])])])])]) : _vm._e()
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "panel-heading"
+  }, [_c('span', {
+    staticClass: "text-success"
+  }, [_c('i', {
+    staticClass: "fa fa-fw fa-exclamation-circle"
+  }), _vm._v("\n                        Batch File To Update Selected Clients\n                    ")])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-d43200cc", module.exports)
+  }
+}
+
+/***/ }),
+/* 437 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(434);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(5)("025da11a", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-d43200cc\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/less-loader/index.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./BatchUpdateSelected.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-d43200cc\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/less-loader/index.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./BatchUpdateSelected.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);
