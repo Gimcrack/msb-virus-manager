@@ -29,7 +29,7 @@
                         created : 'DefinitionWasCreated',
                         destroyed : 'DefinitionWasDestroyed',
                         global : {
-                            ShouldFetchDefinitions: this.page.fetch
+                            ShouldFetchDefinitions: () => { this.page.fetch() }
                         }
                     }
                 },

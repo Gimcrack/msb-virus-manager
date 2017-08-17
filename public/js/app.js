@@ -55130,6 +55130,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
+        var _this = this;
+
         return {
             toggles: {
                 new: false
@@ -55147,7 +55149,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     created: 'DefinitionWasCreated',
                     destroyed: 'DefinitionWasDestroyed',
                     global: {
-                        ShouldFetchDefinitions: this.page.fetch
+                        ShouldFetchDefinitions: function ShouldFetchDefinitions() {
+                            _this.page.fetch();
+                        }
                     }
                 }
             }
