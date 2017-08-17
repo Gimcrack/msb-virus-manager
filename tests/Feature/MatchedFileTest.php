@@ -38,7 +38,7 @@ class MatchedFileTest extends TestCase
             'file_modified_at' => '2017-01-01 12:00:00',
             'file' => 'some_file'
         ])
-        
+
         // response assertions
         ->response()
             ->assertStatus(201);
@@ -68,7 +68,7 @@ class MatchedFileTest extends TestCase
             'file_created_at' => $now,
             'file' => 'some_file'
         ])
-        
+
         // response assertions
         ->response()
             ->assertStatus(201);
@@ -87,7 +87,7 @@ class MatchedFileTest extends TestCase
         ->assertDatabaseMissing('matched_files', [
             'file' => 'some_file'
         ])
-        
+
         // response assertions
         ->response()
             ->assertStatus(404);
@@ -110,7 +110,7 @@ class MatchedFileTest extends TestCase
         ->assertDatabaseMissing('matched_files', [
             'file' => 'some_file'
         ])
-        
+
         // response assertions
         ->response()
             ->assertStatus(422);
@@ -118,7 +118,7 @@ class MatchedFileTest extends TestCase
 
     /** @test */
     function a_matched_file_is_incremented_when_it_is_matched_again_by_the_same_client()
-    {   
+    {
         // given a matched file
         $file = factory(MatchedFile::class)->create();
         $now = Carbon::now()->format('Y-m-d H:i:s');
@@ -139,7 +139,7 @@ class MatchedFileTest extends TestCase
 
     /** @test */
     function a_matched_file_can_be_acknowledged_by_an_admin()
-    {   
+    {
         // given a matched file
         $file = factory(MatchedFile::class)->create();
 
@@ -157,9 +157,9 @@ class MatchedFileTest extends TestCase
 
     /** @test */
     function matched_file_can_be_simultaneously_acknowledged_by_an_admin()
-    {   
+    {
         $this->disableExceptionHandling();
-        
+
         // given a matched file
         $files = factory(MatchedFile::class,5)->create();
 
@@ -179,7 +179,7 @@ class MatchedFileTest extends TestCase
 
     /** @test */
     function a_matched_file_can_be_muted_by_an_admin()
-    {   
+    {
         // given a matched file
         $file = factory(MatchedFile::class)->create();
 
@@ -193,6 +193,26 @@ class MatchedFileTest extends TestCase
             ->assertStatus(202);
 
         $this->assertTrue( !! $file->fresh()->muted_flag );
+    }
+
+    /** @test */
+    function multiple_matched_files_can_be_muted_by_an_admin()
+    {
+        $this->disableExceptionHandling();
+
+        $file1 = factory(MatchedFile::class)->create();
+        $file2 = factory(MatchedFile::class)->create();
+
+        $this->actingAsAdmin()
+            ->post("/api/v1/matches/_mute", [
+                "matches" => [$file1->id, $file2->id]
+            ])
+
+            ->response()
+                ->assertStatus(202);
+
+        $this->assertTrue( !! $file1->fresh()->muted_flag );
+        $this->assertTrue( !! $file2->fresh()->muted_flag );
     }
 
     /** @test */
@@ -261,7 +281,7 @@ class MatchedFileTest extends TestCase
             ->get("/api/v1/matches")
             ->response()
                 ->assertStatus(200);
-        
+
         $this->assertJsonCount(5);
     }
 
@@ -277,5 +297,5 @@ class MatchedFileTest extends TestCase
                 ->assertJson(['file' => $file->file]);
     }
 
-    
+
 }

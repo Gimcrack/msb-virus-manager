@@ -42,4 +42,21 @@ class MatchedFileController extends Controller
 
         return response()->json( [], 202 );
     }
+
+    /**
+     * Mute the selected files
+     * @method mute
+     *
+     * @return   response
+     */
+    public function muteMany()
+    {
+        $this->validate( request(), [
+            'matches' => 'required|array'
+        ] );
+
+        MatchedFile::find( request('matches') )->each->mute();
+
+        return response()->json([], 202);
+    }
 }

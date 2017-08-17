@@ -6,6 +6,14 @@
         @created="created"
         @deleted="deleted"
     >
+        <template slot="selection-dropdown-menu">
+            <li>
+                <a href="#" @click.prevent="muteSelected">
+                    Mute Selected
+                </a>
+            </li>
+        </template>
+
         <template slot="menu">
             <button v-show="has_unacknowledged" :class="{ disabled : page.busy }" @click.prevent="ackAll" :disabled="page.busy" class="btn btn-success btn-outline">
                 <i class="fa fa-fw fa-check" :class="{'fa-spin' : page.busy}"></i>
@@ -88,6 +96,17 @@
         },
 
         methods : {
+
+            muteSelected() {
+                this.page.busy = true;
+                Api.post(`matches/_mute`, { matches : this.page.selectedIds() })
+                    .then(this.muteSuccess, this.error);
+            },
+
+            muteSuccess() {
+                this.page.busy = false;
+                flash.success('The matched files were muted');
+            },
 
             toggleMuted() {
                 this.show_muted = ! this.show_muted;

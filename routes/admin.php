@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post("matches/_mute", "MatchedFileController@muteMany");
+
 Route::post("builds",'ClientController@build');
 
 Route::get("users", "UserController@index");
