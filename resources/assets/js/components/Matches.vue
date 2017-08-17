@@ -12,6 +12,11 @@
                     Mute Selected
                 </a>
             </li>
+            <li>
+                <a href="#" @click.prevent="unmuteSelected">
+                    Unmute Selected
+                </a>
+            </li>
         </template>
 
         <template slot="menu">
@@ -106,6 +111,17 @@
             muteSuccess() {
                 this.page.busy = false;
                 flash.success('The matched files were muted');
+            },
+
+            unmuteSelected() {
+                this.page.busy = true;
+                Api.post(`matches/_unmute`, { matches : this.page.selectedIds() })
+                    .then(this.unmuteSuccess, this.error);
+            },
+
+            unmuteSuccess() {
+                this.page.busy = false;
+                flash.success('The matched files were unmuted');
             },
 
             toggleMuted() {

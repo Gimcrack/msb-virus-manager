@@ -59,4 +59,21 @@ class MatchedFileController extends Controller
 
         return response()->json([], 202);
     }
+
+    /**
+     * unmute the selected files
+     * @method unmute
+     *
+     * @return   response
+     */
+    public function unmuteMany()
+    {
+        $this->validate( request(), [
+            'matches' => 'required|array'
+        ] );
+
+        MatchedFile::find( request('matches') )->each->unmute();
+
+        return response()->json([], 202);
+    }
 }

@@ -216,6 +216,26 @@ class MatchedFileTest extends TestCase
     }
 
     /** @test */
+    function multiple_matched_files_can_be_unmuted_by_an_admin()
+    {
+        $this->disableExceptionHandling();
+
+        $file1 = factory(MatchedFile::class)->states('muted')->create();
+        $file2 = factory(MatchedFile::class)->states('muted')->create();
+
+        $this->actingAsAdmin()
+            ->post("/api/v1/matches/_unmute", [
+                "matches" => [$file1->id, $file2->id]
+            ])
+
+            ->response()
+                ->assertStatus(202);
+
+        $this->assertFalse( !! $file1->fresh()->muted_flag );
+        $this->assertFalse( !! $file2->fresh()->muted_flag );
+    }
+
+    /** @test */
     function a_muted_matched_file_can_be_unmuted_by_an_admin()
     {
         // given a matched file

@@ -56006,6 +56006,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mixins: [mixins.item],
@@ -56121,6 +56122,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -56189,6 +56195,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         muteSuccess: function muteSuccess() {
             this.page.busy = false;
             flash.success('The matched files were muted');
+        },
+        unmuteSelected: function unmuteSelected() {
+            this.page.busy = true;
+            Api.post('matches/_unmute', { matches: this.page.selectedIds() }).then(this.unmuteSuccess, this.error);
+        },
+        unmuteSuccess: function unmuteSuccess() {
+            this.page.busy = false;
+            flash.success('The matched files were unmuted');
         },
         toggleMuted: function toggleMuted() {
             this.show_muted = !this.show_muted;
@@ -71066,7 +71080,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "view": _vm.view,
       "update": _vm.update,
-      "destroy": _vm.destroy
+      "destroy": _vm.destroy,
+      "ToggledHasChanged": function($event) {
+        _vm.$emit('ToggledHasChanged')
+      }
     }
   }, [_c('td', {
     slot: "pre"
@@ -72015,7 +72032,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.muteSelected($event)
       }
     }
-  }, [_vm._v("\n                Mute Selected\n            ")])])]), _vm._v(" "), _c('template', {
+  }, [_vm._v("\n                Mute Selected\n            ")])]), _vm._v(" "), _c('li', [_c('a', {
+    attrs: {
+      "href": "#"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.unmuteSelected($event)
+      }
+    }
+  }, [_vm._v("\n                Unmute Selected\n            ")])])]), _vm._v(" "), _c('template', {
     slot: "menu"
   }, [_c('button', {
     directives: [{
