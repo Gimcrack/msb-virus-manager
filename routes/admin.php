@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 
 Route::post("matches/_mute", "MatchedFileController@muteMany");
 Route::post("matches/_unmute", "MatchedFileController@unmuteMany");
+Route::post("matches/_exempt", "MatchedFileController@exemptMany");
+Route::post("matches/_exempt/filename", "MatchedFileController@exemptManyByFilename");
 
 Route::post("builds",'ClientController@build');
 

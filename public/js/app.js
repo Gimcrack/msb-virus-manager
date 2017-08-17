@@ -56127,6 +56127,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -56203,6 +56213,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         unmuteSuccess: function unmuteSuccess() {
             this.page.busy = false;
             flash.success('The matched files were unmuted');
+        },
+        exemptSelectedFiles: function exemptSelectedFiles() {
+            this.page.busy = true;
+            Api.post('matches/_exempt', { matches: this.page.selectedIds() }).then(this.exemptSelectedFilesSuccess, this.error);
+        },
+        exemptSelectedFilesSuccess: function exemptSelectedFilesSuccess() {
+            this.page.busy = false;
+            flash.success('The matched files were exempted');
+        },
+        exemptSelectedFilenames: function exemptSelectedFilenames() {
+            this.page.busy = true;
+            Api.post('matches/_exempt/filename', { matches: this.page.selectedIds() }).then(this.exemptSelectedFilenamesSuccess, this.error);
+        },
+        exemptSelectedFilenamesSuccess: function exemptSelectedFilenamesSuccess() {
+            this.page.busy = false;
+            flash.success('The matched filenames were exempted');
         },
         toggleMuted: function toggleMuted() {
             this.show_muted = !this.show_muted;
@@ -72042,7 +72068,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.unmuteSelected($event)
       }
     }
-  }, [_vm._v("\n                Unmute Selected\n            ")])])]), _vm._v(" "), _c('template', {
+  }, [_vm._v("\n                Unmute Selected\n            ")])]), _vm._v(" "), _c('li', [_c('a', {
+    attrs: {
+      "href": "#"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.exemptSelectedFilenames($event)
+      }
+    }
+  }, [_vm._v("\n                Exempt Selected - Filenames\n            ")])]), _vm._v(" "), _c('li', [_c('a', {
+    attrs: {
+      "href": "#"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.exemptSelectedFiles($event)
+      }
+    }
+  }, [_vm._v("\n                Exempt Selected - Full Paths\n            ")])])]), _vm._v(" "), _c('template', {
     slot: "menu"
   }, [_c('button', {
     directives: [{

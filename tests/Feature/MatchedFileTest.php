@@ -293,6 +293,54 @@ class MatchedFileTest extends TestCase
     }
 
     /** @test */
+    function multiple_matched_files_can_be_exempted_by_filename()
+    {
+        $this->disableExceptionHandling();
+
+        $file1 = factory(MatchedFile::class)->create();
+        $file2 = factory(MatchedFile::class)->create();
+
+        $this
+            ->actingAsAdmin()
+            ->post("api/v1/matches/_exempt/filename", [
+                'matches' => [$file1->id, $file2->id]
+            ])
+
+        ->response()
+            ->assertStatus(202);
+
+        $this->assertDatabaseHas('exemptions', ['pattern' => $file1->filename]);
+        $this->assertDatabaseHas('exemptions', ['pattern' => $file2->filename]);
+
+        $this->assertTrue( $file1->fresh()->muted_flag );
+        $this->assertTrue( $file2->fresh()->muted_flag );
+    }
+
+    /** @test */
+    function multiple_matched_files_can_be_exempted_by_filepath()
+    {
+        $this->disableExceptionHandling();
+
+        $file1 = factory(MatchedFile::class)->create();
+        $file2 = factory(MatchedFile::class)->create();
+
+        $this
+            ->actingAsAdmin()
+            ->post("api/v1/matches/_exempt", [
+                'matches' => [$file1->id, $file2->id]
+            ])
+
+        ->response()
+            ->assertStatus(202);
+
+        $this->assertDatabaseHas('exemptions', ['pattern' => $file1->file]);
+        $this->assertDatabaseHas('exemptions', ['pattern' => $file2->file]);
+
+        $this->assertTrue( $file1->fresh()->muted_flag );
+        $this->assertTrue( $file2->fresh()->muted_flag );
+    }
+
+    /** @test */
     function a_list_of_matched_files_can_be_fetched()
     {
         factory(MatchedFile::class,5)->create();

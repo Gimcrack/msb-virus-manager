@@ -44,7 +44,7 @@ class ExemptionTest extends TestCase
 
     /** @test */
     function an_exemption_must_have_a_unique_pattern()
-    {   
+    {
         // given an exemption
         factory(Exemption::class)->create([
             'pattern' => 'some_pattern'
@@ -62,5 +62,15 @@ class ExemptionTest extends TestCase
         }
 
         $this->fail("Expected a query exception, but did not get one");
+    }
+
+    /** @test */
+    function an_exemption_can_be_created_from_a_pattern()
+    {
+        $ex = Exemption::createFromPattern("pattern");
+        $ex2 = Exemption::createFromPattern("pattern");
+
+        $this->assertEquals(1,Exemption::count());
+        $this->assertEquals('pattern',$ex->pattern);
     }
 }

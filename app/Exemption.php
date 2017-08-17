@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\MatchedFile;
 use App\Events\ExemptionWasCreated;
 use App\Events\ExemptionWasUpdated;
 use App\Events\ExemptionWasDestroyed;
@@ -22,7 +23,7 @@ class Exemption extends Model
     protected $casts = [
         'published_flag' => 'bool'
     ];
-    
+
     /**
      * Limit the scope to only published exemptions
      * @method scopePublished
@@ -54,5 +55,26 @@ class Exemption extends Model
     public function publish()
     {
         return $this->update(['published_flag' => 1]);
+    }
+
+    /**
+     * Create a new exemption from the specified pattern
+     * @method createFromPattern
+     *
+     * @return   self
+     */
+    public static function createFromPattern($pattern)
+    {
+        $ex = static::firstOrCreate(['pattern' => $pattern]);
+
+        MatchedFile::where('file',$ex->pattern)->get()->each->mute();
+
+        MatchedFile::where('file','like',"%{$ex->pattern}")->get()->each->mute();
+
+        MatchedFile::whereHas('pattern', function($query) use ($ex) {
+            return $query->where('name',$ex->pattern);
+        })->get()->each->mute();
+
+        return $ex->fresh();
     }
 }

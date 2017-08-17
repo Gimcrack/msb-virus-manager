@@ -157,4 +157,16 @@ class MatchedFile extends Model
 
         return $exists;
     }
+
+    /**
+     * Get the filename attribute
+     * @method getFilenameAttribute
+     *
+     * @return   string
+     */
+    public function getFilenameAttribute()
+    {
+        $exploded = explode("\\",$this->attributes['file']);
+        return array_pop($exploded);
+    }
 }

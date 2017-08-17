@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exemption;
 use App\MatchedFile;
 use Illuminate\Http\Request;
 
@@ -75,5 +76,43 @@ class MatchedFileController extends Controller
         MatchedFile::find( request('matches') )->each->unmute();
 
         return response()->json([], 202);
+    }
+
+    /**
+     * Exempt the selected matched files by file
+     * @method exemptMany
+     *
+     * @return   response
+     */
+    public function exemptMany()
+    {
+        $this->validate( request(), [
+            'matches' => 'required|array'
+        ]);
+
+        MatchedFile::find( request('matches') )->each( function($match) {
+            Exemption::createFromPattern($match->file);
+        });
+
+        return response()->json([],202);
+    }
+
+    /**
+     * Exempt the selected matched files by filename
+     * @method exemptManyByFilename
+     *
+     * @return   response
+     */
+    public function exemptManyByFilename()
+    {
+        $this->validate( request(), [
+            'matches' => 'required|array'
+        ]);
+
+        MatchedFile::find( request('matches') )->each( function($match) {
+            Exemption::createFromPattern($match->filename);
+        });
+
+        return response()->json([],202);
     }
 }

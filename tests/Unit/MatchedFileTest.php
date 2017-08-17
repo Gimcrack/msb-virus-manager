@@ -126,7 +126,7 @@ class MatchedFileTest extends TestCase
 
     /** @test */
     function a_matched_file_can_be_muted()
-    {   
+    {
         // given a matched file
         $matched_file = factory(MatchedFile::class)->create();
 
@@ -152,7 +152,7 @@ class MatchedFileTest extends TestCase
 
     /** @test */
     function a_muted_matched_file_can_be_unmuted()
-    {   
+    {
         // given a matched file
         $matched_file = factory(MatchedFile::class)->states('muted')->create();
 
@@ -164,8 +164,17 @@ class MatchedFileTest extends TestCase
     }
 
     /** @test */
+    function a_filename_can_be_retrieved_for_a_matched_file()
+    {
+        // given a matched file
+        $matched_file = factory(MatchedFile::class)->create(['file' => 'C:\testing\filename.txt']);
+
+        $this->assertEquals('filename.txt', $matched_file->filename);
+    }
+
+    /** @test */
     function an_event_is_dispatched_when_a_matched_file_is_muted()
-    {   
+    {
         $matched_file = factory(MatchedFile::class)->create();
 
         $matched_file->mute();
@@ -175,7 +184,7 @@ class MatchedFileTest extends TestCase
 
     /** @test */
     function an_event_is_dispatched_when_a_matched_file_is_unmuted()
-    {   
+    {
         $matched_file = factory(MatchedFile::class)->states('muted')->create();
 
         $matched_file->unmute();
@@ -193,7 +202,7 @@ class MatchedFileTest extends TestCase
 
     /** @test */
     function an_event_is_dispatched_when_a_matched_file_is_incremented()
-    {   
+    {
         // given a matched_file
         $matched_file = factory(MatchedFile::class)->create();
 
@@ -205,7 +214,7 @@ class MatchedFileTest extends TestCase
 
     /** @test */
     function an_event_is_not_dispatched_when_a_muted_matched_file_is_incremented()
-    {   
+    {
         // given a muted matched_file
         $matched_file = factory(MatchedFile::class)->states('muted')->create();
 
@@ -228,17 +237,17 @@ class MatchedFileTest extends TestCase
         $matched_file = factory(MatchedFile::class)->create();
 
         // assert that a notification was sent to the admin
-        $this->assertNotification( 
+        $this->assertNotification(
             MatchedFileCreatedNotification::class,
             $admin,
-            ['matched_file' => $matched_file] 
+            ['matched_file' => $matched_file]
         );
 
         // assert that a notification was not sent to the std user
-        $this->assertNotificationNotSent( 
+        $this->assertNotificationNotSent(
             MatchedFileCreatedNotification::class,
             $user,
-            ['matched_file' => $matched_file] 
+            ['matched_file' => $matched_file]
         );
     }
 
@@ -258,17 +267,17 @@ class MatchedFileTest extends TestCase
         $matched_file->incrementMatch();
 
         // assert that a notification was sent to the admin
-        $this->assertNotification( 
+        $this->assertNotification(
             MatchedFileIncrementedNotification::class,
             $admin,
-            ['matched_file' => $matched_file] 
+            ['matched_file' => $matched_file]
         );
 
         // assert that a notification was not sent to the std user
-        $this->assertNotificationNotSent( 
+        $this->assertNotificationNotSent(
             MatchedFileIncrementedNotification::class,
             $user,
-            ['matched_file' => $matched_file] 
+            ['matched_file' => $matched_file]
         );
     }
 
@@ -285,10 +294,10 @@ class MatchedFileTest extends TestCase
         $matched_file->incrementMatch();
 
         // assert that a notification was not sent
-        $this->assertNotificationNotSent( 
+        $this->assertNotificationNotSent(
             MatchedFileIncrementedNotification::class,
             $admin,
-            ['matched_file' => $matched_file] 
+            ['matched_file' => $matched_file]
         );
     }
 

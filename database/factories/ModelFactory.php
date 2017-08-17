@@ -56,7 +56,7 @@ $factory->define(App\MatchedFile::class, function(Faker\Generator $faker) {
         'pattern_id' => function() use ($faker) {
             return factory(App\Pattern::class)->create()->id;
         },
-        'file' => $faker->sentence,
+        'file' => str_replace(" ","\\",$faker->sentence),
         'muted_flag' => 0
     ];
 });

@@ -44,15 +44,7 @@ class ExemptionController extends Controller
      */
     public function create()
     {
-        $ex = Exemption::create( request()->only(['pattern']) );
-
-        MatchedFile::where('file',$ex->pattern)->get()->each->mute();
-
-        MatchedFile::where('file','like',"%{$ex->pattern}")->get()->each->mute();
-
-        MatchedFile::whereHas('pattern', function($query) use ($ex) {
-            return $query->where('name',$ex->pattern);
-        })->get()->each->mute();
+        Exemption::createFromPattern( request('pattern') );
 
         return response()->json([],201);
     }

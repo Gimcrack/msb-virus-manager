@@ -17,6 +17,16 @@
                     Unmute Selected
                 </a>
             </li>
+            <li>
+                <a href="#" @click.prevent="exemptSelectedFilenames">
+                    Exempt Selected - Filenames
+                </a>
+            </li>
+            <li>
+                <a href="#" @click.prevent="exemptSelectedFiles">
+                    Exempt Selected - Full Paths
+                </a>
+            </li>
         </template>
 
         <template slot="menu">
@@ -122,6 +132,28 @@
             unmuteSuccess() {
                 this.page.busy = false;
                 flash.success('The matched files were unmuted');
+            },
+
+            exemptSelectedFiles() {
+                this.page.busy = true;
+                Api.post(`matches/_exempt`, { matches : this.page.selectedIds() })
+                    .then(this.exemptSelectedFilesSuccess, this.error);
+            },
+
+            exemptSelectedFilesSuccess() {
+                this.page.busy = false;
+                flash.success('The matched files were exempted');
+            },
+
+            exemptSelectedFilenames() {
+                this.page.busy = true;
+                Api.post(`matches/_exempt/filename`, { matches : this.page.selectedIds() })
+                    .then(this.exemptSelectedFilenamesSuccess, this.error);
+            },
+
+            exemptSelectedFilenamesSuccess() {
+                this.page.busy = false;
+                flash.success('The matched filenames were exempted');
             },
 
             toggleMuted() {
