@@ -8,6 +8,7 @@ export default {
             search : null,
             orderBy : 'name',
             asc : true,
+            timeouts : {}
         }
     },
 
@@ -51,6 +52,13 @@ export default {
             if ( !! this.preFetch )
                 this.preFetch();
 
+            if ( !! this.timeouts.fetch )
+                clearTimeout(this.timeouts.fetch)
+
+            this.timeouts.fetch = setTimeout( this.performFetch, 1000 );
+        },
+
+        performFetch() {
             Api.get( this.params.endpoint )
                 .then( this.success, this.error )
         },

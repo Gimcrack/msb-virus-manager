@@ -13,6 +13,7 @@
             return {
                 definitions : null,
                 loaded : false,
+                timeouts : {}
             }
         },
 
@@ -24,12 +25,17 @@
         methods : {
 
             listen() {
-                Bus.$on('ShouldFetchDefinitions', () => {
-                    sleep(2000).then( this.fetch )
-                });
+                Bus.$on('ShouldFetchDefinitions', this.fetch);
             },
 
             fetch() {
+                if ( !! this.timeouts.fetch )
+                    clearTimeout(this.timeouts.fetch)
+
+                this.timeouts.fetch = setTimeout( this.performFetch, 1000 );
+            },
+
+            performFetch() {
                 Api.get('definitions-status')
                     .then( this.success, this.error );
             },

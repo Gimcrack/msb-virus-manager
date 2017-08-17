@@ -1,6 +1,6 @@
 <template>
     <li class="agent-build-status" v-show="loaded">
-        <a href="#">  
+        <a href="#">
             <span class="label label-info">Agent {{ build }}</span>
         </a>
     </li>
@@ -13,6 +13,7 @@
             return {
                 build : null,
                 loaded : false,
+                timeouts : {}
             }
         },
 
@@ -27,6 +28,13 @@
             },
 
             fetch() {
+                if ( !! this.timeouts.fetch )
+                    clearTimeout(this.timeouts.fetch)
+
+                this.timeouts.fetch = setTimeout( this.performFetch, 1000 );
+            },
+
+            performFetch() {
                 Api.get('agent-build')
                     .then( this.success, this.error );
             },

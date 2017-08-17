@@ -54223,7 +54223,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             build: null,
-            loaded: false
+            loaded: false,
+            timeouts: {}
         };
     },
     mounted: function mounted() {
@@ -54237,6 +54238,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             Bus.$on('ShouldFetchAgentBuild', this.fetch);
         },
         fetch: function fetch() {
+            if (!!this.timeouts.fetch) clearTimeout(this.timeouts.fetch);
+
+            this.timeouts.fetch = setTimeout(this.performFetch, 1000);
+        },
+        performFetch: function performFetch() {
             Api.get('agent-build').then(this.success, this.error);
         },
         success: function success(response) {
@@ -55124,8 +55130,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
-        var _this = this;
-
         return {
             toggles: {
                 new: false
@@ -55143,9 +55147,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     created: 'DefinitionWasCreated',
                     destroyed: 'DefinitionWasDestroyed',
                     global: {
-                        ShouldFetchDefinitions: function ShouldFetchDefinitions() {
-                            sleep(2000).then(_this.page.fetch);
-                        }
+                        ShouldFetchDefinitions: this.page.fetch
                     }
                 }
             }
@@ -55172,7 +55174,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             definitions: null,
-            loaded: false
+            loaded: false,
+            timeouts: {}
         };
     },
     mounted: function mounted() {
@@ -55183,13 +55186,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         listen: function listen() {
-            var _this = this;
-
-            Bus.$on('ShouldFetchDefinitions', function () {
-                sleep(2000).then(_this.fetch);
-            });
+            Bus.$on('ShouldFetchDefinitions', this.fetch);
         },
         fetch: function fetch() {
+            if (!!this.timeouts.fetch) clearTimeout(this.timeouts.fetch);
+
+            this.timeouts.fetch = setTimeout(this.performFetch, 1000);
+        },
+        performFetch: function performFetch() {
             Api.get('definitions-status').then(this.success, this.error);
         },
         success: function success(response) {
@@ -57356,7 +57360,8 @@ window.mixins = {
             refresh_btn_text: 'Refresh',
             search: null,
             orderBy: 'name',
-            asc: true
+            asc: true,
+            timeouts: {}
         };
     },
     mounted: function mounted() {
@@ -57394,6 +57399,11 @@ window.mixins = {
         fetch: function fetch() {
             if (!!this.preFetch) this.preFetch();
 
+            if (!!this.timeouts.fetch) clearTimeout(this.timeouts.fetch);
+
+            this.timeouts.fetch = setTimeout(this.performFetch, 1000);
+        },
+        performFetch: function performFetch() {
             Api.get(this.params.endpoint).then(this.success, this.error);
         },
         success: function success(response) {
